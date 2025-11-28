@@ -405,6 +405,3 @@ git branch --show-current
 ```
 
 ---
-
-If you want, I can also generate separate cheat sheets (PDF / DOCX /
-Markdown) or advanced Git workflow guides.
