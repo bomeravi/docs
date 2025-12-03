@@ -20,8 +20,9 @@ A beautifully organized hub to navigate all developer documentation including Gi
   - [🏷️ Badges](#️-badges)
   - [📄 Table of Contents](#-table-of-contents)
   - [🧭 Overview](#-overview)
+  - [📁 Cloudflared](#-cloudflared)
   - [📁 Git Documentation](#-git-documentation)
-  - [🗂️ Folder Structure (Example)](#️-folder-structure-example)
+  - [🗂️ Folder Structure](#️-folder-structure)
   - [🔗 Recommended Standards](#-recommended-standards)
   - [✨ Future Improvements](#-future-improvements)
 
@@ -30,6 +31,12 @@ A beautifully organized hub to navigate all developer documentation including Gi
 ## 🧭 Overview
 
 This repository centralizes all development-related documents. Everything is grouped by category for maximum clarity and fast navigation.
+
+---
+
+## 📁 Cloudflared
+
+Essential guides for setup cloudflared setup and essential basic commands
 
 ---
 
@@ -58,11 +65,13 @@ Essential guides for working with Git.
 
 ---
 
-## 🗂️ Folder Structure (Example)
+
+## 🗂️ Folder Structure
 
 ```
 .
 ├── readme.md
+├── cloudflared.md
 ├── git/
 │   ├── git-setup.md
 │   ├── git-commands.md
