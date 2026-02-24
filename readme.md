@@ -1,105 +1,78 @@
-# 📚 Project Documentation Index
+# Project Documentation Index
 
-A beautifully organized hub to navigate all developer documentation including Git workflow, server setup, Kubernetes deployment, and best practices.
+This repository contains internal setup, deployment, and operations documentation.
 
----
+## All Documentation Pages
 
-## 🏷️ Badges
+### Core Docs
+- [Basic Packages](./basic-packages.md)
+- [Certbot](./certbot.md)
+- [Cloudflared](./cloudflared.md)
+- [LAMP Setup](./lamp-setup.md)
+- [Server Setup](./server-setup.md)
 
-<p>
-  <img src="https://img.shields.io/badge/docs-organized-brightgreen" />
-  <img src="https://img.shields.io/badge/style-markdown-blue" />
-  <img src="https://img.shields.io/badge/version-1.0.0-purple" />
-</p>
+### ArgoCD
+- [Overview](./argocd/readme.md)
 
----
+### Git
+- [Git Setup](./git/git-setup.md)
+- [Git Commands](./git/git-commands.md)
+- [Git Commit Guide](./git/git-commit.md)
 
-## 📄 Table of Contents
+### Docker
+- [Overview](./docker/readme.md)
 
-- [📚 Project Documentation Index](#-project-documentation-index)
-  - [🏷️ Badges](#️-badges)
-  - [📄 Table of Contents](#-table-of-contents)
-  - [🧭 Overview](#-overview)
-  - [📁 Cloudflared](#-cloudflared)
-  - [📁 Git Documentation](#-git-documentation)
-  - [🗂️ Folder Structure](#️-folder-structure)
-  - [🔗 Recommended Standards](#-recommended-standards)
-  - [✨ Future Improvements](#-future-improvements)
+### Jenkins
+- [Overview](./jenkins/readme.md)
+- [Apache Setup](./jenkins/apache-setup.md)
+- [Secrets](./jenkins/secrets.md)
+- [Server Setup](./jenkins/server-setup.md)
+- [Jenkinsfiles Overview](./jenkins/jenkinsfiles/README.md)
+- [Shared Library Overview](./jenkins/shared-library/README.md)
 
----
+### Kubernetes
+- [Overview](./kubernetes/readme.md)
+- [Installation and Commands](./kubernetes/kubernetes-installation-and-commands.md)
+- [Manifests Overview](./kubernetes/manifests/README.md)
+- [Django Manifest Docs](./kubernetes/manifests/django/README.md)
+- [Go Manifest Docs](./kubernetes/manifests/go/README.md)
+- [Java Microservice Manifest Docs](./kubernetes/manifests/java-microservice/README.md)
+- [Jenkins Manifest Docs](./kubernetes/manifests/jenkins/README.md)
+- [Laravel Manifest Docs](./kubernetes/manifests/laravel/README.md)
+- [Node Manifest Docs](./kubernetes/manifests/node/README.md)
+- [React Manifest Docs](./kubernetes/manifests/react/README.md)
+- [WordPress Manifest Docs](./kubernetes/manifests/wordpress/README.md)
 
-## 🧭 Overview
+## Cloudflare Pages Deployment
 
-This repository centralizes all development-related documents. Everything is grouped by category for maximum clarity and fast navigation.
+This repo is ready to deploy as a static docs site using Docsify.
 
----
+### 1) Connect repository
+- In Cloudflare dashboard, go to **Workers & Pages** -> **Create** -> **Pages**.
+- Connect this Git repository.
 
-## 📁 Cloudflared
+### 2) Build configuration
+Use these exact values:
+- **Framework preset:** `None`
+- **Build command:** *(leave empty)*
+- **Build output directory:** `.`
+- **Root directory:** `/` (or empty/default)
 
-Essential guides for setup cloudflared setup and essential basic commands
+### 3) Deploy
+- Trigger deployment from the dashboard.
+- Cloudflare will serve `index.html` from repo root.
 
----
+### 4) How navigation works
+- `index.html` boots Docsify.
+- `_sidebar.md` contains links to all markdown pages.
+- `readme.md` is the homepage.
 
-## 📁 Git Documentation
+## Local Preview
 
-Essential guides for working with Git.
+To preview locally before pushing:
 
-<details>
-<summary><strong>Git Setup</strong></summary>
-<p>Initial Git configuration, SSH keys setup, and global environment configuration.</p>
-<a href="./git/git-setup.md">Open File →</a>
-</details>
-
-<details>
-<summary><strong>Git Commands</strong></summary>
-<p>Most frequently used Git commands with explanations for daily use.</p>
-<a href="./git/git-commands-md">Open File →</a>
-</details>
-
-<details>
-<summary><strong>Git Commit Guide</strong></summary>
-<p>Standard commit message format using Conventional Commits.</p>
-<a href="./git/git-commit.md">Open File →</a>
-</details>
-
-
----
-
-
-## 🗂️ Folder Structure
-
-```
-.
-├── readme.md
-├── cloudflared.md
-├── git/
-│   ├── git-setup.md
-│   ├── git-commands.md
-│   └── git-commit.md
-
+```bash
+npx docsify-cli serve .
 ```
 
----
-
-## 🔗 Recommended Standards
-
-* **[Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/)** – Standard for writing semantic commit messages.
-
----
-
-## ✨ Future Improvements
-
-Planned documentation expansion:
-
-* Nginx server setup
-* Redis installation & tuning
-* Docker / Podman cheat sheets
-* Monitoring stack (Prometheus, Grafana)
-* CI/CD workflows (GitHub Actions, Jenkins, GitLab CI)
-* Linux automation scripts
-* Frameworks like laravel, spring boot 
-
----
-
-The main purpose of this repo is to help new developer to learn, existing developer to make the task better, efficient.
-If you want to add more on this repo, you can send the PR.
+Then open `http://localhost:3000`.
