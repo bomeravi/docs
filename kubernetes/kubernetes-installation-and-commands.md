@@ -71,6 +71,15 @@ sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 kubectl version --client
 ```
 
+Doctl needed for digitalocean only,
+```bash
+cd ~
+wget https://github.com/digitalocean/doctl/releases/download/v1.146.0/doctl-1.146.0-linux-amd64.tar.gz
+tar xf ~/doctl-1.146.0-linux-amd64.tar.gz
+sudo mv ~/doctl /usr/local/bin
+```
+
+
 3. Install `kubeadm`, `kubelet`, `kubectl` from apt (optional for kubeadm clusters):
 
 ```bash

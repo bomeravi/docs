@@ -56,7 +56,7 @@ Optional: create a database and user.
 
 ```sql
 CREATE DATABASE app_db;
-CREATE USER 'app_user'@'localhost' IDENTIFIED BY 'change_me';
+CREATE USER 'app_user'@'localhost' IDENTIFIED BY 'password12';
 GRANT ALL PRIVILEGES ON app_db.* TO 'app_user'@'localhost';
 FLUSH PRIVILEGES;
 ```

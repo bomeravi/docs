@@ -1,6 +1,12 @@
+Install Helm (on local, not on kubernites)
+```
+curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-4
+chmod 700 get_helm.sh
+./get_helm.sh
+```
 
 
-
+```
 cat <<'EOF' | kubectl apply -f -
 apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
@@ -17,6 +23,8 @@ spec:
         ingress:
           class: nginx
 EOF
+```
+
 
 
 
@@ -50,4 +58,9 @@ spec:
             port:
               number: 443
 EOF
+```
+
+Get Password
+```
+kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
 ```
