@@ -14,6 +14,10 @@ sudo apt update && sudo apt upgrade -y
 ```
 
 ## Install Required Packages
+Not to use
+``` bash
+sudo apt install -y fontconfig openjdk-21-jre apache2 ufw fail2ban curl wget
+```
 
 ``` bash
 sudo apt install -y fontconfig openjdk-21-jre apache2 ufw fail2ban curl wget
