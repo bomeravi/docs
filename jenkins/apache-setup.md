@@ -19,10 +19,6 @@ Not to use
 sudo apt install -y fontconfig openjdk-21-jre apache2 ufw fail2ban curl wget
 ```
 
-``` bash
-sudo apt install -y fontconfig openjdk-21-jre apache2 ufw fail2ban curl wget
-```
-
 Verify Java:
 
 ``` bash
@@ -107,7 +103,7 @@ sudo systemctl restart apache2
 Create:
 
 ``` bash
-sudo nano /etc/apache2/sites-available/jenkins.conf
+sudo nano /etc/apache2/sites-available/jenkins.digi.saroj.name.np.conf
 ```
 
 Paste:
