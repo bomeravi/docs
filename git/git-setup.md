@@ -1,4 +1,4 @@
-# Git Setup Guide (README)
+# Git Setup Guide
 
 This guide explains how to set up Git on different operating systems,
 generate SSH keys, configure SSH agents, and manage global and
@@ -6,7 +6,7 @@ repository-specific Git settings.
 
 ---
 
-## \## 1. Install Git
+## 1. Install Git
 
 ### **Windows**
 

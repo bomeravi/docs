@@ -1,4 +1,8 @@
-Shared Pipeline Library
+---
+title: Shared Library
+---
+
+# Shared Library
 
 Recommended structure for a Git-backed shared library:
 

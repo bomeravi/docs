@@ -1,4 +1,8 @@
-**Jenkins**
+---
+title: Jenkins
+---
+
+# Jenkins
 
 This document shows how to install Jenkins on Windows, Ubuntu/Linux, and macOS, plus example `Jenkinsfile` templates, shared library guidance, and secrets handling.
 

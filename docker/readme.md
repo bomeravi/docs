@@ -1,23 +1,3 @@
-Docker basics for local builds and for Jenkins CI
-
-Build an image locally:
-
-```bash
-cd path/to/project
-docker build -t my-app:local .
-docker run --rm -p 8080:80 my-app:local
-```
-
-Build & run with docker-compose:
-
-```bash
-cd path/to/project
-docker-compose up --build
-```
-
-To integrate with Jenkins, ensure your `Jenkinsfile` builds the Docker image and pushes to a registry Jenkins can access (use credentials in Jenkins' credentials store).
-
-See the sample `docker-compose.yml` and per-app `Dockerfile` templates in this folder.
 # Docker Comprehensive Guide
 
 ## Table of Contents
@@ -168,7 +148,7 @@ brew install --cask docker
 ```
 # Launch Docker Desktop
 open /Applications/Docker.app
-Docker Commands
+## Docker Commands
 Container Management
 
 ```
@@ -532,7 +512,7 @@ docker exec <container_name> env
 # Clean up everything
 docker system prune -a --volumes
 ```
-Dockerfile Examples
+## Dockerfile Examples
 Basic Dockerfile (Node.js)
 ``` Dockerfile
 
@@ -741,7 +721,7 @@ EXPOSE 80
 
 CMD ["apache2-foreground"]
 ```
-Docker Compose Examples
+## Docker Compose Examples
 Basic Web Application (Node.js + MongoDB)
 ``` YAML
 
@@ -1312,3 +1292,23 @@ Docker Compose Documentation
 Dockerfile Reference
 Docker Best Practices
 ```
+Docker basics for local builds and for Jenkins CI
+
+Build an image locally:
+
+```bash
+cd path/to/project
+docker build -t my-app:local .
+docker run --rm -p 8080:80 my-app:local
+```
+
+Build & run with docker-compose:
+
+```bash
+cd path/to/project
+docker-compose up --build
+```
+
+To integrate with Jenkins, ensure your `Jenkinsfile` builds the Docker image and pushes to a registry Jenkins can access (use credentials in Jenkins' credentials store).
+
+See the sample `docker-compose.yml` and per-app `Dockerfile` templates in this folder.
