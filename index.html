@@ -163,6 +163,59 @@
       width: 100%;
     }
 
+    .docs-topbar__brand-group {
+      align-items: center;
+      display: inline-flex;
+      gap: 0.55rem;
+      min-width: 0;
+    }
+
+    .docs-topbar__menu-toggle {
+      align-items: center;
+      background: color-mix(in srgb, var(--ui-surface) 88%, var(--theme-color) 12%);
+      border: 1px solid var(--ui-border);
+      border-radius: 10px;
+      color: var(--ui-text);
+      cursor: pointer;
+      display: inline-flex;
+      height: 2.2rem;
+      flex-shrink: 0;
+      justify-content: center;
+      padding: 0;
+      transition: border-color 0.16s ease, background-color 0.16s ease, transform 0.16s ease;
+      width: 2.2rem;
+    }
+
+    .docs-topbar__menu-toggle:hover {
+      background: color-mix(in srgb, var(--ui-surface) 78%, var(--theme-color) 22%);
+      border-color: rgba(20, 184, 166, 0.42);
+      transform: translateY(-1px);
+    }
+
+    .docs-topbar__menu-toggle:active {
+      transform: translateY(0);
+    }
+
+    .docs-topbar__menu-toggle span {
+      background: var(--ui-text);
+      border-radius: 999px;
+      display: block;
+      height: 2px;
+      width: 15px;
+    }
+
+    .docs-topbar__menu-toggle .bar-mid {
+      width: 11px;
+    }
+
+    .docs-topbar__menu-toggle-inner {
+      align-items: center;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      justify-content: center;
+    }
+
     .docs-topbar__search-slot {
       flex: 1;
       margin: 0 0.45rem;
@@ -368,8 +421,14 @@
     }
 
     .sidebar ul li.active > a {
-      background: var(--sidebar-active-bg);
+      background: transparent;
       border-right: 0;
+      color: var(--ui-text-soft);
+      font-weight: 600;
+    }
+
+    .sidebar ul li > a.is-current {
+      background: var(--sidebar-active-bg);
       color: var(--sidebar-active-text);
       font-weight: 700;
     }
@@ -701,17 +760,39 @@
       color: var(--code-token-operator);
     }
 
-    .sidebar-toggle {
-      background: var(--ui-surface);
-      border: 1px solid var(--ui-border);
-      border-radius: 11px;
-      box-shadow: var(--ui-shadow);
-      padding: 6px 8px;
-      transition: background-color 0.16s ease;
+    #back-to-top {
+      align-items: center;
+      background: linear-gradient(135deg, #0f766e 0%, #14b8a6 100%);
+      border: 0;
+      border-radius: 999px;
+      box-shadow: 0 10px 22px rgba(15, 118, 110, 0.35);
+      color: #ffffff;
+      cursor: pointer;
+      display: inline-flex;
+      font-family: "Space Grotesk", "Manrope", sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      height: 2.5rem;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      position: fixed;
+      right: 1rem;
+      bottom: 1rem;
+      transform: translateY(12px);
+      transition: opacity 0.2s ease, transform 0.2s ease, filter 0.2s ease;
+      width: 2.5rem;
+      z-index: 96;
     }
 
-    .sidebar-toggle span {
-      background-color: var(--ui-text);
+    #back-to-top:hover {
+      filter: brightness(1.05);
+    }
+
+    #back-to-top.is-visible {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
     }
 
     @media (max-width: 900px) {
@@ -728,9 +809,17 @@
         padding-top: 0.58rem;
       }
 
+      .docs-topbar__brand-group {
+        grid-area: brand;
+      }
+
       .docs-topbar__brand {
         font-size: 0.92rem;
-        grid-area: brand;
+      }
+
+      .docs-topbar__menu-toggle {
+        height: 2rem;
+        width: 2rem;
       }
 
       .docs-topbar__actions {
@@ -761,10 +850,8 @@
         top: var(--topbar-height);
       }
 
-      .sidebar-toggle {
-        bottom: auto;
-        left: 0.72rem;
-        top: calc(var(--topbar-height) + 8px);
+      .content {
+        margin-top: var(--topbar-height);
       }
 
       .markdown-section {
@@ -804,10 +891,19 @@
 <body>
   <header class="docs-topbar">
     <div class="docs-topbar__inner">
-      <a class="docs-topbar__brand" href="#/">
-        <span class="docs-topbar__dot" aria-hidden="true"></span>
-        <span>Project Docs</span>
-      </a>
+      <div class="docs-topbar__brand-group">
+        <button id="docs-topbar-sidebar-toggle" class="docs-topbar__menu-toggle" type="button" aria-label="Toggle sidebar">
+          <span class="docs-topbar__menu-toggle-inner" aria-hidden="true">
+            <span></span>
+            <span class="bar-mid"></span>
+            <span></span>
+          </span>
+        </button>
+        <a class="docs-topbar__brand" href="#/">
+          <span class="docs-topbar__dot" aria-hidden="true"></span>
+          <span>Project Docs</span>
+        </a>
+      </div>
       <div id="docs-topbar-search" class="docs-topbar__search-slot" aria-label="Search docs"></div>
       <div class="docs-topbar__actions">
         <button id="ui-theme-toggle" class="theme-toggle" type="button" aria-label="Toggle site theme"></button>
@@ -817,12 +913,15 @@
   </header>
 
   <div id="app">Loading documentation...</div>
+  <button id="back-to-top" type="button" aria-label="Back to top" title="Back to top">↑</button>
 
   <script>
     var UI_THEME_STORAGE_KEY = "docs-ui-theme";
     var CODE_THEME_STORAGE_KEY = "docs-code-theme";
     var LONG_CODE_BLOCK_MIN_LINES = 9;
     var ANCHOR_OFFSET_EXTRA = 6;
+    var BACK_TO_TOP_VISIBILITY_OFFSET = 220;
+    var backToTopContentScrollTarget = null;
 
     function isTheme(theme) {
       return theme === "light" || theme === "dark";
@@ -1003,6 +1102,56 @@
       if (searchElement.parentElement !== searchSlot) {
         searchSlot.appendChild(searchElement);
       }
+
+      updateTopbarHeightVariable();
+    }
+
+    function hideNativeSidebarToggle() {
+      var nativeToggles = document.querySelectorAll(".sidebar-toggle");
+      if (!nativeToggles.length) {
+        return false;
+      }
+
+      nativeToggles.forEach(function (toggle) {
+        toggle.setAttribute("hidden", "hidden");
+        toggle.setAttribute("aria-hidden", "true");
+        toggle.tabIndex = -1;
+      });
+
+      return true;
+    }
+
+    function initializeTopbarSidebarToggle(attemptsRemaining) {
+      var topbarToggle = document.querySelector("#docs-topbar-sidebar-toggle");
+      if (!topbarToggle) {
+        return;
+      }
+
+      var nativeToggleFound = hideNativeSidebarToggle();
+
+      if (topbarToggle.dataset.bound !== "true") {
+        topbarToggle.addEventListener("click", function () {
+          var nativeToggle = document.querySelector(".sidebar-toggle");
+          if (nativeToggle) {
+            nativeToggle.click();
+            return;
+          }
+
+          document.body.classList.toggle("close");
+        });
+        topbarToggle.dataset.bound = "true";
+      }
+
+      if (!nativeToggleFound) {
+        if (attemptsRemaining > 0) {
+          window.setTimeout(function () {
+            initializeTopbarSidebarToggle(attemptsRemaining - 1);
+          }, 90);
+        }
+        return;
+      }
+
+      updateTopbarHeightVariable();
     }
 
     function clearSearchSuggestions() {
@@ -1118,12 +1267,122 @@
       document.documentElement.style.setProperty("--topbar-height", topbar.offsetHeight + "px");
     }
 
+    function getScrollTopForRoot(root) {
+      if (root === window) {
+        return (
+          window.pageYOffset ||
+          document.documentElement.scrollTop ||
+          document.body.scrollTop ||
+          0
+        );
+      }
+      return root && typeof root.scrollTop === "number" ? root.scrollTop : 0;
+    }
+
+    function updateBackToTopVisibility() {
+      var backToTopButton = document.querySelector("#back-to-top");
+      if (!backToTopButton) {
+        return;
+      }
+
+      var contentScroller = document.querySelector(".content");
+      var contentScrollTop = contentScroller && typeof contentScroller.scrollTop === "number"
+        ? contentScroller.scrollTop
+        : 0;
+      var windowScrollTop = getScrollTopForRoot(window);
+      var scrollTop = Math.max(windowScrollTop, contentScrollTop);
+      backToTopButton.classList.toggle("is-visible", scrollTop > BACK_TO_TOP_VISIBILITY_OFFSET);
+    }
+
+    function bindBackToTopScrollTarget() {
+      var nextContentTarget = document.querySelector(".content");
+      if (backToTopContentScrollTarget === nextContentTarget) {
+        return;
+      }
+
+      if (backToTopContentScrollTarget && backToTopContentScrollTarget.removeEventListener) {
+        backToTopContentScrollTarget.removeEventListener("scroll", updateBackToTopVisibility);
+      }
+
+      backToTopContentScrollTarget = nextContentTarget;
+      if (backToTopContentScrollTarget && backToTopContentScrollTarget.addEventListener) {
+        backToTopContentScrollTarget.addEventListener("scroll", updateBackToTopVisibility, { passive: true });
+      }
+    }
+
+    function scrollActiveRootToTop() {
+      var scrollRoot = getActiveScrollRoot();
+
+      function scrollWindowToTop() {
+        try {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        } catch (error) {
+          window.scrollTo(0, 0);
+        }
+      }
+
+      if (scrollRoot === window) {
+        scrollWindowToTop();
+        return;
+      }
+
+      var previousScrollTop = getScrollTopForRoot(scrollRoot);
+
+      if (scrollRoot) {
+        try {
+          if (typeof scrollRoot.scrollTo === "function") {
+            scrollRoot.scrollTo({ top: 0, behavior: "smooth" });
+          } else {
+            scrollRoot.scrollTop = 0;
+          }
+        } catch (error) {
+          scrollRoot.scrollTop = 0;
+        }
+      }
+
+      window.setTimeout(function () {
+        var currentScrollTop = getScrollTopForRoot(scrollRoot);
+        if (currentScrollTop >= previousScrollTop - 1) {
+          scrollWindowToTop();
+        }
+      }, 140);
+    }
+
+    function initializeBackToTopButton() {
+      var backToTopButton = document.querySelector("#back-to-top");
+      if (!backToTopButton) {
+        return;
+      }
+
+      if (backToTopButton.dataset.bound !== "true") {
+        backToTopButton.addEventListener("click", function () {
+          scrollActiveRootToTop();
+        });
+        backToTopButton.dataset.bound = "true";
+      }
+
+      if (backToTopButton.dataset.scrollBound !== "true") {
+        window.addEventListener("scroll", updateBackToTopVisibility, { passive: true });
+        backToTopButton.dataset.scrollBound = "true";
+      }
+
+      bindBackToTopScrollTarget();
+      updateBackToTopVisibility();
+    }
+
     function getActiveScrollRoot() {
       var contentScroller = document.querySelector(".content");
-      var isContentScrollable = !!(
-        contentScroller &&
-        contentScroller.scrollHeight > contentScroller.clientHeight + 1
-      );
+
+      var isContentScrollable = false;
+      if (contentScroller) {
+        var contentStyle = getComputedStyle(contentScroller);
+        var overflowY = contentStyle.overflowY;
+        var allowsScrollY =
+          overflowY === "auto" || overflowY === "scroll" || overflowY === "overlay";
+        isContentScrollable =
+          allowsScrollY && contentScroller.scrollHeight > contentScroller.clientHeight + 1;
+      }
+
       return isContentScrollable ? contentScroller : window;
     }
 
@@ -1210,6 +1469,97 @@
 
     function getCurrentHashAnchorId() {
       return extractAnchorIdFromHashLike(window.location.hash || "");
+    }
+
+    function normalizeRoutePath(path) {
+      var normalized = (path || "").trim();
+      if (!normalized) {
+        return "/";
+      }
+      if (normalized.charAt(0) !== "/") {
+        return "/";
+      }
+      if (normalized.length > 1) {
+        normalized = normalized.replace(/\/+$/, "");
+      }
+      return normalized || "/";
+    }
+
+    function extractRoutePathFromHashLike(hashLike) {
+      if (!hashLike) {
+        return "";
+      }
+
+      var source = String(hashLike);
+      var hashIndex = source.indexOf("#");
+      var hashPart = hashIndex > -1 ? source.slice(hashIndex + 1) : source;
+      if (!hashPart) {
+        return "/";
+      }
+      if (hashPart.charAt(0) !== "/") {
+        return "";
+      }
+
+      var queryIndex = hashPart.indexOf("?");
+      if (queryIndex !== -1) {
+        hashPart = hashPart.slice(0, queryIndex);
+      }
+
+      var nestedHashIndex = hashPart.indexOf("#");
+      if (nestedHashIndex !== -1) {
+        hashPart = hashPart.slice(0, nestedHashIndex);
+      }
+
+      return normalizeRoutePath(safeDecodeHashValue(hashPart));
+    }
+
+    function getCurrentRoutePath() {
+      return extractRoutePathFromHashLike(window.location.hash || "") || "/";
+    }
+
+    function syncSidebarActiveLink() {
+      var sidebarNav = document.querySelector(".sidebar-nav");
+      if (!sidebarNav) {
+        return false;
+      }
+
+      var links = Array.from(sidebarNav.querySelectorAll("a[href]"));
+      if (!links.length) {
+        return false;
+      }
+
+      var currentPath = getCurrentRoutePath();
+      var matchedLink = null;
+
+      links.forEach(function (link) {
+        link.classList.remove("is-current");
+        if (matchedLink) {
+          return;
+        }
+        var linkPath = extractRoutePathFromHashLike(link.getAttribute("href") || "");
+        if (linkPath && linkPath === currentPath) {
+          matchedLink = link;
+        }
+      });
+
+      if (matchedLink) {
+        matchedLink.classList.add("is-current");
+      }
+
+      return true;
+    }
+
+    function scheduleSidebarActiveSync(retries) {
+      var remaining = typeof retries === "number" ? retries : 8;
+      if (syncSidebarActiveLink()) {
+        return;
+      }
+      if (remaining <= 0) {
+        return;
+      }
+      window.setTimeout(function () {
+        scheduleSidebarActiveSync(remaining - 1);
+      }, 70);
     }
 
     function findAnchorElement(anchorId) {
@@ -1335,9 +1685,13 @@
           hook.ready(function () {
             initializeThemeToggles();
             relocateSearchToTopbar(20);
+            initializeTopbarSidebarToggle(20);
             initializeSearchInteractions();
             initializeAnchorInteractions();
+            initializeBackToTopButton();
+            scheduleSidebarActiveSync(12);
             updateTopbarHeightVariable();
+            updateBackToTopVisibility();
             scheduleAnchorAdjustment();
           });
 
@@ -1346,10 +1700,14 @@
             initializeThemeToggles();
             decorateDocs(appRoot);
             relocateSearchToTopbar(20);
+            initializeTopbarSidebarToggle(20);
             initializeSearchInteractions();
             initializeAnchorInteractions();
+            initializeBackToTopButton();
+            scheduleSidebarActiveSync(12);
             updateTopbarHeightVariable();
             resetScrollForRouteWithoutAnchor();
+            updateBackToTopVisibility();
             scheduleAnchorAdjustment();
           });
         }
@@ -1378,19 +1736,28 @@
       initializeThemeToggles();
       decorateDocs(appRoot);
       relocateSearchToTopbar(20);
+      initializeTopbarSidebarToggle(20);
       initializeSearchInteractions();
       initializeAnchorInteractions();
+      initializeBackToTopButton();
+      scheduleSidebarActiveSync(12);
       updateTopbarHeightVariable();
       resetScrollForRouteWithoutAnchor();
+      updateBackToTopVisibility();
       scheduleAnchorAdjustment();
     });
 
     window.addEventListener("resize", function () {
       updateTopbarHeightVariable();
+      bindBackToTopScrollTarget();
+      updateBackToTopVisibility();
       scheduleAnchorAdjustment();
     });
 
     window.addEventListener("hashchange", function () {
+      scheduleSidebarActiveSync(12);
+      bindBackToTopScrollTarget();
+      updateBackToTopVisibility();
       scheduleAnchorAdjustment();
     });
   </script>
