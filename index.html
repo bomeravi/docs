@@ -5,10 +5,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Project Docs</title>
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.css">
   <style>
     :root {
       --theme-color: #0f766e;
+      --topbar-height: 60px;
+      --ui-bg: #f5f8fb;
+      --ui-surface: #ffffff;
+      --ui-text: #132337;
+      --ui-text-soft: #4b5d75;
+      --ui-border: #d7e3f2;
+      --ui-shadow: 0 18px 36px rgba(8, 24, 55, 0.09);
+      --focus-ring: rgba(20, 184, 166, 0.36);
+      --sidebar-bg: linear-gradient(180deg, #f9fcff 0%, #f0f6fd 100%);
+      --sidebar-hover-bg: rgba(15, 118, 110, 0.09);
+      --sidebar-active-bg: rgba(15, 118, 110, 0.14);
+      --sidebar-active-text: #0b5d56;
+      --topbar-bg: rgba(245, 248, 251, 0.84);
+      --selection-bg: rgba(20, 184, 166, 0.26);
+      --selection-text: #062f2b;
+      --search-bg: #ffffff;
       --code-bg: #0b1328;
       --code-bg-soft: #111c37;
       --code-border: #223354;
@@ -19,10 +38,6 @@
       --code-lang-border: rgba(148, 163, 184, 0.25);
       --code-lang-text: #9db0d4;
       --code-line-number: #7589b1;
-      --code-toggle-bg: #0f766e;
-      --code-toggle-bg-hover: #0d675f;
-      --code-toggle-border: #0b5750;
-      --code-toggle-text: #f0fdfa;
       --code-token-comment: #7f91b6;
       --code-token-keyword: #7ab3ff;
       --code-token-string: #97f1b6;
@@ -31,27 +46,536 @@
       --code-token-operator: #d2ddf5;
     }
 
+    html[data-ui-theme="dark"] {
+      --theme-color: #1cc7b5;
+      --ui-bg: #0a1324;
+      --ui-surface: #0f1b31;
+      --ui-text: #d9e7ff;
+      --ui-text-soft: #9eb4d7;
+      --ui-border: #1e3357;
+      --ui-shadow: 0 20px 38px rgba(1, 7, 18, 0.42);
+      --focus-ring: rgba(45, 212, 191, 0.44);
+      --sidebar-bg: linear-gradient(180deg, #0f1c35 0%, #0b152a 100%);
+      --sidebar-hover-bg: rgba(45, 212, 191, 0.1);
+      --sidebar-active-bg: rgba(45, 212, 191, 0.16);
+      --sidebar-active-text: #92fff3;
+      --topbar-bg: rgba(10, 19, 36, 0.84);
+      --selection-bg: rgba(45, 212, 191, 0.34);
+      --selection-text: #031313;
+      --search-bg: #0d1a2f;
+      --inline-code-bg: rgba(45, 212, 191, 0.15);
+      --inline-code-text: #8ff8ee;
+    }
+
     html[data-code-theme="light"] {
       --code-bg: #f8fbff;
       --code-bg-soft: #ffffff;
       --code-border: #d7e3f5;
       --code-text: #16253f;
-      --inline-code-bg: #e8f7f5;
-      --inline-code-text: #0f766e;
       --code-lang-bg: rgba(15, 118, 110, 0.08);
       --code-lang-border: rgba(15, 118, 110, 0.18);
       --code-lang-text: #0f766e;
       --code-line-number: #7c8ca9;
-      --code-toggle-bg: #f8fafc;
-      --code-toggle-bg-hover: #f1f5f9;
-      --code-toggle-border: #cbd5e1;
-      --code-toggle-text: #0f172a;
       --code-token-comment: #64748b;
       --code-token-keyword: #2563eb;
       --code-token-string: #047857;
       --code-token-function: #b45309;
       --code-token-number: #be123c;
       --code-token-operator: #1e293b;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      height: 100%;
+    }
+
+    html {
+      scroll-padding-top: calc(var(--topbar-height) + 6px);
+    }
+
+    body {
+      background: var(--ui-bg);
+      color: var(--ui-text);
+      font-family: "Manrope", "Segoe UI", sans-serif;
+      line-height: 1.72;
+      margin: 0;
+      padding-top: 0;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+      transition: background-color 0.24s ease, color 0.24s ease;
+    }
+
+    ::selection {
+      background: var(--selection-bg);
+      color: var(--selection-text);
+    }
+
+    *::-webkit-scrollbar {
+      height: 10px;
+      width: 10px;
+    }
+
+    *::-webkit-scrollbar-thumb {
+      background: rgba(92, 122, 161, 0.55);
+      border-radius: 999px;
+      border: 2px solid transparent;
+      background-clip: padding-box;
+    }
+
+    *::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    a:focus-visible,
+    button:focus-visible,
+    input:focus-visible {
+      outline: 3px solid var(--focus-ring);
+      outline-offset: 2px;
+    }
+
+    .docs-topbar {
+      backdrop-filter: blur(14px);
+      background: var(--topbar-bg);
+      border-bottom: 1px solid var(--ui-border);
+      left: 0;
+      overflow: visible;
+      position: fixed;
+      right: 0;
+      top: 0;
+      width: 100%;
+      z-index: 80;
+    }
+
+    .docs-topbar__inner {
+      align-items: center;
+      display: flex;
+      gap: 1rem;
+      height: 60px;
+      justify-content: space-between;
+      margin: 0 auto;
+      max-width: 1300px;
+      overflow: visible;
+      padding: 0 1rem;
+      width: 100%;
+    }
+
+    .docs-topbar__search-slot {
+      flex: 1;
+      margin: 0 0.45rem;
+      max-width: 540px;
+      min-width: 180px;
+      overflow: visible;
+    }
+
+    .docs-topbar__search-slot .search {
+      border-bottom: 0;
+      margin: 0;
+      padding: 0;
+      position: relative;
+      width: 100%;
+    }
+
+    .docs-topbar__search-slot .search input {
+      background: var(--search-bg);
+      border: 1px solid var(--ui-border);
+      border-radius: 999px;
+      color: var(--ui-text);
+      font-family: "Manrope", "Segoe UI", sans-serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      padding: 0.52rem 2.7rem 0.52rem 0.85rem;
+      transition: border-color 0.16s ease, box-shadow 0.16s ease;
+      width: 100%;
+    }
+
+    .docs-topbar__search-slot .search input::placeholder {
+      color: color-mix(in srgb, var(--ui-text-soft) 85%, transparent);
+    }
+
+    .docs-topbar__search-slot .search input:focus {
+      border-color: rgba(20, 184, 166, 0.46);
+      box-shadow: 0 0 0 4px rgba(20, 184, 166, 0.16);
+      outline: 0;
+    }
+
+    .docs-topbar__search-slot .search .results-panel {
+      background: var(--ui-surface);
+      border: 1px solid var(--ui-border);
+      border-radius: 12px;
+      box-shadow: var(--ui-shadow);
+      left: 0;
+      margin-top: 0;
+      max-height: 62vh;
+      overflow-y: auto;
+      padding: 0.35rem 0;
+      position: absolute;
+      right: 0;
+      top: calc(100% + 0.45rem);
+      width: 100%;
+      z-index: 120;
+    }
+
+    .docs-topbar__search-slot .search .matching-post {
+      border-bottom: 1px solid var(--ui-border);
+      margin: 0;
+      padding: 0.45rem 0.72rem;
+    }
+
+    .docs-topbar__search-slot .search .matching-post:last-child {
+      border-bottom: 0;
+    }
+
+    .docs-topbar__search-slot .search .matching-post a {
+      color: var(--ui-text);
+      font-size: 0.86rem;
+      text-decoration: none;
+    }
+
+    .docs-topbar__search-slot .search .matching-post p {
+      color: var(--ui-text-soft);
+      margin: 0.28rem 0 0;
+    }
+
+    .docs-topbar__search-slot .search .clear-button {
+      align-items: center;
+      background: color-mix(in srgb, var(--ui-surface) 86%, var(--theme-color) 14%);
+      border: 1px solid var(--ui-border);
+      border-radius: 999px;
+      color: var(--ui-text-soft);
+      display: none !important;
+      font-size: 0.9rem;
+      font-weight: 800;
+      height: 1.5rem;
+      justify-content: center;
+      line-height: 1;
+      padding: 0;
+      pointer-events: none;
+      position: absolute !important;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 1.5rem;
+      z-index: 2;
+    }
+
+    .docs-topbar__search-slot .search.has-value .clear-button {
+      display: inline-flex !important;
+      pointer-events: auto;
+    }
+
+    .docs-topbar__search-slot .search .clear-button:hover {
+      background: color-mix(in srgb, var(--ui-surface) 76%, var(--theme-color) 24%);
+      color: var(--ui-text);
+    }
+
+    .docs-topbar__brand {
+      align-items: center;
+      color: var(--ui-text);
+      display: inline-flex;
+      font-family: "Space Grotesk", "Manrope", sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      gap: 0.55rem;
+      letter-spacing: 0.01em;
+      text-decoration: none;
+    }
+
+    .docs-topbar__brand:hover {
+      color: var(--theme-color);
+      text-decoration: none;
+    }
+
+    .docs-topbar__dot {
+      background: radial-gradient(circle at 35% 35%, #2dd4bf 0%, #0f766e 75%);
+      border-radius: 999px;
+      box-shadow: 0 0 0 6px rgba(20, 184, 166, 0.13);
+      height: 10px;
+      width: 10px;
+    }
+
+    .docs-topbar__actions {
+      align-items: center;
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .theme-toggle {
+      background: var(--ui-surface);
+      border: 1px solid var(--ui-border);
+      border-radius: 999px;
+      color: var(--ui-text);
+      cursor: pointer;
+      font-family: "Manrope", "Segoe UI", sans-serif;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.025em;
+      line-height: 1.1;
+      min-width: 84px;
+      padding: 0.38rem 0.7rem;
+      transition: transform 0.16s ease, border-color 0.16s ease, background-color 0.16s ease;
+    }
+
+    .theme-toggle:hover {
+      background: var(--sidebar-hover-bg);
+      border-color: rgba(20, 184, 166, 0.34);
+      transform: translateY(-1px);
+    }
+
+    .theme-toggle:active {
+      transform: translateY(0);
+    }
+
+    .sidebar {
+      background: var(--sidebar-bg);
+      border-right: 1px solid var(--ui-border);
+      box-shadow: 8px 0 24px rgba(15, 23, 42, 0.08);
+      height: calc(100vh - var(--topbar-height));
+      top: var(--topbar-height);
+      transition: background 0.24s ease, border-color 0.24s ease;
+    }
+
+    .sidebar .app-name {
+      display: none;
+    }
+
+    .sidebar-nav {
+      padding: 0.2rem 0.72rem 1.1rem;
+    }
+
+    .sidebar ul li {
+      margin: 0.2rem 0;
+    }
+
+    .sidebar ul li a {
+      border-radius: 10px;
+      color: var(--ui-text-soft);
+      display: block;
+      font-size: 0.93rem;
+      font-weight: 600;
+      line-height: 1.35;
+      padding: 0.34rem 0.68rem;
+      transition: background-color 0.16s ease, color 0.16s ease;
+    }
+
+    .sidebar ul li a:hover {
+      background: var(--sidebar-hover-bg);
+      color: var(--ui-text);
+      text-decoration: none;
+    }
+
+    .sidebar ul li.active > a {
+      background: var(--sidebar-active-bg);
+      border-right: 0;
+      color: var(--sidebar-active-text);
+      font-weight: 700;
+    }
+
+    .sidebar-nav li > p {
+      color: var(--ui-text);
+      font-size: 0.85rem;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      margin: 1rem 0 0.45rem;
+      padding: 0 0.68rem;
+      text-transform: uppercase;
+    }
+
+    .search {
+      margin: 0.8rem 0.72rem 0.9rem;
+      padding: 0;
+    }
+
+    .search input {
+      background: var(--search-bg);
+      border: 1px solid var(--ui-border);
+      border-radius: 10px;
+      color: var(--ui-text);
+      font-family: "Manrope", "Segoe UI", sans-serif;
+      font-size: 0.89rem;
+      font-weight: 500;
+      padding: 0.62rem 0.75rem;
+      transition: border-color 0.16s ease, box-shadow 0.16s ease;
+    }
+
+    .search input::placeholder {
+      color: color-mix(in srgb, var(--ui-text-soft) 85%, transparent);
+    }
+
+    .search input:focus {
+      border-color: rgba(20, 184, 166, 0.46);
+      box-shadow: 0 0 0 4px rgba(20, 184, 166, 0.16);
+      outline: 0;
+    }
+
+    .content {
+      background: var(--ui-bg);
+      min-height: calc(100vh - var(--topbar-height));
+      scroll-padding-top: 6px;
+      top: var(--topbar-height);
+      transition: background-color 0.24s ease;
+    }
+
+    .markdown-section {
+      color: var(--ui-text);
+      font-size: 16px;
+      line-height: 1.8;
+      margin: 0 auto;
+      max-width: 920px;
+      padding: 2rem 2.3rem 3.4rem;
+    }
+
+    .markdown-section h1[id],
+    .markdown-section h2[id],
+    .markdown-section h3[id],
+    .markdown-section h4[id],
+    .markdown-section h5[id],
+    .markdown-section h6[id] {
+      scroll-margin-top: 6px;
+    }
+
+    .markdown-section > * {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .markdown-section.route-enter > * {
+      animation: route-enter 0.48s cubic-bezier(0.2, 0.85, 0.2, 1) both;
+      opacity: 0;
+      transform: translateY(10px);
+    }
+
+    .markdown-section.route-enter > *:nth-child(1) { animation-delay: 0.02s; }
+    .markdown-section.route-enter > *:nth-child(2) { animation-delay: 0.04s; }
+    .markdown-section.route-enter > *:nth-child(3) { animation-delay: 0.06s; }
+    .markdown-section.route-enter > *:nth-child(4) { animation-delay: 0.08s; }
+    .markdown-section.route-enter > *:nth-child(5) { animation-delay: 0.1s; }
+    .markdown-section.route-enter > *:nth-child(6) { animation-delay: 0.12s; }
+    .markdown-section.route-enter > *:nth-child(7) { animation-delay: 0.14s; }
+    .markdown-section.route-enter > *:nth-child(8) { animation-delay: 0.16s; }
+    .markdown-section.route-enter > *:nth-child(9) { animation-delay: 0.18s; }
+    .markdown-section.route-enter > *:nth-child(10) { animation-delay: 0.2s; }
+
+    @keyframes route-enter {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .markdown-section h1,
+    .markdown-section h2,
+    .markdown-section h3,
+    .markdown-section h4 {
+      color: var(--ui-text);
+      font-family: "Space Grotesk", "Manrope", sans-serif;
+      letter-spacing: -0.012em;
+      line-height: 1.26;
+      margin-top: 1.5em;
+    }
+
+    .markdown-section h1 {
+      font-size: clamp(1.7rem, 2.4vw, 2.2rem);
+      margin-top: 0.24em;
+    }
+
+    .markdown-section h2 {
+      border-bottom: 1px solid var(--ui-border);
+      font-size: clamp(1.33rem, 1.8vw, 1.58rem);
+      padding-bottom: 0.35rem;
+    }
+
+    .markdown-section h3 {
+      font-size: clamp(1.11rem, 1.5vw, 1.28rem);
+    }
+
+    .markdown-section p,
+    .markdown-section li {
+      color: var(--ui-text-soft);
+      font-size: 1rem;
+    }
+
+    .markdown-section strong {
+      color: var(--ui-text);
+    }
+
+    .markdown-section a {
+      color: var(--theme-color);
+      font-weight: 700;
+      text-decoration-thickness: 1.5px;
+      text-underline-offset: 3px;
+    }
+
+    .markdown-section a:hover {
+      color: color-mix(in srgb, var(--theme-color) 83%, #ffffff 17%);
+    }
+
+    .markdown-section blockquote {
+      background: color-mix(in srgb, var(--ui-surface) 90%, var(--theme-color) 10%);
+      border-left: 4px solid var(--theme-color);
+      border-radius: 10px;
+      color: var(--ui-text);
+      margin: 1.05rem 0;
+      padding: 0.8rem 1rem;
+    }
+
+    .markdown-section hr {
+      background: linear-gradient(90deg, transparent 0%, var(--ui-border) 20%, var(--ui-border) 80%, transparent 100%);
+      border: 0;
+      height: 1px;
+      margin: 2.2rem 0;
+    }
+
+    .markdown-section table {
+      background: var(--ui-surface);
+      border: 1px solid var(--ui-border);
+      border-collapse: separate;
+      border-radius: 12px;
+      border-spacing: 0;
+      box-shadow: var(--ui-shadow);
+      display: block;
+      margin: 1.1rem 0;
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+
+    .markdown-section table th,
+    .markdown-section table td {
+      border-bottom: 1px solid var(--ui-border);
+      border-right: 1px solid var(--ui-border);
+      color: var(--ui-text-soft);
+      padding: 0.6rem 0.8rem;
+    }
+
+    .markdown-section table th:last-child,
+    .markdown-section table td:last-child {
+      border-right: 0;
+    }
+
+    .markdown-section table tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .markdown-section table th {
+      background: color-mix(in srgb, var(--ui-surface) 85%, var(--theme-color) 15%);
+      color: var(--ui-text);
+      font-weight: 700;
+    }
+
+    .markdown-section img {
+      border: 1px solid var(--ui-border);
+      border-radius: 12px;
+      box-shadow: var(--ui-shadow);
+      margin: 0.8rem 0;
+      max-width: 100%;
     }
 
     .markdown-section pre {
@@ -80,6 +604,7 @@
       background: var(--inline-code-bg);
       border-radius: 6px;
       color: var(--inline-code-text);
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", "Consolas", "Courier New", monospace;
       padding: 0.12em 0.38em;
     }
 
@@ -120,7 +645,7 @@
       box-shadow: 0 6px 14px rgba(15, 118, 110, 0.3);
       color: #fff;
       font-size: 0.72rem;
-      font-weight: 600;
+      font-weight: 700;
       letter-spacing: 0.02em;
       padding: 0.32rem 0.72rem;
       top: 0.48rem;
@@ -142,41 +667,6 @@
 
     .docsify-copy-code-button.error {
       background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
-    }
-
-    .code-theme-toggle {
-      background: var(--code-toggle-bg);
-      border: 1px solid var(--code-toggle-border);
-      border-radius: 999px;
-      bottom: 1.1rem;
-      box-shadow: 0 8px 22px rgba(2, 8, 23, 0.2);
-      color: var(--code-toggle-text);
-      cursor: pointer;
-      font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 0.02em;
-      padding: 0.42rem 0.85rem;
-      position: fixed;
-      right: 1rem;
-      transition: transform 0.16s ease, filter 0.16s ease, background-color 0.16s ease;
-      z-index: 40;
-    }
-
-    .code-theme-toggle:hover {
-      background: var(--code-toggle-bg-hover);
-      filter: brightness(1.02);
-      transform: translateY(-1px);
-    }
-
-    .code-theme-toggle:active {
-      transform: translateY(0);
-    }
-
-    @media (max-width: 900px) {
-      .code-theme-toggle {
-        bottom: 0.75rem;
-        right: 0.75rem;
-      }
     }
 
     .markdown-section pre .token.comment,
@@ -211,64 +701,223 @@
     .markdown-section pre .token.punctuation {
       color: var(--code-token-operator);
     }
+
+    .sidebar-toggle {
+      background: var(--ui-surface);
+      border: 1px solid var(--ui-border);
+      border-radius: 11px;
+      box-shadow: var(--ui-shadow);
+      padding: 6px 8px;
+      transition: background-color 0.16s ease;
+    }
+
+    .sidebar-toggle span {
+      background-color: var(--ui-text);
+    }
+
+    @media (max-width: 900px) {
+      .docs-topbar__inner {
+        display: grid;
+        grid-template-areas:
+          "brand actions"
+          "search search";
+        grid-template-columns: 1fr auto;
+        height: auto;
+        row-gap: 0.5rem;
+        padding: 0 0.72rem;
+        padding-bottom: 0.6rem;
+        padding-top: 0.58rem;
+      }
+
+      .docs-topbar__brand {
+        font-size: 0.92rem;
+        grid-area: brand;
+      }
+
+      .docs-topbar__actions {
+        gap: 0.4rem;
+        grid-area: actions;
+      }
+
+      .theme-toggle {
+        font-size: 0.66rem;
+        min-width: 78px;
+        padding: 0.34rem 0.58rem;
+      }
+
+      .docs-topbar__search-slot {
+        grid-area: search;
+        margin: 0;
+        max-width: 100%;
+        min-width: 0;
+      }
+
+      .docs-topbar__search-slot .search input {
+        font-size: 0.83rem;
+        padding: 0.5rem 2.55rem 0.5rem 0.8rem;
+      }
+
+      .sidebar {
+        height: calc(100vh - var(--topbar-height));
+        top: var(--topbar-height);
+      }
+
+      .sidebar-toggle {
+        bottom: auto;
+        left: 0.72rem;
+        top: calc(var(--topbar-height) + 8px);
+      }
+
+      .markdown-section {
+        font-size: 15px;
+        padding: 1.35rem 1rem 2.7rem;
+      }
+
+      .markdown-section h1 {
+        font-size: 1.63rem;
+      }
+
+      .markdown-section h2 {
+        font-size: 1.3rem;
+      }
+
+      .markdown-section pre {
+        border-radius: 10px;
+        padding: 2.05rem 0.84rem 0.9rem;
+      }
+
+      .markdown-section pre.line-numbers {
+        padding-left: 3.55rem;
+      }
+
+      .markdown-section pre[data-lang]::after {
+        font-size: 0.58rem;
+        right: 4.45rem;
+      }
+
+      .docsify-copy-code-button {
+        font-size: 0.66rem;
+        padding: 0.28rem 0.62rem;
+      }
+    }
   </style>
 </head>
 <body>
-  <div id="app">Loading documentation...</div>
-  <script>
-    var CODE_THEME_STORAGE_KEY = "docs-code-theme";
-    var CODE_THEME_DEFAULT = "dark";
-    var LONG_CODE_BLOCK_MIN_LINES = 9;
+  <header class="docs-topbar">
+    <div class="docs-topbar__inner">
+      <a class="docs-topbar__brand" href="#/">
+        <span class="docs-topbar__dot" aria-hidden="true"></span>
+        <span>Project Docs</span>
+      </a>
+      <div id="docs-topbar-search" class="docs-topbar__search-slot" aria-label="Search docs"></div>
+      <div class="docs-topbar__actions">
+        <button id="ui-theme-toggle" class="theme-toggle" type="button" aria-label="Toggle site theme"></button>
+        <button id="code-theme-toggle" class="theme-toggle" type="button" aria-label="Toggle code theme"></button>
+      </div>
+    </div>
+  </header>
 
-    function getStoredCodeTheme() {
-      try {
-        var theme = window.localStorage.getItem(CODE_THEME_STORAGE_KEY);
-        if (theme === "light" || theme === "dark") {
-          return theme;
-        }
-      } catch (error) {
-        return CODE_THEME_DEFAULT;
-      }
-      return CODE_THEME_DEFAULT;
+  <div id="app">Loading documentation...</div>
+
+  <script>
+    var UI_THEME_STORAGE_KEY = "docs-ui-theme";
+    var CODE_THEME_STORAGE_KEY = "docs-code-theme";
+    var LONG_CODE_BLOCK_MIN_LINES = 9;
+    var ANCHOR_OFFSET_EXTRA = 6;
+
+    function isTheme(theme) {
+      return theme === "light" || theme === "dark";
     }
 
-    function setStoredCodeTheme(theme) {
+    function getStoredTheme(key) {
       try {
-        window.localStorage.setItem(CODE_THEME_STORAGE_KEY, theme);
+        return window.localStorage.getItem(key);
+      } catch (error) {
+        return null;
+      }
+    }
+
+    function setStoredTheme(key, value) {
+      try {
+        window.localStorage.setItem(key, value);
       } catch (error) {
         return;
       }
+    }
+
+    function getSystemUiTheme() {
+      if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+        return "dark";
+      }
+      return "light";
+    }
+
+    function getInitialUiTheme() {
+      var saved = getStoredTheme(UI_THEME_STORAGE_KEY);
+      return isTheme(saved) ? saved : getSystemUiTheme();
+    }
+
+    function getInitialCodeTheme(fallbackTheme) {
+      var saved = getStoredTheme(CODE_THEME_STORAGE_KEY);
+      return isTheme(saved) ? saved : fallbackTheme;
+    }
+
+    function applyUiTheme(theme) {
+      document.documentElement.setAttribute("data-ui-theme", theme);
+      updateThemeButtons();
     }
 
     function applyCodeTheme(theme) {
       document.documentElement.setAttribute("data-code-theme", theme);
-      var toggleButton = document.querySelector("#code-theme-toggle");
-      if (toggleButton) {
-        toggleButton.textContent = theme === "dark" ? "Code: Dark" : "Code: Light";
-        toggleButton.setAttribute("aria-pressed", theme === "dark" ? "true" : "false");
+      updateThemeButtons();
+    }
+
+    function updateThemeButtons() {
+      var uiTheme = document.documentElement.getAttribute("data-ui-theme") || "light";
+      var codeTheme = document.documentElement.getAttribute("data-code-theme") || "dark";
+      var uiButton = document.querySelector("#ui-theme-toggle");
+      var codeButton = document.querySelector("#code-theme-toggle");
+
+      if (uiButton) {
+        uiButton.textContent = uiTheme === "dark" ? "UI: Dark" : "UI: Light";
+        uiButton.setAttribute("aria-pressed", uiTheme === "dark" ? "true" : "false");
+      }
+
+      if (codeButton) {
+        codeButton.textContent = codeTheme === "dark" ? "Code: Dark" : "Code: Light";
+        codeButton.setAttribute("aria-pressed", codeTheme === "dark" ? "true" : "false");
       }
     }
 
-    function ensureCodeThemeToggle() {
-      if (document.querySelector("#code-theme-toggle")) {
-        return;
+    function initializeThemeToggles() {
+      var uiButton = document.querySelector("#ui-theme-toggle");
+      var codeButton = document.querySelector("#code-theme-toggle");
+
+      if (uiButton && !uiButton.dataset.bound) {
+        uiButton.addEventListener("click", function () {
+          var currentTheme = document.documentElement.getAttribute("data-ui-theme") || "light";
+          var nextTheme = currentTheme === "dark" ? "light" : "dark";
+          applyUiTheme(nextTheme);
+          setStoredTheme(UI_THEME_STORAGE_KEY, nextTheme);
+        });
+        uiButton.dataset.bound = "true";
       }
 
-      var button = document.createElement("button");
-      button.id = "code-theme-toggle";
-      button.type = "button";
-      button.className = "code-theme-toggle";
-      button.setAttribute("aria-label", "Toggle code block theme");
-      button.title = "Toggle code block theme";
-      button.addEventListener("click", function () {
-        var currentTheme = document.documentElement.getAttribute("data-code-theme") || CODE_THEME_DEFAULT;
-        var nextTheme = currentTheme === "dark" ? "light" : "dark";
-        applyCodeTheme(nextTheme);
-        setStoredCodeTheme(nextTheme);
-      });
+      if (codeButton && !codeButton.dataset.bound) {
+        codeButton.addEventListener("click", function () {
+          var currentTheme = document.documentElement.getAttribute("data-code-theme") || "dark";
+          var nextTheme = currentTheme === "dark" ? "light" : "dark";
+          applyCodeTheme(nextTheme);
+          setStoredTheme(CODE_THEME_STORAGE_KEY, nextTheme);
+          var appRoot = document.querySelector("#app");
+          if (window.Prism && window.Prism.highlightAllUnder && appRoot) {
+            window.Prism.highlightAllUnder(appRoot);
+          }
+        });
+        codeButton.dataset.bound = "true";
+      }
 
-      document.body.appendChild(button);
-      applyCodeTheme(document.documentElement.getAttribute("data-code-theme") || getStoredCodeTheme());
+      updateThemeButtons();
     }
 
     function countCodeLines(text) {
@@ -306,7 +955,363 @@
       });
     }
 
-    applyCodeTheme(getStoredCodeTheme());
+    function animateRouteContent(container) {
+      if (!container) {
+        return;
+      }
+
+      var section = container.querySelector(".markdown-section");
+      if (!section) {
+        return;
+      }
+
+      section.classList.remove("route-enter");
+      void section.offsetWidth;
+      section.classList.add("route-enter");
+      window.setTimeout(function () {
+        section.classList.remove("route-enter");
+      }, 720);
+    }
+
+    function decorateDocs(container) {
+      if (!container) {
+        return;
+      }
+
+      applyLineNumbers(container);
+      if (window.Prism && window.Prism.highlightAllUnder) {
+        window.Prism.highlightAllUnder(container);
+      }
+      animateRouteContent(container);
+    }
+
+    function relocateSearchToTopbar(attemptsRemaining) {
+      var searchSlot = document.querySelector("#docs-topbar-search");
+      if (!searchSlot) {
+        return;
+      }
+
+      var searchElement = document.querySelector(".sidebar .search") || document.querySelector(".search");
+      if (!searchElement) {
+        if (attemptsRemaining > 0) {
+          window.setTimeout(function () {
+            relocateSearchToTopbar(attemptsRemaining - 1);
+          }, 90);
+        }
+        return;
+      }
+
+      if (searchElement.parentElement !== searchSlot) {
+        searchSlot.appendChild(searchElement);
+      }
+    }
+
+    function clearSearchSuggestions() {
+      var searchSlot = document.querySelector("#docs-topbar-search");
+      if (!searchSlot) {
+        return;
+      }
+
+      var searchElement = searchSlot.querySelector(".search");
+      if (!searchElement) {
+        return;
+      }
+
+      searchElement.classList.remove("show");
+
+      var resultsPanel = searchElement.querySelector(".results-panel");
+      if (resultsPanel) {
+        resultsPanel.classList.remove("show");
+      }
+    }
+
+    function updateSearchClearButtonVisibility(searchSlot) {
+      var slot = searchSlot || document.querySelector("#docs-topbar-search");
+      if (!slot) {
+        return;
+      }
+
+      var searchElement = slot.querySelector(".search");
+      if (!searchElement) {
+        return;
+      }
+
+      var input = searchElement.querySelector("input");
+      if (!input) {
+        return;
+      }
+
+      var hasValue = (input.value || "").trim().length > 0;
+      searchElement.classList.toggle("has-value", hasValue);
+    }
+
+    function initializeSearchInteractions() {
+      var searchSlot = document.querySelector("#docs-topbar-search");
+      if (!searchSlot) {
+        return;
+      }
+      updateSearchClearButtonVisibility(searchSlot);
+      if (searchSlot.dataset.bound === "true") {
+        return;
+      }
+
+      searchSlot.addEventListener("click", function (event) {
+        var resultLink = event.target.closest(".results-panel a");
+        if (resultLink) {
+          clearSearchSuggestions();
+
+          var searchInput = searchSlot.querySelector("input");
+          if (searchInput) {
+            searchInput.blur();
+          }
+          return;
+        }
+
+        var clearButton = event.target.closest(".search .clear-button");
+        if (clearButton) {
+          window.setTimeout(function () {
+            updateSearchClearButtonVisibility(searchSlot);
+          }, 0);
+          window.setTimeout(function () {
+            updateSearchClearButtonVisibility(searchSlot);
+          }, 50);
+          window.setTimeout(function () {
+            updateSearchClearButtonVisibility(searchSlot);
+          }, 150);
+        }
+      });
+
+      searchSlot.addEventListener("input", function (event) {
+        if (event.target.matches(".search input")) {
+          updateSearchClearButtonVisibility(searchSlot);
+        }
+      });
+
+      searchSlot.addEventListener("keyup", function (event) {
+        if (event.target.matches(".search input")) {
+          updateSearchClearButtonVisibility(searchSlot);
+        }
+      });
+
+      searchSlot.addEventListener("search", function (event) {
+        if (event.target.matches(".search input")) {
+          updateSearchClearButtonVisibility(searchSlot);
+        }
+      });
+
+      searchSlot.addEventListener("change", function (event) {
+        if (event.target.matches(".search input")) {
+          updateSearchClearButtonVisibility(searchSlot);
+        }
+      });
+
+      searchSlot.dataset.bound = "true";
+      window.setTimeout(function () {
+        updateSearchClearButtonVisibility(searchSlot);
+      }, 0);
+    }
+
+    function updateTopbarHeightVariable() {
+      var topbar = document.querySelector(".docs-topbar");
+      if (!topbar) {
+        return;
+      }
+      document.documentElement.style.setProperty("--topbar-height", topbar.offsetHeight + "px");
+    }
+
+    function getActiveScrollRoot() {
+      var contentScroller = document.querySelector(".content");
+      var isContentScrollable = !!(
+        contentScroller &&
+        contentScroller.scrollHeight > contentScroller.clientHeight + 1
+      );
+      return isContentScrollable ? contentScroller : window;
+    }
+
+    function getScrollableAncestor(element) {
+      var current = element ? element.parentElement : null;
+      while (current && current !== document.body) {
+        var style = getComputedStyle(current);
+        var overflowY = style.overflowY;
+        var isScrollableY = overflowY === "auto" || overflowY === "scroll";
+        if (isScrollableY && current.scrollHeight > current.clientHeight + 1) {
+          return current;
+        }
+        current = current.parentElement;
+      }
+      return null;
+    }
+
+    function resetScrollForRouteWithoutAnchor() {
+      if (getCurrentHashAnchorId()) {
+        return;
+      }
+
+      var scrollRoot = getActiveScrollRoot();
+      if (scrollRoot === window) {
+        if (window.pageYOffset > 0) {
+          window.scrollTo(0, 0);
+        }
+        return;
+      }
+
+      if (scrollRoot.scrollTop > 0) {
+        scrollRoot.scrollTop = 0;
+      }
+    }
+
+    function safeDecodeHashValue(value) {
+      try {
+        return decodeURIComponent(value);
+      } catch (error) {
+        return value;
+      }
+    }
+
+    function extractAnchorIdFromHashLike(hashLike) {
+      if (!hashLike) {
+        return "";
+      }
+
+      var hash = hashLike;
+      var hashStart = hash.indexOf("#");
+      if (hashStart > -1) {
+        hash = hash.slice(hashStart);
+      }
+
+      if (hash.charAt(0) !== "#") {
+        return "";
+      }
+
+      var rawHash = hash.slice(1);
+      if (!rawHash) {
+        return "";
+      }
+
+      var queryIndex = rawHash.indexOf("?");
+      if (queryIndex !== -1) {
+        var params = new URLSearchParams(rawHash.slice(queryIndex + 1));
+        var queryId = params.get("id");
+        if (queryId) {
+          return safeDecodeHashValue(queryId);
+        }
+      }
+
+      var nestedHashIndex = rawHash.lastIndexOf("#");
+      if (nestedHashIndex > -1 && nestedHashIndex < rawHash.length - 1) {
+        return safeDecodeHashValue(rawHash.slice(nestedHashIndex + 1));
+      }
+
+      if (rawHash.charAt(0) !== "/" && rawHash.charAt(0) !== "?") {
+        return safeDecodeHashValue(rawHash);
+      }
+
+      return "";
+    }
+
+    function getCurrentHashAnchorId() {
+      return extractAnchorIdFromHashLike(window.location.hash || "");
+    }
+
+    function findAnchorElement(anchorId) {
+      if (!anchorId) {
+        return null;
+      }
+
+      var byId = document.getElementById(anchorId);
+      if (byId) {
+        return byId;
+      }
+
+      var escaped = anchorId.replace(/\\/g, "\\\\").replace(/"/g, '\\"');
+      return document.querySelector('[name="' + escaped + '"]');
+    }
+
+    function adjustAnchorForTopbar(anchorIdOverride) {
+      var anchorId = anchorIdOverride || getCurrentHashAnchorId();
+      if (!anchorId) {
+        return;
+      }
+
+      var anchorElement = findAnchorElement(anchorId);
+      if (!anchorElement) {
+        return;
+      }
+
+      var topbarHeight = parseFloat(
+        getComputedStyle(document.documentElement).getPropertyValue("--topbar-height")
+      ) || 0;
+      var scrollContainer = getScrollableAncestor(anchorElement);
+      var anchorRect = anchorElement.getBoundingClientRect();
+
+      if (scrollContainer) {
+        var containerRect = scrollContainer.getBoundingClientRect();
+        var desiredTop = containerRect.top + ANCHOR_OFFSET_EXTRA;
+        var deltaInContainer = anchorRect.top - desiredTop;
+        if (Math.abs(deltaInContainer) <= 1) {
+          return;
+        }
+        var targetScrollTop = scrollContainer.scrollTop + deltaInContainer;
+        var maxScrollTop = Math.max(0, scrollContainer.scrollHeight - scrollContainer.clientHeight);
+        var clampedScrollTop = Math.min(maxScrollTop, Math.max(0, Math.round(targetScrollTop)));
+        if (Math.abs(scrollContainer.scrollTop - clampedScrollTop) > 1) {
+          scrollContainer.scrollTop = clampedScrollTop;
+        }
+        return;
+      }
+
+      var desiredWindowTop = topbarHeight + ANCHOR_OFFSET_EXTRA;
+      var deltaInWindow = anchorRect.top - desiredWindowTop;
+      if (Math.abs(deltaInWindow) <= 1) {
+        return;
+      }
+
+      var targetWindowTop = window.pageYOffset + deltaInWindow;
+      var clampedWindowTop = Math.max(0, Math.round(targetWindowTop));
+      if (Math.abs(window.pageYOffset - clampedWindowTop) > 1) {
+        window.scrollTo(0, clampedWindowTop);
+      }
+    }
+
+    function scheduleAnchorAdjustment(anchorIdOverride) {
+      var run = function () {
+        window.requestAnimationFrame(function () {
+          adjustAnchorForTopbar(anchorIdOverride);
+        });
+      };
+
+      run();
+
+      window.setTimeout(run, 120);
+      window.setTimeout(run, 360);
+      window.setTimeout(run, 760);
+    }
+
+    function initializeAnchorInteractions() {
+      if (document.body.dataset.anchorOffsetBound === "true") {
+        return;
+      }
+
+      document.body.addEventListener("click", function (event) {
+        var anchorLink = event.target.closest('a[href*="#"]');
+        if (!anchorLink) {
+          return;
+        }
+
+        var href = anchorLink.getAttribute("href") || "";
+        var clickedAnchorId = extractAnchorIdFromHashLike(href);
+
+        window.setTimeout(function () {
+          scheduleAnchorAdjustment(clickedAnchorId);
+        }, 16);
+      });
+
+      document.body.dataset.anchorOffsetBound = "true";
+    }
+
+    var initialUiTheme = getInitialUiTheme();
+    applyUiTheme(initialUiTheme);
+    applyCodeTheme(getInitialCodeTheme(initialUiTheme === "dark" ? "dark" : "light"));
 
     window.$docsify = {
       name: "Project Docs",
@@ -329,25 +1334,33 @@
       plugins: [
         function (hook) {
           hook.ready(function () {
-            ensureCodeThemeToggle();
+            initializeThemeToggles();
+            relocateSearchToTopbar(20);
+            initializeSearchInteractions();
+            initializeAnchorInteractions();
+            updateTopbarHeightVariable();
+            scheduleAnchorAdjustment();
           });
 
           hook.doneEach(function () {
             var appRoot = document.querySelector("#app");
-            ensureCodeThemeToggle();
-            applyLineNumbers(appRoot);
-            if (window.Prism && window.Prism.highlightAllUnder) {
-              window.Prism.highlightAllUnder(appRoot);
-            }
+            initializeThemeToggles();
+            decorateDocs(appRoot);
+            relocateSearchToTopbar(20);
+            initializeSearchInteractions();
+            initializeAnchorInteractions();
+            updateTopbarHeightVariable();
+            resetScrollForRouteWithoutAnchor();
+            scheduleAnchorAdjustment();
           });
         }
       ]
     };
   </script>
+
   <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
   <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/search.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/docsify-copy-code/dist/docsify-copy-code.min.js"></script>
-
   <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-bash.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-yaml.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-sql.min.js"></script>
@@ -363,11 +1376,23 @@
 
     window.addEventListener("load", function () {
       var appRoot = document.querySelector("#app");
-      ensureCodeThemeToggle();
-      applyLineNumbers(appRoot);
-      if (window.Prism && window.Prism.highlightAllUnder) {
-        window.Prism.highlightAllUnder(appRoot);
-      }
+      initializeThemeToggles();
+      decorateDocs(appRoot);
+      relocateSearchToTopbar(20);
+      initializeSearchInteractions();
+      initializeAnchorInteractions();
+      updateTopbarHeightVariable();
+      resetScrollForRouteWithoutAnchor();
+      scheduleAnchorAdjustment();
+    });
+
+    window.addEventListener("resize", function () {
+      updateTopbarHeightVariable();
+      scheduleAnchorAdjustment();
+    });
+
+    window.addEventListener("hashchange", function () {
+      scheduleAnchorAdjustment();
     });
   </script>
 </body>
