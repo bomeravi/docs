@@ -922,6 +922,13 @@
     var ANCHOR_OFFSET_EXTRA = 6;
     var BACK_TO_TOP_VISIBILITY_OFFSET = 220;
     var backToTopContentScrollTarget = null;
+    var GA_MEASUREMENT_ID_BY_HOSTNAME = {
+      "docs.sajiloapps.com": "G-R03MSWJRHH",
+      "readme-docs.saroj.name.np": "G-V0ZWER6XXZ"
+    };
+    var gaMeasurementIdInUse = "";
+    var gaInitialized = false;
+    var lastTrackedAnalyticsPath = "";
 
     function isTheme(theme) {
       return theme === "light" || theme === "dark";
@@ -1016,6 +1023,71 @@
       }
 
       updateThemeButtons();
+    }
+
+    function isValidGaMeasurementId(measurementId) {
+      var value = (measurementId || "").trim();
+      return /^G-[A-Z0-9]+$/i.test(value) && value !== "G-XXXXXXXXXX";
+    }
+
+    function getGaMeasurementIdForCurrentHost() {
+      var hostname = (window.location.hostname || "").toLowerCase();
+      return (GA_MEASUREMENT_ID_BY_HOSTNAME[hostname] || "").trim();
+    }
+
+    function initializeGoogleAnalytics() {
+      if (gaInitialized) {
+        return;
+      }
+
+      var measurementId = getGaMeasurementIdForCurrentHost();
+      if (!isValidGaMeasurementId(measurementId)) {
+        return;
+      }
+
+      var analyticsScriptId = "ga4-tracker-script";
+      if (!document.getElementById(analyticsScriptId)) {
+        var scriptElement = document.createElement("script");
+        scriptElement.id = analyticsScriptId;
+        scriptElement.async = true;
+        scriptElement.src = "https://www.googletagmanager.com/gtag/js?id=" + encodeURIComponent(measurementId);
+        document.head.appendChild(scriptElement);
+      }
+
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = window.gtag || function () {
+        window.dataLayer.push(arguments);
+      };
+
+      window.gtag("js", new Date());
+      window.gtag("config", measurementId, { send_page_view: false });
+      gaMeasurementIdInUse = measurementId;
+      gaInitialized = true;
+    }
+
+    function getAnalyticsPagePath() {
+      if (typeof getCurrentRoutePath === "function") {
+        return getCurrentRoutePath() || "/";
+      }
+      return "/";
+    }
+
+    function trackAnalyticsPageView() {
+      if (!gaInitialized || !gaMeasurementIdInUse || typeof window.gtag !== "function") {
+        return;
+      }
+
+      var pagePath = getAnalyticsPagePath();
+      if (pagePath === lastTrackedAnalyticsPath) {
+        return;
+      }
+
+      lastTrackedAnalyticsPath = pagePath;
+      window.gtag("event", "page_view", {
+        page_title: document.title,
+        page_location: window.location.href,
+        page_path: pagePath
+      });
     }
 
     function countCodeLines(text) {
@@ -1132,7 +1204,13 @@
       if (topbarToggle.dataset.bound !== "true") {
         topbarToggle.addEventListener("click", function () {
           var nativeToggle = document.querySelector(".sidebar-toggle");
-          if (nativeToggle) {
+          var canUseNativeToggle = !!(
+            nativeToggle &&
+            !nativeToggle.hasAttribute("hidden") &&
+            nativeToggle.offsetParent !== null
+          );
+
+          if (canUseNativeToggle) {
             nativeToggle.click();
             return;
           }
@@ -1683,6 +1761,7 @@
       plugins: [
         function (hook) {
           hook.ready(function () {
+            initializeGoogleAnalytics();
             initializeThemeToggles();
             relocateSearchToTopbar(20);
             initializeTopbarSidebarToggle(20);
@@ -1692,11 +1771,13 @@
             scheduleSidebarActiveSync(12);
             updateTopbarHeightVariable();
             updateBackToTopVisibility();
+            trackAnalyticsPageView();
             scheduleAnchorAdjustment();
           });
 
           hook.doneEach(function () {
             var appRoot = document.querySelector("#app");
+            initializeGoogleAnalytics();
             initializeThemeToggles();
             decorateDocs(appRoot);
             relocateSearchToTopbar(20);
@@ -1708,6 +1789,7 @@
             updateTopbarHeightVariable();
             resetScrollForRouteWithoutAnchor();
             updateBackToTopVisibility();
+            trackAnalyticsPageView();
             scheduleAnchorAdjustment();
           });
         }
@@ -1733,6 +1815,7 @@
 
     window.addEventListener("load", function () {
       var appRoot = document.querySelector("#app");
+      initializeGoogleAnalytics();
       initializeThemeToggles();
       decorateDocs(appRoot);
       relocateSearchToTopbar(20);
@@ -1744,6 +1827,7 @@
       updateTopbarHeightVariable();
       resetScrollForRouteWithoutAnchor();
       updateBackToTopVisibility();
+      trackAnalyticsPageView();
       scheduleAnchorAdjustment();
     });
 
@@ -1758,6 +1842,7 @@
       scheduleSidebarActiveSync(12);
       bindBackToTopScrollTarget();
       updateBackToTopVisibility();
+      trackAnalyticsPageView();
       scheduleAnchorAdjustment();
     });
   </script>
