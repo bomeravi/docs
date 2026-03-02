@@ -5,15 +5,309 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Project Docs</title>
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.css">
   <style>
     :root {
       --theme-color: #0f766e;
+      --code-bg: #0b1328;
+      --code-bg-soft: #111c37;
+      --code-border: #223354;
+      --code-text: #e7efff;
+      --inline-code-bg: #e8f7f5;
+      --inline-code-text: #0f766e;
+      --code-lang-bg: rgba(15, 23, 42, 0.35);
+      --code-lang-border: rgba(148, 163, 184, 0.25);
+      --code-lang-text: #9db0d4;
+      --code-line-number: #7589b1;
+      --code-toggle-bg: #0f766e;
+      --code-toggle-bg-hover: #0d675f;
+      --code-toggle-border: #0b5750;
+      --code-toggle-text: #f0fdfa;
+      --code-token-comment: #7f91b6;
+      --code-token-keyword: #7ab3ff;
+      --code-token-string: #97f1b6;
+      --code-token-function: #ffd17d;
+      --code-token-number: #ffb2a6;
+      --code-token-operator: #d2ddf5;
+    }
+
+    html[data-code-theme="light"] {
+      --code-bg: #f8fbff;
+      --code-bg-soft: #ffffff;
+      --code-border: #d7e3f5;
+      --code-text: #16253f;
+      --inline-code-bg: #e8f7f5;
+      --inline-code-text: #0f766e;
+      --code-lang-bg: rgba(15, 118, 110, 0.08);
+      --code-lang-border: rgba(15, 118, 110, 0.18);
+      --code-lang-text: #0f766e;
+      --code-line-number: #7c8ca9;
+      --code-toggle-bg: #f8fafc;
+      --code-toggle-bg-hover: #f1f5f9;
+      --code-toggle-border: #cbd5e1;
+      --code-toggle-text: #0f172a;
+      --code-token-comment: #64748b;
+      --code-token-keyword: #2563eb;
+      --code-token-string: #047857;
+      --code-token-function: #b45309;
+      --code-token-number: #be123c;
+      --code-token-operator: #1e293b;
+    }
+
+    .markdown-section pre {
+      background: linear-gradient(180deg, var(--code-bg-soft) 0%, var(--code-bg) 100%);
+      border: 1px solid var(--code-border);
+      border-radius: 12px;
+      box-shadow: 0 12px 28px rgba(2, 8, 23, 0.2);
+      color: var(--code-text);
+      margin: 1.1em 0;
+      overflow: auto;
+      padding: 2.2rem 1rem 1rem;
+    }
+
+    .markdown-section pre code {
+      background: transparent;
+      border-radius: 0;
+      color: inherit;
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", "Consolas", "Courier New", monospace;
+      font-size: 0.9rem;
+      line-height: 1.65;
+      padding: 0;
+      text-shadow: none;
+    }
+
+    .markdown-section code {
+      background: var(--inline-code-bg);
+      border-radius: 6px;
+      color: var(--inline-code-text);
+      padding: 0.12em 0.38em;
+    }
+
+    .markdown-section pre[data-lang]::after {
+      background: var(--code-lang-bg);
+      border: 1px solid var(--code-lang-border);
+      border-radius: 999px;
+      color: var(--code-lang-text);
+      font-size: 0.63rem;
+      letter-spacing: 0.08em;
+      padding: 0.12rem 0.5rem;
+      right: 4.9rem;
+      text-transform: uppercase;
+      top: 0.55rem;
+    }
+
+    .markdown-section pre.line-numbers {
+      padding-left: 3.9rem;
+    }
+
+    .markdown-section pre.line-numbers .line-numbers-rows {
+      border-right: 1px solid var(--code-border);
+      left: 0;
+      top: 2.2rem;
+      width: 2.85rem;
+    }
+
+    .markdown-section pre.line-numbers .line-numbers-rows > span:before {
+      color: var(--code-line-number);
+      font-size: 0.8rem;
+      line-height: 1.65;
+    }
+
+    .docsify-copy-code-button {
+      background: linear-gradient(135deg, #0f766e 0%, #14b8a6 100%);
+      border: 0;
+      border-radius: 999px;
+      box-shadow: 0 6px 14px rgba(15, 118, 110, 0.3);
+      color: #fff;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      padding: 0.32rem 0.72rem;
+      top: 0.48rem;
+      transition: transform 0.16s ease, filter 0.16s ease;
+    }
+
+    .docsify-copy-code-button:hover {
+      filter: brightness(1.06);
+      transform: translateY(-1px);
+    }
+
+    .docsify-copy-code-button:active {
+      transform: translateY(0);
+    }
+
+    .docsify-copy-code-button.success {
+      background: linear-gradient(135deg, #16a34a 0%, #22c55e 100%);
+    }
+
+    .docsify-copy-code-button.error {
+      background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+    }
+
+    .code-theme-toggle {
+      background: var(--code-toggle-bg);
+      border: 1px solid var(--code-toggle-border);
+      border-radius: 999px;
+      bottom: 1.1rem;
+      box-shadow: 0 8px 22px rgba(2, 8, 23, 0.2);
+      color: var(--code-toggle-text);
+      cursor: pointer;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      padding: 0.42rem 0.85rem;
+      position: fixed;
+      right: 1rem;
+      transition: transform 0.16s ease, filter 0.16s ease, background-color 0.16s ease;
+      z-index: 40;
+    }
+
+    .code-theme-toggle:hover {
+      background: var(--code-toggle-bg-hover);
+      filter: brightness(1.02);
+      transform: translateY(-1px);
+    }
+
+    .code-theme-toggle:active {
+      transform: translateY(0);
+    }
+
+    @media (max-width: 900px) {
+      .code-theme-toggle {
+        bottom: 0.75rem;
+        right: 0.75rem;
+      }
+    }
+
+    .markdown-section pre .token.comment,
+    .markdown-section pre .token.prolog,
+    .markdown-section pre .token.doctype,
+    .markdown-section pre .token.cdata {
+      color: var(--code-token-comment);
+    }
+
+    .markdown-section pre .token.keyword,
+    .markdown-section pre .token.selector,
+    .markdown-section pre .token.atrule {
+      color: var(--code-token-keyword);
+    }
+
+    .markdown-section pre .token.string,
+    .markdown-section pre .token.attr-value {
+      color: var(--code-token-string);
+    }
+
+    .markdown-section pre .token.function,
+    .markdown-section pre .token.class-name {
+      color: var(--code-token-function);
+    }
+
+    .markdown-section pre .token.number,
+    .markdown-section pre .token.boolean {
+      color: var(--code-token-number);
+    }
+
+    .markdown-section pre .token.operator,
+    .markdown-section pre .token.punctuation {
+      color: var(--code-token-operator);
     }
   </style>
 </head>
 <body>
   <div id="app">Loading documentation...</div>
   <script>
+    var CODE_THEME_STORAGE_KEY = "docs-code-theme";
+    var CODE_THEME_DEFAULT = "dark";
+    var LONG_CODE_BLOCK_MIN_LINES = 9;
+
+    function getStoredCodeTheme() {
+      try {
+        var theme = window.localStorage.getItem(CODE_THEME_STORAGE_KEY);
+        if (theme === "light" || theme === "dark") {
+          return theme;
+        }
+      } catch (error) {
+        return CODE_THEME_DEFAULT;
+      }
+      return CODE_THEME_DEFAULT;
+    }
+
+    function setStoredCodeTheme(theme) {
+      try {
+        window.localStorage.setItem(CODE_THEME_STORAGE_KEY, theme);
+      } catch (error) {
+        return;
+      }
+    }
+
+    function applyCodeTheme(theme) {
+      document.documentElement.setAttribute("data-code-theme", theme);
+      var toggleButton = document.querySelector("#code-theme-toggle");
+      if (toggleButton) {
+        toggleButton.textContent = theme === "dark" ? "Code: Dark" : "Code: Light";
+        toggleButton.setAttribute("aria-pressed", theme === "dark" ? "true" : "false");
+      }
+    }
+
+    function ensureCodeThemeToggle() {
+      if (document.querySelector("#code-theme-toggle")) {
+        return;
+      }
+
+      var button = document.createElement("button");
+      button.id = "code-theme-toggle";
+      button.type = "button";
+      button.className = "code-theme-toggle";
+      button.setAttribute("aria-label", "Toggle code block theme");
+      button.title = "Toggle code block theme";
+      button.addEventListener("click", function () {
+        var currentTheme = document.documentElement.getAttribute("data-code-theme") || CODE_THEME_DEFAULT;
+        var nextTheme = currentTheme === "dark" ? "light" : "dark";
+        applyCodeTheme(nextTheme);
+        setStoredCodeTheme(nextTheme);
+      });
+
+      document.body.appendChild(button);
+      applyCodeTheme(document.documentElement.getAttribute("data-code-theme") || getStoredCodeTheme());
+    }
+
+    function countCodeLines(text) {
+      var normalized = (text || "").replace(/\r\n?/g, "\n");
+      if (!normalized) {
+        return 0;
+      }
+      if (normalized.endsWith("\n")) {
+        normalized = normalized.slice(0, -1);
+      }
+      return normalized ? normalized.split("\n").length : 0;
+    }
+
+    function applyLineNumbers(container) {
+      if (!container) {
+        return;
+      }
+
+      var codeBlocks = container.querySelectorAll("pre > code");
+      codeBlocks.forEach(function (codeElement) {
+        var preElement = codeElement.parentElement;
+        if (!preElement) {
+          return;
+        }
+
+        preElement.classList.remove("line-numbers");
+        var existingRows = preElement.querySelector(".line-numbers-rows");
+        if (existingRows) {
+          existingRows.remove();
+        }
+
+        if (countCodeLines(codeElement.textContent) >= LONG_CODE_BLOCK_MIN_LINES) {
+          preElement.classList.add("line-numbers");
+        }
+      });
+    }
+
+    applyCodeTheme(getStoredCodeTheme());
+
     window.$docsify = {
       name: "Project Docs",
       homepage: "readme.md",
@@ -22,14 +316,59 @@
       auto2top: true,
       relativePath: true,
       notFoundPage: "_404.md",
+      copyCode: {
+        buttonText: "Copy",
+        errorText: "Error",
+        successText: "Copied"
+      },
       search: {
         placeholder: "Search docs",
         noData: "No results",
         depth: 3
-      }
+      },
+      plugins: [
+        function (hook) {
+          hook.ready(function () {
+            ensureCodeThemeToggle();
+          });
+
+          hook.doneEach(function () {
+            var appRoot = document.querySelector("#app");
+            ensureCodeThemeToggle();
+            applyLineNumbers(appRoot);
+            if (window.Prism && window.Prism.highlightAllUnder) {
+              window.Prism.highlightAllUnder(appRoot);
+            }
+          });
+        }
+      ]
     };
   </script>
   <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
   <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/search.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/docsify-copy-code/dist/docsify-copy-code.min.js"></script>
+
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-bash.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-yaml.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-sql.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-groovy.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-powershell.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-docker.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-apacheconf.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/plugins/line-numbers/prism-line-numbers.min.js"></script>
+  <script>
+    if (window.Prism && window.Prism.languages && window.Prism.languages.apacheconf) {
+      window.Prism.languages.apache = window.Prism.languages.apacheconf;
+    }
+
+    window.addEventListener("load", function () {
+      var appRoot = document.querySelector("#app");
+      ensureCodeThemeToggle();
+      applyLineNumbers(appRoot);
+      if (window.Prism && window.Prism.highlightAllUnder) {
+        window.Prism.highlightAllUnder(appRoot);
+      }
+    });
+  </script>
 </body>
 </html>
