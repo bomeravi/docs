@@ -1,12 +1,23 @@
+## ArgoCD 
+
+### Description
+
+Argo CD is a GitOps continuous delivery tool for Kubernetes. It watches your Git repository for application and infrastructure manifests, then keeps the cluster state synchronized with what is defined in Git.
+
+This guide documents a basic Argo CD setup with Helm, cert-manager `ClusterIssuer`, and HTTPS ingress so you can securely access the Argo CD UI.
+
+### Installation
+
+
 Install Helm (on local, not on kubernites)
-```
+```bash
 curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-4
 chmod 700 get_helm.sh
 ./get_helm.sh
 ```
 
 
-```
+```bash
 cat <<'EOF' | kubectl apply -f -
 apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
@@ -60,7 +71,7 @@ spec:
 EOF
 ```
 
-Get Password
-```
+Get Initial Password
+```bash
 kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
 ```

@@ -1,10 +1,10 @@
 ---
-title: Project Documentation Index
+title: Documentation
 slug: /
 sidebar_position: 1
 ---
 
-# Project Documentation Index
+# Documentation
 
 This repository contains internal setup, deployment, and operations documentation.
 
