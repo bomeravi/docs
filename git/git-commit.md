@@ -1,3 +1,8 @@
+---
+title: Git Commit Message Standard
+sidebar_position: 4
+---
+
 # Git Commit Message Standard
 
 This document describes the standard format for writing clean, consistent, professional Git commit messages using **[Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/)**.

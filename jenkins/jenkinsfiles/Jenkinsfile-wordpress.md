@@ -1,14 +1,21 @@
+# Jenkinsfile-wordpress.md
+
+Template pipeline for WordPress container images focused on checkout, Docker build, and registry publish steps.
+
+## Pipeline
+
+```groovy
 pipeline {
   agent any
   environment {
-    REGISTRY = "your.registry.example.com/my-react-app"
+    REGISTRY = "your.registry.example.com/my-wordpress"
     REGISTRY_CREDENTIALS = 'registry-credentials-id'
   }
   stages {
     stage('Checkout') { steps { checkout scm } }
-    stage('Install') { steps { sh 'npm ci' } }
-    stage('Build') { steps { sh 'npm run build' } }
-    stage('Build Image') { steps { sh 'docker build -t ${REGISTRY}:${BUILD_NUMBER} .' } }
+    stage('Build Image') {
+      steps { sh 'docker build -t ${REGISTRY}:${BUILD_NUMBER} .' }
+    }
     stage('Push') {
       steps {
         withCredentials([usernamePassword(credentialsId: env.REGISTRY_CREDENTIALS, usernameVariable: 'USER', passwordVariable: 'PASS')]) {
@@ -19,3 +26,6 @@ pipeline {
     }
   }
 }
+```
+
+Copy the pipeline into your repository root as `Jenkinsfile` and adjust registry/credentials/build commands for your project.

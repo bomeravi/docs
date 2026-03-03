@@ -1,5 +1,6 @@
-# LAMP Setup (Apache2 + MySQL + Multi-PHP, PHP 8.4 default)
+# LAMP Setup 
 
+(Apache2 + MySQL + Multi-PHP, PHP 8.4 default)
 This guide targets Ubuntu 22.04/24.04 and installs Apache2, MySQL, and multiple PHP versions with PHP 8.4 as the default for both CLI and Apache.
 
 ## 1) Base packages

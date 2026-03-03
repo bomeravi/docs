@@ -1,3 +1,10 @@
+# Jenkinsfile-php.md
+
+Template pipeline for generic PHP applications using Composer install, PHPUnit tests, Docker image build, and registry push.
+
+## Pipeline
+
+```groovy
 pipeline {
   agent any
   environment {
@@ -29,3 +36,6 @@ pipeline {
     }
   }
 }
+```
+
+Copy the pipeline into your repository root as `Jenkinsfile` and adjust registry/credentials/build commands for your project.

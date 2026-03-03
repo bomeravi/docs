@@ -1,7 +1,7 @@
-# Disable Root Login on Ubuntu (SSH Hardening Guide)
+# Disable Root Login
 
 This guide explains how to securely disable root login on an Ubuntu
-server after system upgrades.
+server after system upgrades on Ubuntu (SSH Hardening Guide)
 
 ------------------------------------------------------------------------
 

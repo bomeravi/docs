@@ -1,3 +1,8 @@
+---
+title: Git Commands Reference
+sidebar_position: 3
+---
+
 # Git Commands Reference
 
 A complete list of commonly used Git commands for daily development:

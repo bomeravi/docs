@@ -1,4 +1,4 @@
-# Cloudflared / Cloudflare Tunnel — Complete Setup Guide
+# Cloudflared
 
 A complete, production-ready guide for installing and configuring **Cloudflare Tunnel (cloudflared)** on **Ubuntu/Linux, Windows, and macOS**.
 

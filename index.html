@@ -1736,6 +1736,23 @@
       document.body.dataset.anchorOffsetBound = "true";
     }
 
+    function stripLeadingFrontMatter(markdownContent) {
+      if (typeof markdownContent !== "string" || markdownContent.length === 0) {
+        return markdownContent;
+      }
+
+      var normalized = markdownContent.replace(/^\uFEFF/, "");
+      var frontMatterMatch = normalized.match(
+        /^---[ \t]*\r?\n[\s\S]*?\r?\n---(?:[ \t]*\r?\n|[ \t]*$)/
+      );
+
+      if (!frontMatterMatch) {
+        return normalized;
+      }
+
+      return normalized.slice(frontMatterMatch[0].length);
+    }
+
     var initialUiTheme = getInitialUiTheme();
     applyUiTheme(initialUiTheme);
     applyCodeTheme(getInitialCodeTheme(initialUiTheme === "dark" ? "dark" : "light"));
@@ -1760,6 +1777,10 @@
       },
       plugins: [
         function (hook) {
+          hook.beforeEach(function (markdown) {
+            return stripLeadingFrontMatter(markdown);
+          });
+
           hook.ready(function () {
             initializeGoogleAnalytics();
             initializeThemeToggles();

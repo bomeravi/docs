@@ -1,13 +1,20 @@
+# Jenkinsfile-go.md
+
+Template pipeline for Go services compiling a Linux binary, executing tests, then building and publishing a container image.
+
+## Pipeline
+
+```groovy
 pipeline {
   agent any
   environment {
-    REGISTRY = "your.registry.example.com/my-python-app"
+    REGISTRY = "your.registry.example.com/my-go-service"
     REGISTRY_CREDENTIALS = 'registry-credentials-id'
   }
   stages {
     stage('Checkout') { steps { checkout scm } }
-    stage('Install') { steps { sh 'python -m pip install -r requirements.txt' } }
-    stage('Test') { steps { sh 'pytest -q' } }
+    stage('Build') { steps { sh 'CGO_ENABLED=0 GOOS=linux go build -v -o app .' } }
+    stage('Test') { steps { sh 'go test ./...' } }
     stage('Build Image') { steps { sh 'docker build -t ${REGISTRY}:${BUILD_NUMBER} .' } }
     stage('Push') {
       steps {
@@ -19,3 +26,6 @@ pipeline {
     }
   }
 }
+```
+
+Copy the pipeline into your repository root as `Jenkinsfile` and adjust registry/credentials/build commands for your project.

@@ -1,5 +1,6 @@
-# Install and Configure SSH on Ubuntu Server
+# Install SSH
 
+Install and Configure SSH on Ubuntu Server
 This guide explains how to install, enable, and secure SSH on an Ubuntu server.
 
 ---
@@ -51,7 +52,7 @@ You should see port `22` in LISTEN state.
 ---
 
 ## 5. Allow SSH Through Firewall (UFW)
-
+Not for cloud providers, on cloud providers use external firewall outside instance.
 ```bash
 sudo ufw allow ssh
 sudo ufw enable

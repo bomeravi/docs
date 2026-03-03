@@ -33,7 +33,7 @@ This repository contains internal setup, deployment, and operations documentatio
 - [Apache Setup](./jenkins/apache-setup.md)
 - [Secrets](./jenkins/secrets.md)
 - [Server Setup](./jenkins/server-setup.md)
-- [Jenkinsfiles Overview](./jenkins/jenkinsfiles/README.md)
+- [Jenkinsfiles Overview](./jenkins/jenkinsfiles/readme.md)
 - [Shared Library Overview](./jenkins/shared-library/README.md)
 
 ### Kubernetes

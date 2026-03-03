@@ -1,4 +1,4 @@
-# 🔐 Complete Certbot Setup Guide -- Ubuntu Server
+# Certbot Setup
 
 This guide covers:
 

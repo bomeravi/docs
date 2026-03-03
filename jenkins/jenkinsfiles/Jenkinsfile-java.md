@@ -1,3 +1,10 @@
+# Jenkinsfile-java.md
+
+Template pipeline for Java services using Maven wrapper for build/test, followed by Docker build and push.
+
+## Pipeline
+
+```groovy
 pipeline {
   agent any
   environment {
@@ -19,3 +26,6 @@ pipeline {
     }
   }
 }
+```
+
+Copy the pipeline into your repository root as `Jenkinsfile` and adjust registry/credentials/build commands for your project.

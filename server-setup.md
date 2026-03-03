@@ -1,5 +1,6 @@
-# Server Setup: Creating and Using `ubuntu` User on DigitalOcean (Ubuntu 24.04 LTS)
+# Server Setup (Digitalocean)
 
+Creating and Using `ubuntu` User on DigitalOcean (Ubuntu 24.04 LTS)
 This document explains how to migrate from **root login** to a secure, non-root user named **`ubuntu`**, and why each command is used.
 
 ---

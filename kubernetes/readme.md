@@ -21,3 +21,6 @@ This folder contains Kubernetes-related documentation and example manifests.
 
 See `kubernetes-installation-and-commands.md` for OS-specific install steps and common `kubectl` usage.
 
+
+[Digital Ocean Setup]
+

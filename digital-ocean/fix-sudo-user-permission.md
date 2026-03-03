@@ -1,4 +1,7 @@
-# Fix Missing sudo Access (DigitalOcean Droplet)
+# Fix Missing sudo Access
+
+For DigitalOcean Droplet
+
 
 ## Problem
 

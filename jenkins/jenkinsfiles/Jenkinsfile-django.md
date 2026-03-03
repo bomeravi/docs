@@ -1,20 +1,26 @@
+# Jenkinsfile-django.md
+
+Template pipeline for Django apps including dependency install, migrations, collectstatic, tests, and Docker image publish.
+
+## Pipeline
+
+```groovy
 pipeline {
   agent any
   environment {
-    REGISTRY = "your.registry.example.com/my-laravel-app"
+    REGISTRY = "your.registry.example.com/my-django-app"
     REGISTRY_CREDENTIALS = 'registry-credentials-id'
   }
   stages {
     stage('Checkout') { steps { checkout scm } }
-    stage('Install') {
-      steps { sh 'composer install --no-interaction --prefer-dist --optimize-autoloader' }
-    }
-    stage('Env & Migrate') {
+    stage('Install') { steps { sh 'python -m pip install -r requirements.txt' } }
+    stage('Migrate/Collect') {
       steps {
-        sh 'php artisan migrate --force'
+        sh 'python manage.py migrate --noinput'
+        sh 'python manage.py collectstatic --noinput'
       }
     }
-    stage('Test') { steps { sh 'vendor/bin/phpunit' } }
+    stage('Test') { steps { sh 'pytest -q' } }
     stage('Build Image') { steps { sh 'docker build -t ${REGISTRY}:${BUILD_NUMBER} .' } }
     stage('Push') {
       steps {
@@ -26,3 +32,6 @@ pipeline {
     }
   }
 }
+```
+
+Copy the pipeline into your repository root as `Jenkinsfile` and adjust registry/credentials/build commands for your project.

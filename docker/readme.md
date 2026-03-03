@@ -1,4 +1,4 @@
-# Docker Comprehensive Guide
+# Docker
 
 ## Table of Contents
 - [Installation](#installation)

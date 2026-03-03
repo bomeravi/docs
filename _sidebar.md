@@ -11,6 +11,7 @@
   - [Overview](/argocd/readme.md)
 
 - Git
+  - [Overview](/git/readme.md)
   - [Git Setup](/git/git-setup.md)
   - [Git Commands](/git/git-commands.md)
   - [Git Commit](/git/git-commit.md)
@@ -24,7 +25,7 @@
   - [Secrets](/jenkins/secrets.md)
   - [Server Setup](/jenkins/server-setup.md)
   - Jenkinsfiles
-    - [Overview](/jenkins/jenkinsfiles/README.md)
+    - [Overview](/jenkins/jenkinsfiles/readme.md)
   - Shared Library
     - [Overview](/jenkins/shared-library/README.md)
 
