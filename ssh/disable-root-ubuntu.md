@@ -102,6 +102,8 @@ closing your current session.
 
 ## Basic Firewall Setup (Optional)
 
+(Not for cloud providers)
+
 ``` bash
 sudo ufw allow OpenSSH
 sudo ufw enable

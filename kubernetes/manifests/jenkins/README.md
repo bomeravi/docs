@@ -1,14 +1,77 @@
 # Jenkins on Kubernetes
 
-This example deploys Jenkins as a StatefulSet with a persistent volume for `JENKINS_HOME`.
+This folder contains a Jenkins StatefulSet and Service.
 
-Notes:
-- Use a StorageClass suitable for your cluster; the example uses a `volumeClaimTemplates` request.
-- For production, secure the instance (NetworkPolicy, TLS/Ingress, RBAC) and use an external storage provider.
-- Replace images, resource requests/limits, and storage sizes as needed.
+- `statefulset.yaml` provisions persistent Jenkins data with a `volumeClaimTemplates` request.
+- `service.yaml` exposes both Jenkins UI and agent ports.
+- Review resources, storage size, and service type before production use.
 
-Apply:
+## `statefulset.yaml`
+Runs Jenkins as a single-replica StatefulSet with persistent storage.
 
-```bash
-kubectl apply -f kubernetes/manifests/jenkins/ -n jenkins
+```yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: jenkins
+  labels:
+    app: jenkins
+spec:
+  serviceName: "jenkins"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jenkins
+  template:
+    metadata:
+      labels:
+        app: jenkins
+    spec:
+      containers:
+      - name: jenkins
+        image: jenkins/jenkins:lts
+        ports:
+        - containerPort: 8080
+        - containerPort: 50000
+        volumeMounts:
+        - name: jenkins-home
+          mountPath: /var/jenkins_home
+        resources:
+          requests:
+            cpu: "500m"
+            memory: "1Gi"
+          limits:
+            cpu: "1"
+            memory: "2Gi"
+  volumeClaimTemplates:
+  - metadata:
+      name: jenkins-home
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      resources:
+        requests:
+          storage: 10Gi
+```
+
+## `service.yaml`
+Exposes Jenkins UI (`8080`) and agent port (`50000`) using `NodePort`.
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: jenkins
+  labels:
+    app: jenkins
+spec:
+  selector:
+    app: jenkins
+  ports:
+  - name: http
+    port: 8080
+    targetPort: 8080
+  - name: agent
+    port: 50000
+    targetPort: 50000
+  type: NodePort
 ```

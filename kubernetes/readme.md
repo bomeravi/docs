@@ -1,5 +1,3 @@
-# Kubernetes Docs
-
 # Kubernetes
 
 This folder contains installation notes and example manifests for local development and deployment.

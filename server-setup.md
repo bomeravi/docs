@@ -138,5 +138,3 @@ Prevents root from logging in locally or remotely.
 - Rotate keys periodically
 
 ---
-
-**File:** `server-setup.md`

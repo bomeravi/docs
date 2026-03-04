@@ -1,22 +1,32 @@
 # Kubernetes Manifests
+Last updated: **March 4, 2026**
 
-This folder contains example Kubernetes manifests organized per-application. Replace image names, secrets, and resource settings before applying to your cluster.
+This directory contains Kubernetes manifest examples organized by application.
+Each app folder has its own README that includes all YAML files with descriptions and inline code.
 
-Layout:
+## App Folder Paths
 
-- `laravel/` - Laravel (PHP-FPM) example
-- `wordpress/` - WordPress + MySQL example
-- `java-microservice/` - Java microservice example
-- `node/` - Node.js example
-- `go/` - Go microservice example
-- `django/` - Python / Django example
- - `jenkins/` - Jenkins StatefulSet example with PVC
- - `react/` - React (static) app example
+- [`django/`](./django/README.md) - Django Deployment + Service
+- [`go/`](./go/README.md) - Go Deployment + Service
+- [`java-microservice/`](./java-microservice/README.md) - Java Deployment + Service
+- [`jenkins/`](./jenkins/README.md) - Jenkins StatefulSet + Service
+- [`laravel/`](./laravel/README.md) - Laravel Deployment + Service
+- [`node/`](./node/README.md) - Node.js Deployment + Service
+- [`react/`](./react/README.md) - React Deployment + Service
+- [`wordpress/`](./wordpress/README.md) - WordPress + MySQL + Secret example
 
-Apply an app's manifests with:
+## Apply Manifests
+
+Apply all manifests for one app:
 
 ```bash
 kubectl apply -f kubernetes/manifests/<app>/ -n <namespace>
 ```
 
-Be sure to create namespaces, PVCs, and secrets as required by each app.
+Example:
+
+```bash
+kubectl apply -f kubernetes/manifests/go/ -n demo
+```
+
+Before applying, update image names, create required Secrets, and adjust resources for your cluster.
