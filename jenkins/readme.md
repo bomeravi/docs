@@ -13,6 +13,7 @@ This document shows how to install Jenkins on Windows, Ubuntu/Linux, and macOS, 
 ```bash
 sudo apt update
 sudo apt install fontconfig openjdk-21-jre
+java -version
 ```
 
 - Add Jenkins repository and install:
@@ -49,12 +50,13 @@ brew install jenkins-lts
 brew services start jenkins-lts
 ```
 
-- Open http://localhost:8080 and follow the web setup.
-
 **Notes**
 - Ensure the Jenkins host has required ports open (default 8080).
 - Use a dedicated service user for Jenkins where possible.
 - For production, configure HTTPS (Apache/Nginx reverse proxy or built-in support with TLS) and set up backups.
+- See [Apache setup](./apache-setup.md) for Apache reverse proxy and HTTPS guidance.
+- For development only (or before you add SSL), you can access Jenkins at `http://jenkins.digi.saroj.name.np:8080`. Make sure port `8080` is reachable, otherwise you may see errors like `This site can't be reached` or connection timeout/refused messages. Then continue with the [Server setup guide](./server-setup.md).
+
 
 **Jenkinsfiles & Templates**
 

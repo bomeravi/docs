@@ -5,7 +5,18 @@ firewall, and hardened settings.
 
 ------------------------------------------------------------------------
 
-# 1. System Preparation
+# 1. Install Jenkins (LTS)
+
+Use the main installation guide before following this Apache production setup:
+
+- [Jenkins installation guide](./readme.md) - follow **Installation (Ubuntu / Debian)**.
+- [Server setup guide](./server-setup.md) - complete the first login and initial Jenkins web setup.
+
+After Jenkins is installed and accessible, continue with the steps below.
+
+------------------------------------------------------------------------
+
+# 2. System Preparation
 
 ## Update System
 
@@ -16,33 +27,7 @@ sudo apt update && sudo apt upgrade -y
 ## Install Required Packages
 Not to use
 ``` bash
-sudo apt install -y fontconfig openjdk-21-jre apache2 ufw fail2ban curl wget
-```
-
-Verify Java:
-
-``` bash
-java -version
-```
-
-------------------------------------------------------------------------
-
-# 2. Install Jenkins (LTS)
-
-``` bash
-sudo wget -O /etc/apt/keyrings/jenkins-keyring.asc   https://pkg.jenkins.io/debian-stable/jenkins.io-2026.key
-
-echo "deb [signed-by=/etc/apt/keyrings/jenkins-keyring.asc]"   https://pkg.jenkins.io/debian-stable binary/ | sudo tee   /etc/apt/sources.list.d/jenkins.list > /dev/null
-
-sudo apt update
-sudo apt install jenkins
-```
-
-Enable & start:
-
-``` bash
-sudo systemctl enable jenkins
-sudo systemctl start jenkins
+sudo apt install -y apache2 ufw fail2ban curl wget
 ```
 
 ------------------------------------------------------------------------
@@ -135,6 +120,7 @@ Paste:
 ```
 
 
+This is final output that we create later.
 
 ``` apache
 <VirtualHost *:80>
@@ -206,6 +192,21 @@ Test auto-renew:
 sudo certbot renew --dry-run
 ```
 
+
+Once ssl installed edit the host file to make some changes,
+
+```bash
+sudo nano /etc/apache2/sites-available/jenkins.digi.saroj.name.np-le-ssl.conf
+```
+make this changes, this is used to forwarded all headers, port = 443, proto = https
+
+```bash
+    # --- Forwarded headers for Jenkins ---
+    RequestHeader set X-Forwarded-Host "%{HTTP_HOST}i"
+    RequestHeader set X-Forwarded-Port "443"
+    RequestHeader set X-Forwarded-Proto "https"
+```
+
 ------------------------------------------------------------------------
 
 # 8. Jenkins Configuration
@@ -269,6 +270,8 @@ sudo journalctl -u jenkins -f
 ```
 
 ------------------------------------------------------------------------
+
+- [Server setup guide](./server-setup.md) - complete the first login and initial Jenkins web setup.
 
 # Production Checklist
 
