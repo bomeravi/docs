@@ -1,76 +1,84 @@
 # Kubernetes on DigitalOcean (DOKS)
 Last updated: **March 4, 2026**
 
-This guide walks through creating a DigitalOcean Kubernetes cluster and deploying a basic workload.
+This guide follows the DigitalOcean UI flow to create and connect a Kubernetes cluster.
+
+All screenshots are loaded from `digitalocean/images/kubernetes/`.
 
 ## Prerequisites
 
 - DigitalOcean account with billing enabled
-- `kubectl` installed locally
-- `doctl` installed locally (recommended)
+- A project where the cluster will be created
+- A terminal/Droplet where you can run `doctl` and `kubectl`
 
-## 1. Create a Kubernetes Cluster
+## 1. Open Kubernetes and start cluster creation
 
 - Open DigitalOcean dashboard.
-- Go to `Kubernetes` -> `Create Kubernetes Cluster`.
-- Configure:
-  - Region and VPC
-  - Kubernetes version
-  - Node pool size and instance type
-  - Cluster name
-- Click `Create Cluster`.
+- Go to `Kubernetes` and click `Create a Kubernetes Cluster`.
+- You can also click `Create` from the top menu, then select `Kubernetes`.
 
-## 2. Authenticate with DigitalOcean
+![Step 1 - List Kubernetes](./images/kubernetes/01-list-kubernetes.png)
 
-Create a personal access token from `API` -> `Tokens/Keys`, then run:
+## 2. Create Kubernetes Cluster
+
+- Configure cluster options.
+- If needed, enable `High Availability`.
+- Choose droplet/node plan.
+- Click `Create Kubernetes Cluster`.
+- Wait until cluster provisioning is complete.
+
+![Step 2 - Create Kubernetes Cluster](./images/kubernetes/02-create-kubernetes-cluster.png)
+
+## 3. Open cluster details
+
+- After creation, open the cluster details page.
+- In the guided setup flow, click `Next`.
+
+![Step 3 - Cluster details](./images/kubernetes/03-cluster-details.png)
+
+## 4. Connect cluster (Droplet + doctl + kubectl)
+
+- Create or use a Droplet/terminal machine for cluster access.
+- Install `doctl` on that machine.
+- Install `kubectl`:
 
 ```bash
-doctl auth init
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+kubectl version --client
 ```
 
-Paste the token when prompted.
+- Run the exact command shown by DigitalOcean on this screen (kubeconfig save command).
+- After the command succeeds, click `Continue`.
 
-## 3. Save Kubeconfig for the Cluster
+![Step 4 - Connect cluster](./images/kubernetes/04-connect-cluster.png)
 
-List clusters:
+## 5. Verify kubectl and continue
 
-```bash
-doctl kubernetes cluster list
-```
-
-Save kubeconfig:
-
-```bash
-doctl kubernetes cluster kubeconfig save <CLUSTER_NAME>
-```
-
-## 4. Verify Cluster Access
+- Verify access from terminal:
 
 ```bash
 kubectl get nodes
 kubectl get ns
 ```
 
-If nodes are visible, access is configured correctly.
+- If the cluster and nodes are visible, click `Continue`.
 
-## 5. Deploy a Test Application
+![Step 5 - Verify kubectl](./images/kubernetes/05-verify-kubectl.png)
 
-```bash
-kubectl create deployment hello-nginx --image=nginx:stable
-kubectl expose deployment hello-nginx --port=80 --type=LoadBalancer
-kubectl get svc hello-nginx -w
-```
+## 6. Deployment complete
 
-Use the external IP once it is assigned.
+- On the deployment complete screen, click `Great, I am done`.
 
-## 6. Basic Production Setup Checklist
+![Step 6 - Deployment complete](./images/kubernetes/06-deploy-complete.png)
 
-- Create namespaces per environment (`dev`, `staging`, `prod`)
-- Set resource requests/limits for workloads
-- Store secrets in Kubernetes Secrets or external secret manager
-- Enable monitoring and alerts
-- Restrict access with RBAC
+## 7. Final cluster detail page
+
+- You will land on the final cluster detail page.
+- From here, you can manage node pools, upgrades, networking, and access settings.
+
+![Step 7 - Final cluster detail page](./images/kubernetes/07-final-cluster-detail-page.png)
 
 ## Next Step
 
-- Continue with cluster operations in [Kubernetes docs](../kubernetes/readme.md).
+- Continue with [Kubernetes installation and commands](../kubernetes/kubernetes-installation-and-commands.md).

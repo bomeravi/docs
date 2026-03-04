@@ -45,14 +45,14 @@ sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin 
 sudo docker run hello-world
 ```
 #### Method 2: Convenience Script
-```
 
+```bash
 curl -fsSL https://get.docker.com -o get-docker.sh
 sudo sh get-docker.sh
+```
 Post-installation Steps (Ubuntu)
-Bash
-
-# Add your user to docker group
+Add your user to docker group
+```bash
 sudo usermod -aG docker $USER
 
 # Activate changes to groups
@@ -98,15 +98,15 @@ docker --version
 docker compose version
 docker run hello-world
 ```
+
 Post-installation (Windows)
+Configure Docker to start on boot (usually default)
+Settings > General > "Start Docker Desktop when you log in"
 
+Configure WSL 2 integration
+Settings > Resources > WSL Integration
+Enable integration with your WSL 2 distros
 
-# Configure Docker to start on boot (usually default)
-# Settings > General > "Start Docker Desktop when you log in"
-
-# Configure WSL 2 integration
-# Settings > Resources > WSL Integration
-# Enable integration with your WSL 2 distros
 ### macOS Installation
 Requirements
 macOS 11 or newer (for Apple Silicon)
@@ -130,23 +130,22 @@ Enter your password to proceed
 Wait for Docker to start
 Verify Installation
 
-```
-
+```bash
 docker --version
 docker compose version
 docker run hello-world
 Using Homebrew (Alternative)
 ```
 
-# Install Homebrew if not installed
+### Install Homebrew if not installed
 ```
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
-# Install Docker Desktop
+### Install Docker Desktop
 ```
 brew install --cask docker
 ```
-# Launch Docker Desktop
+### Launch Docker Desktop
 open /Applications/Docker.app
 ## Docker Commands
 Container Management

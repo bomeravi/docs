@@ -410,3 +410,142 @@ git branch --show-current
 ```
 
 ---
+
+## 15. Git Ignore Files & Local File Management
+
+### Create .gitignore file
+
+``` bash
+# Create .gitignore in root directory
+touch .gitignore
+```
+
+### Common .gitignore entries
+
+``` bash
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Node modules
+node_modules/
+package-lock.json
+yarn.lock
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Build directories
+dist/
+build/
+out/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+```
+
+### Check if file matches .gitignore pattern
+
+``` bash
+git check-ignore <file>
+git check-ignore -v <file>
+```
+
+### List all ignored files
+
+``` bash
+git status --ignored
+```
+
+### Show all tracked files
+
+``` bash
+git ls-files
+```
+
+### Show ignored files
+
+``` bash
+git ls-files --others --ignored --exclude-standard
+```
+
+---
+
+## 16. Assume-Unchanged & Skip-Worktree Commands
+
+These commands allow you to tell Git to ignore local changes to tracked files without committing `gitignore` changes.
+
+### Mark file as assumed-unchanged
+
+``` bash
+git update-index --assume-unchanged <file>
+```
+
+This tells Git to assume the file hasn't changed locally, useful for configuration files modified locally.
+
+### Unmark assumed-unchanged
+
+``` bash
+git update-index --no-assume-unchanged <file>
+```
+
+### List all assumed-unchanged files
+
+``` bash
+git ls-files -v | grep '^[a-z]'
+```
+
+The lowercase letter indicates an `assume-unchanged` file.
+
+### Skip-worktree (preferred alternative)
+
+Skip-worktree is more reliable than `assume-unchanged`:
+
+``` bash
+# Mark file as skip-worktree
+git update-index --skip-worktree <file>
+
+# Unmark skip-worktree
+git update-index --no-skip-worktree <file>
+
+# List all skip-worktree files
+git ls-files -v | grep '^S'
+```
+
+### Difference between assume-unchanged and skip-worktree
+
+| Feature | assume-unchanged | skip-worktree |
+|---------|------------------|---------------|
+| Purpose | Optimize performance | Ignore local changes |
+| Git operations | Bypass stat check | Skip file entirely |
+| Reliability | Can break with certain operations | More reliable |
+| Use case | Large binary files | Config files with local changes |
+
+### Clear assume-unchanged files for a fresh start
+
+``` bash
+# Remove all assume-unchanged flags
+git ls-files -v | grep '^[a-z]' | awk '{print $2}' | xargs git update-index --no-assume-unchanged
+
+# Remove all skip-worktree flags
+git ls-files -v | grep '^S' | awk '{print $2}' | xargs git update-index --no-skip-worktree
+```
+
+---

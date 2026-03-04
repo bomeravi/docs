@@ -147,7 +147,7 @@ This is final output that we create later.
     ProxyPreserveHost On
     AllowEncodedSlashes NoDecode
 
-    RequestHeader set X-Forwarded-Host "%{Host}i"
+    RequestHeader set X-Forwarded-Host "%{Host}s"
     RequestHeader set X-Forwarded-Port "443"
     RequestHeader set X-Forwarded-Proto "https"
 
@@ -202,7 +202,7 @@ make this changes, this is used to forwarded all headers, port = 443, proto = ht
 
 ```bash
     # --- Forwarded headers for Jenkins ---
-    RequestHeader set X-Forwarded-Host "%{HTTP_HOST}i"
+    RequestHeader set X-Forwarded-Host "%{HTTP_HOST}s"
     RequestHeader set X-Forwarded-Port "443"
     RequestHeader set X-Forwarded-Proto "https"
 ```
