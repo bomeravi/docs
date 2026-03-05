@@ -1752,7 +1752,10 @@
       return extractRoutePathFromHashLike(window.location.hash || "") || "/";
     }
 
-    function syncSidebarActiveLink() {
+    function syncSidebarActiveLink(options) {
+      var allowRouteFallbackWhenAnchorMissing = !!(
+        options && options.allowRouteFallbackWhenAnchorMissing
+      );
       var sidebarNav = document.querySelector(".sidebar-nav");
       if (!sidebarNav) {
         return false;
@@ -1764,18 +1767,61 @@
       }
 
       var currentPath = getCurrentRoutePath();
-      var matchedLink = null;
+      var currentAnchorId = getCurrentHashAnchorId();
+      var exactAnchorMatchedLink = null;
+      var routeOnlyMatchedLink = null;
+      var hasAnyAnchorLinksForCurrentPath = false;
 
       links.forEach(function (link) {
         link.classList.remove("is-current");
-        if (matchedLink) {
+
+        var linkHref = link.getAttribute("href") || "";
+        var linkPath = extractRoutePathFromHashLike(linkHref);
+        var linkAnchorId = extractAnchorIdFromHashLike(linkHref);
+        var isSameRoute = !!linkPath ? linkPath === currentPath : !!linkAnchorId;
+        if (!isSameRoute) {
           return;
         }
-        var linkPath = extractRoutePathFromHashLike(link.getAttribute("href") || "");
-        if (linkPath && linkPath === currentPath) {
-          matchedLink = link;
+
+        if (linkAnchorId) {
+          hasAnyAnchorLinksForCurrentPath = true;
+        }
+
+        if (currentAnchorId && linkAnchorId && linkAnchorId === currentAnchorId) {
+          if (!exactAnchorMatchedLink) {
+            exactAnchorMatchedLink = link;
+          }
+          return;
+        }
+
+        if (!routeOnlyMatchedLink && !linkAnchorId) {
+          routeOnlyMatchedLink = link;
         }
       });
+
+      var matchedLink = null;
+      if (currentAnchorId) {
+        if (exactAnchorMatchedLink) {
+          matchedLink = exactAnchorMatchedLink;
+        } else if (allowRouteFallbackWhenAnchorMissing || hasAnyAnchorLinksForCurrentPath) {
+          matchedLink = routeOnlyMatchedLink;
+        } else {
+          return false;
+        }
+      } else {
+        matchedLink = routeOnlyMatchedLink;
+      }
+
+      if (!matchedLink && currentAnchorId) {
+        links.some(function (link) {
+          var linkPath = extractRoutePathFromHashLike(link.getAttribute("href") || "");
+          if (linkPath && linkPath === currentPath) {
+            matchedLink = link;
+            return true;
+          }
+          return false;
+        });
+      }
 
       if (matchedLink) {
         matchedLink.classList.add("is-current");
@@ -1790,6 +1836,7 @@
         return;
       }
       if (remaining <= 0) {
+        syncSidebarActiveLink({ allowRouteFallbackWhenAnchorMissing: true });
         return;
       }
       window.setTimeout(function () {
