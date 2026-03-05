@@ -22,25 +22,53 @@ ENTRYPOINT ["/usr/local/bin/app"]
 
 ## What It Does
 
-- Uses a multi-stage build for smaller runtime images.
-- Compiles a static Go binary in the build stage.
-- Runs as a non-root user in the final stage.
-- Exposes port `8080`.
+- Builds a static Go binary in a builder stage.
+- Uses a minimal runtime image (`alpine`).
+- Runs the app as non-root user.
 
 ## Required Files In Build Context
 
 - `go.mod`
 - `go.sum`
-- Go source files
+- Go source code with a runnable main package
 
-## Build
+## Docker Compose Example
+
+```yaml
+version: '3.8'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: docker/go/Dockerfile
+    container_name: go-app
+    env_file:
+      - .env
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+```
+
+## Other Files You Need
+
+- `.env` (for example: `PORT`, `APP_ENV`, DB/redis URLs if your app uses them)
+- `.dockerignore`
+- Config files loaded by your Go app at runtime
+
+## Build (Docker)
 
 ```bash
 docker build -t go-app -f docker/go/Dockerfile .
 ```
 
-## Run
+## Run (Docker)
 
 ```bash
 docker run --rm -p 8080:8080 go-app
+```
+
+## Run (Docker Compose)
+
+```bash
+docker compose up --build -d
 ```

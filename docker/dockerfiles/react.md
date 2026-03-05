@@ -22,24 +22,53 @@ CMD ["nginx", "-g", "daemon off;"]
 
 ## What It Does
 
-- Uses a multi-stage build to compile React assets with Node.
-- Copies static build output into Nginx runtime image.
-- Serves the app via Nginx on port `80`.
+- Uses multi-stage build to compile React assets.
+- Serves static build output with Nginx.
+- Exposes HTTP on port `80`.
 
 ## Required Files In Build Context
 
 - `package.json`
 - `package-lock.json` (or compatible lockfile)
-- React source files
+- React source (`src/`, `public/`)
 
-## Build
+## Docker Compose Example
+
+```yaml
+version: '3.8'
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: docker/react/Dockerfile
+    container_name: react-frontend
+    ports:
+      - "3000:80"
+    env_file:
+      - .env
+    restart: unless-stopped
+```
+
+## Other Files You Need
+
+- `.env` for build-time values (for example `REACT_APP_API_URL`)
+- Frontend routing fallback config if you serve SPA routes through Nginx
+- `.dockerignore`
+
+## Build (Docker)
 
 ```bash
 docker build -t react-app -f docker/react/Dockerfile .
 ```
 
-## Run
+## Run (Docker)
 
 ```bash
-docker run --rm -p 8080:80 react-app
+docker run --rm -p 3000:80 react-app
+```
+
+## Run (Docker Compose)
+
+```bash
+docker compose up --build -d
 ```
