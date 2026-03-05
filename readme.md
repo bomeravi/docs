@@ -34,6 +34,7 @@ This repository contains internal setup, deployment, and operations documentatio
 - [Secrets](./jenkins/secrets.md)
 - [Server Setup](./jenkins/server-setup.md)
 - [Jenkinsfiles Overview](./jenkins/jenkinsfiles/readme.md)
+- [Docs + Kubernetes Jenkinsfile](./jenkins/jenkinsfiles/Jenkinsfile-docs-k8s.md)
 - [Shared Library Overview](./jenkins/shared-library/README.md)
 
 ### Kubernetes
@@ -48,6 +49,11 @@ This repository contains internal setup, deployment, and operations documentatio
 - [Node Manifest Docs](./kubernetes/manifests/node/README.md)
 - [React Manifest Docs](./kubernetes/manifests/react/README.md)
 - [WordPress Manifest Docs](./kubernetes/manifests/wordpress/README.md)
+
+### K8s Deploy Flow (Docs)
+- [Overview](./k8s/README.md)
+- [Direct Kubectl Deploy](./k8s/kubernetes/README.md)
+- [ArgoCD Application Deploy](./k8s/argocd/README.md)
 
 ## Cloudflare Pages Deployment
 

@@ -13,6 +13,10 @@
     :root {
       --theme-color: #0f766e;
       --topbar-height: 60px;
+      --layout-shell-max-width: 1300px;
+      --layout-shell-gutter: 1rem;
+      --layout-sidebar-width: 300px;
+      --layout-shell-side-gap: max(var(--layout-shell-gutter), calc((100vw - var(--layout-shell-max-width)) / 2));
       --ui-bg: #f5f8fb;
       --ui-surface: #ffffff;
       --ui-text: #132337;
@@ -157,7 +161,7 @@
       height: 60px;
       justify-content: space-between;
       margin: 0 auto;
-      max-width: 1300px;
+      max-width: var(--layout-shell-max-width);
       overflow: visible;
       padding: 0 1rem;
       width: 100%;
@@ -795,6 +799,27 @@
       transform: translateY(0);
     }
 
+    @media (min-width: 769px) {
+      .sidebar {
+        left: var(--layout-shell-side-gap);
+        width: var(--layout-sidebar-width);
+      }
+
+      .content {
+        left: calc(var(--layout-shell-side-gap) + var(--layout-sidebar-width));
+        right: var(--layout-shell-side-gap);
+      }
+
+      body.close .sidebar {
+        transform: translateX(calc((-1 * var(--layout-sidebar-width)) - var(--layout-shell-side-gap) - var(--layout-shell-gutter)));
+      }
+
+      body.close .content {
+        left: var(--layout-shell-side-gap);
+        right: var(--layout-shell-side-gap);
+      }
+    }
+
     @media (max-width: 900px) {
       .docs-topbar__inner {
         display: grid;
@@ -884,6 +909,25 @@
       .docsify-copy-code-button {
         font-size: 0.66rem;
         padding: 0.28rem 0.62rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        left: 0 !important;
+        transform: translateX(calc(-100% - 0.9rem)) !important;
+        width: min(86vw, var(--layout-sidebar-width)) !important;
+        z-index: 92;
+      }
+
+      body.is-mobile-sidebar-open .sidebar {
+        transform: translateX(0) !important;
+      }
+
+      .content {
+        left: 0 !important;
+        right: 0 !important;
+        transform: none !important;
       }
     }
   </style>
@@ -1193,6 +1237,57 @@
       return true;
     }
 
+    function isMobileViewport() {
+      return window.matchMedia && window.matchMedia("(max-width: 768px)").matches;
+    }
+
+    function setMobileSidebarOpen(isOpen) {
+      if (!document.body) {
+        return;
+      }
+
+      var open = !!isOpen && isMobileViewport();
+      document.body.classList.toggle("is-mobile-sidebar-open", open);
+
+      if (isMobileViewport()) {
+        // Keep Docsify in its closed state and control mobile drawer ourselves.
+        document.body.classList.add("close");
+      }
+    }
+
+    function closeMobileSidebar() {
+      setMobileSidebarOpen(false);
+    }
+
+    function initializeMobileSidebarInteractions() {
+      if (!document.body || document.body.dataset.mobileSidebarBound === "true") {
+        return;
+      }
+
+      document.body.addEventListener("click", function (event) {
+        if (!isMobileViewport() || !document.body.classList.contains("is-mobile-sidebar-open")) {
+          return;
+        }
+
+        var topbarToggle = event.target.closest("#docs-topbar-sidebar-toggle");
+        if (topbarToggle) {
+          return;
+        }
+
+        var sidebar = event.target.closest(".sidebar");
+        if (sidebar) {
+          closeMobileSidebar();
+          return;
+        }
+
+        if (event.target.closest(".content")) {
+          closeMobileSidebar();
+        }
+      });
+
+      document.body.dataset.mobileSidebarBound = "true";
+    }
+
     function initializeTopbarSidebarToggle(attemptsRemaining) {
       var topbarToggle = document.querySelector("#docs-topbar-sidebar-toggle");
       if (!topbarToggle) {
@@ -1203,12 +1298,14 @@
 
       if (topbarToggle.dataset.bound !== "true") {
         topbarToggle.addEventListener("click", function () {
+          if (isMobileViewport()) {
+            var shouldOpen = !document.body.classList.contains("is-mobile-sidebar-open");
+            setMobileSidebarOpen(shouldOpen);
+            return;
+          }
+
           var nativeToggle = document.querySelector(".sidebar-toggle");
-          var canUseNativeToggle = !!(
-            nativeToggle &&
-            !nativeToggle.hasAttribute("hidden") &&
-            nativeToggle.offsetParent !== null
-          );
+          var canUseNativeToggle = !!(nativeToggle && typeof nativeToggle.click === "function");
 
           if (canUseNativeToggle) {
             nativeToggle.click();
@@ -1251,13 +1348,7 @@
       }
     }
 
-    function updateSearchClearButtonVisibility(searchSlot) {
-      var slot = searchSlot || document.querySelector("#docs-topbar-search");
-      if (!slot) {
-        return;
-      }
-
-      var searchElement = slot.querySelector(".search");
+    function updateSingleSearchClearButtonVisibility(searchElement) {
       if (!searchElement) {
         return;
       }
@@ -1271,11 +1362,84 @@
       searchElement.classList.toggle("has-value", hasValue);
     }
 
+    function updateSearchClearButtonVisibility(searchSlot) {
+      var slot = searchSlot || document.querySelector("#docs-topbar-search");
+      var searchElements = slot ? Array.from(slot.querySelectorAll(".search")) : [];
+
+      if (!searchElements.length) {
+        searchElements = Array.from(document.querySelectorAll(".search"));
+      }
+
+      searchElements.forEach(function (searchElement) {
+        updateSingleSearchClearButtonVisibility(searchElement);
+      });
+    }
+
+    function handleSearchClearButtonClick(clearButton, event, searchSlot) {
+      if (!clearButton || (event && event.__searchClearHandled)) {
+        return;
+      }
+
+      if (event) {
+        event.__searchClearHandled = true;
+      }
+
+      var activeSearchElement = clearButton.closest(".search");
+      var activeSearchInput = activeSearchElement ? activeSearchElement.querySelector("input") : null;
+
+      if (activeSearchInput) {
+        activeSearchInput.value = "";
+        activeSearchInput.dispatchEvent(new Event("input", { bubbles: true }));
+        activeSearchInput.dispatchEvent(new Event("search", { bubbles: true }));
+        activeSearchInput.dispatchEvent(new Event("change", { bubbles: true }));
+      }
+
+      if (activeSearchElement) {
+        activeSearchElement.classList.remove("has-value");
+      }
+
+      clearSearchSuggestions();
+      updateSingleSearchClearButtonVisibility(activeSearchElement);
+      updateSearchClearButtonVisibility(searchSlot);
+
+      window.requestAnimationFrame(function () {
+        updateSingleSearchClearButtonVisibility(activeSearchElement);
+        updateSearchClearButtonVisibility(searchSlot);
+      });
+      window.setTimeout(function () {
+        updateSearchClearButtonVisibility(searchSlot);
+      }, 0);
+      window.setTimeout(function () {
+        updateSearchClearButtonVisibility(searchSlot);
+      }, 50);
+      window.setTimeout(function () {
+        updateSearchClearButtonVisibility(searchSlot);
+      }, 150);
+    }
+
+    function initializeGlobalSearchClearButtonHandler() {
+      if (!document.body || document.body.dataset.globalSearchClearBound === "true") {
+        return;
+      }
+
+      document.body.addEventListener("click", function (event) {
+        var clearButton = event.target.closest(".search .clear-button");
+        if (!clearButton) {
+          return;
+        }
+
+        handleSearchClearButtonClick(clearButton, event, null);
+      }, true);
+
+      document.body.dataset.globalSearchClearBound = "true";
+    }
+
     function initializeSearchInteractions() {
       var searchSlot = document.querySelector("#docs-topbar-search");
       if (!searchSlot) {
         return;
       }
+      initializeGlobalSearchClearButtonHandler();
       updateSearchClearButtonVisibility(searchSlot);
       if (searchSlot.dataset.bound === "true") {
         return;
@@ -1295,15 +1459,8 @@
 
         var clearButton = event.target.closest(".search .clear-button");
         if (clearButton) {
-          window.setTimeout(function () {
-            updateSearchClearButtonVisibility(searchSlot);
-          }, 0);
-          window.setTimeout(function () {
-            updateSearchClearButtonVisibility(searchSlot);
-          }, 50);
-          window.setTimeout(function () {
-            updateSearchClearButtonVisibility(searchSlot);
-          }, 150);
+          handleSearchClearButtonClick(clearButton, event, searchSlot);
+          return;
         }
       });
 
@@ -1786,6 +1943,7 @@
             initializeThemeToggles();
             relocateSearchToTopbar(20);
             initializeTopbarSidebarToggle(20);
+            initializeMobileSidebarInteractions();
             initializeSearchInteractions();
             initializeAnchorInteractions();
             initializeBackToTopButton();
@@ -1803,6 +1961,7 @@
             decorateDocs(appRoot);
             relocateSearchToTopbar(20);
             initializeTopbarSidebarToggle(20);
+            initializeMobileSidebarInteractions();
             initializeSearchInteractions();
             initializeAnchorInteractions();
             initializeBackToTopButton();
@@ -1841,6 +2000,7 @@
       decorateDocs(appRoot);
       relocateSearchToTopbar(20);
       initializeTopbarSidebarToggle(20);
+      initializeMobileSidebarInteractions();
       initializeSearchInteractions();
       initializeAnchorInteractions();
       initializeBackToTopButton();
@@ -1854,12 +2014,18 @@
 
     window.addEventListener("resize", function () {
       updateTopbarHeightVariable();
+      if (!isMobileViewport()) {
+        closeMobileSidebar();
+      }
       bindBackToTopScrollTarget();
       updateBackToTopVisibility();
       scheduleAnchorAdjustment();
     });
 
     window.addEventListener("hashchange", function () {
+      if (isMobileViewport()) {
+        closeMobileSidebar();
+      }
       scheduleSidebarActiveSync(12);
       bindBackToTopScrollTarget();
       updateBackToTopVisibility();

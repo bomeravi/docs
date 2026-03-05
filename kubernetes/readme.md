@@ -1,9 +1,9 @@
 # Kubernetes
 
-This folder contains installation notes and example manifests for local development and deployment.
+This folder contains installation notes and reusable manifest examples.
 
 - Installation and common commands: `kubernetes-installation-and-commands.md`
-- Example manifests: `manifests/` (laravel, wordpress, java-microservice, node, go, django, jenkins, react)
+- Example manifests by stack: `manifests/` (laravel, wordpress, java-microservice, node, go, django, jenkins, react)
 
 Apply app manifests, for example:
 
@@ -12,13 +12,8 @@ kubectl create namespace demo || true
 kubectl apply -f kubernetes/manifests/react/ -n demo
 ```
 
-This folder contains Kubernetes-related documentation and example manifests.
+For the docs deployment flow using Docker Hub + Jenkins + Argo CD, see:
 
-- Installation and commands: `kubernetes-installation-and-commands.md`
-- Example manifests: `manifests/` (laravel, wordpress, java-microservice, node, go, django)
-
-See `kubernetes-installation-and-commands.md` for OS-specific install steps and common `kubectl` usage.
-
-
-[Digital Ocean Setup]
-
+- `../k8s/README.md`
+- `../k8s/kubernetes/README.md`
+- `../k8s/argocd/README.md`

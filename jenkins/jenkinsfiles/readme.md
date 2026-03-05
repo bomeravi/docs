@@ -4,6 +4,7 @@ Jenkins declarative pipeline templates for common stacks. All templates in this 
 
 ## Files
 
+- [Jenkinsfile-docs-k8s.md](./Jenkinsfile-docs-k8s.md) - Docs pipeline building `bomeravi/docs:latest`, pushing Docker Hub, and deploying Kubernetes manifests.
 - [Jenkinsfile-django.md](./Jenkinsfile-django.md) - Django pipeline with migrate, collectstatic, tests, build, and push.
 - [Jenkinsfile-go.md](./Jenkinsfile-go.md) - Go pipeline with binary build, tests, container build, and push.
 - [Jenkinsfile-java.md](./Jenkinsfile-java.md) - Java pipeline using Maven wrapper build/test, then image build and push.

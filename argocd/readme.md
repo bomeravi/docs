@@ -130,3 +130,21 @@ Get Initial Password
 ```bash
 kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
 ```
+
+### Docs App (GitOps Flow)
+
+For the docs deployment (`docs.digi-kube.sajiloapps.com`) this repo now includes:
+
+- `k8s/kubernetes/` for app manifests (Deployment, Service, Ingress, TLS issuer)
+- `k8s/argocd/01-application.yaml` for the Argo CD `Application`
+
+Update `repoURL` in `k8s/argocd/01-application.yaml`, then apply:
+
+```bash
+kubectl apply -f k8s/argocd/01-application.yaml
+```
+
+Recommended branch mapping:
+
+- `jenkins` branch for direct Jenkins + kubectl pipeline
+- `argocd` branch for Argo CD sync (`targetRevision: argocd`)
