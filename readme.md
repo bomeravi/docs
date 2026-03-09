@@ -16,7 +16,6 @@ This repository contains internal setup, deployment, and operations documentatio
 - [Cloudflared](./cloudflared.md)
 - [LAMP Setup](./lamp-setup.md)
 - [Server Setup](./server-setup.md)
-- [404 Page](./_404.md)
 
 ### ArgoCD
 - [Overview](./argocd/readme.md)
@@ -116,3 +115,19 @@ npx docsify-cli serve .
 ```
 
 Then open `http://localhost:3000`.
+
+
+## 🤝 Contributing
+
+If you find any issues or want to add new documentation, feel free to submit a PR — contributions are always welcomed!
+
+> [!WARNING]
+> This repository may contain existing errors or outdated content. Some things may stop working over time due to application version updates.
+
+### How to contribute
+
+| | What | How |
+|---|---|---|
+| 🐛 | Found an error? | Fix it and open a PR |
+| 📄 | Missing documentation? | Add new pages or expand existing ones |
+| 🔧 | Broken example? | Update it for the latest version |
