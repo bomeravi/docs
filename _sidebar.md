@@ -6,7 +6,6 @@
   - [Cloudflared](/cloudflared.md)
   - [LAMP Setup](/lamp-setup.md)
   - [Server Setup](/server-setup.md)
-  - [404 Page](/_404.md)
 
 - ArgoCD
   - [Overview](/argocd/readme.md)
