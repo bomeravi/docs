@@ -1,11 +1,11 @@
 - [Home](/readme.md)
 
 - Core Docs
-  - [Basic Packages](/basic-packages.md)
+  - [Basic Packages](/01-basic-packages.md)
+  - [Server Setup](/02-server-setup.md)
   - [Certbot](/certbot.md)
   - [Cloudflared](/cloudflared.md)
   - [LAMP Setup](/lamp-setup.md)
-  - [Server Setup](/server-setup.md)
 
 - ArgoCD
   - [Overview](/argocd/readme.md)
