@@ -966,6 +966,15 @@
     var ANCHOR_OFFSET_EXTRA = 6;
     var BACK_TO_TOP_VISIBILITY_OFFSET = 220;
     var backToTopContentScrollTarget = null;
+    var scrollSpyScrollTarget = null;
+    var scrollSpyRafId = 0;
+    var scrollSpyState = {
+      lastAnchorId: "",
+      lastRoutePath: "",
+      lastUpdateAt: 0,
+      lastExplicitAnchorId: "",
+      lastExplicitAnchorAt: 0
+    };
     var GA_MEASUREMENT_ID_BY_HOSTNAME = {
       "docs.sajiloapps.com": "G-R03MSWJRHH",
       "readme-docs.saroj.name.np": "G-V0ZWER6XXZ"
@@ -2002,6 +2011,22 @@
       return "#" + routePath;
     }
 
+    function buildHashForRouteWithAnchor(routePath, anchorId) {
+      var normalizedRoute = routePath || getCurrentRoutePath() || "/";
+      if (!normalizedRoute || normalizedRoute.charAt(0) !== "/") {
+        normalizedRoute = "/" + (normalizedRoute || "");
+      }
+      if (normalizedRoute.length > 1) {
+        normalizedRoute = normalizedRoute.replace(/\/+$/, "");
+      }
+
+      if (!anchorId) {
+        return "#" + normalizedRoute;
+      }
+
+      return "#" + normalizedRoute + "?id=" + encodeURIComponent(anchorId);
+    }
+
     function isSameOriginLink(anchorLink) {
       if (!anchorLink || !anchorLink.href) {
         return true;
@@ -2053,6 +2078,8 @@
             }
           }
 
+          scrollSpyState.lastExplicitAnchorId = clickedAnchorId || "";
+          scrollSpyState.lastExplicitAnchorAt = Date.now();
           scheduleSidebarActiveSync(12);
           bindBackToTopScrollTarget();
           updateBackToTopVisibility();
@@ -2083,6 +2110,8 @@
             }
           }
 
+          scrollSpyState.lastExplicitAnchorId = "";
+          scrollSpyState.lastExplicitAnchorAt = 0;
           resetScrollForRouteWithoutAnchor();
           scheduleSidebarActiveSync(12);
           bindBackToTopScrollTarget();
@@ -2096,6 +2125,184 @@
       }, true);
 
       document.body.dataset.anchorOffsetBound = "true";
+    }
+
+    function getAnchorHeadings() {
+      return Array.from(
+        document.querySelectorAll(
+          ".markdown-section h1[id], .markdown-section h2[id], .markdown-section h3[id], " +
+          ".markdown-section h4[id], .markdown-section h5[id], .markdown-section h6[id]"
+        )
+      );
+    }
+
+    function getScrollSpyThreshold(scrollRoot) {
+      if (scrollRoot === window) {
+        var topbarHeight = parseFloat(
+          getComputedStyle(document.documentElement).getPropertyValue("--topbar-height")
+        ) || 0;
+        return topbarHeight + ANCHOR_OFFSET_EXTRA + 2;
+      }
+
+      var rootRect = scrollRoot.getBoundingClientRect();
+      return rootRect.top + ANCHOR_OFFSET_EXTRA + 2;
+    }
+
+    function getScrollMetrics(scrollRoot) {
+      if (scrollRoot === window) {
+        var doc = document.documentElement;
+        var body = document.body;
+        var scrollTop = getScrollTopForRoot(window);
+        var clientHeight = window.innerHeight || doc.clientHeight || 0;
+        var scrollHeight = Math.max(
+          doc ? doc.scrollHeight : 0,
+          body ? body.scrollHeight : 0,
+          doc ? doc.offsetHeight : 0,
+          body ? body.offsetHeight : 0
+        );
+        return {
+          scrollTop: scrollTop,
+          clientHeight: clientHeight,
+          scrollHeight: scrollHeight,
+          nearBottom: scrollTop + clientHeight >= scrollHeight - 2
+        };
+      }
+
+      var rootScrollTop = scrollRoot.scrollTop || 0;
+      var rootClientHeight = scrollRoot.clientHeight || 0;
+      var rootScrollHeight = scrollRoot.scrollHeight || 0;
+      return {
+        scrollTop: rootScrollTop,
+        clientHeight: rootClientHeight,
+        scrollHeight: rootScrollHeight,
+        nearBottom: rootScrollTop + rootClientHeight >= rootScrollHeight - 2
+      };
+    }
+
+    function resolveActiveAnchorId(scrollRoot) {
+      var headings = getAnchorHeadings();
+      if (!headings.length) {
+        return "";
+      }
+
+      var threshold = getScrollSpyThreshold(scrollRoot);
+      var activeId = "";
+
+      for (var i = 0; i < headings.length; i += 1) {
+        var heading = headings[i];
+        var rect = heading.getBoundingClientRect();
+        if (rect.top <= threshold) {
+          activeId = heading.id || "";
+          continue;
+        }
+        if (activeId) {
+          break;
+        }
+      }
+
+      var metrics = getScrollMetrics(scrollRoot);
+      var scrollTop = metrics.scrollTop;
+
+      if (scrollSpyState.lastExplicitAnchorId && metrics.scrollHeight <= metrics.clientHeight + 2) {
+        var explicitAnchor = findAnchorElement(scrollSpyState.lastExplicitAnchorId);
+        if (explicitAnchor) {
+          return scrollSpyState.lastExplicitAnchorId;
+        }
+      }
+
+      if (metrics.nearBottom) {
+        var lastHeading = headings[headings.length - 1];
+        if (lastHeading && lastHeading.id) {
+          return lastHeading.id;
+        }
+      }
+
+      if (!activeId && scrollTop > 6) {
+        activeId = headings[0].id || "";
+      }
+
+      if (scrollTop <= 2) {
+        return "";
+      }
+
+      return activeId;
+    }
+
+    function applyScrollSpyHash(routePath, anchorId) {
+      var nextHash = buildHashForRouteWithAnchor(routePath, anchorId);
+      if (!nextHash) {
+        return;
+      }
+
+      if (window.location.hash !== nextHash) {
+        try {
+          window.history.replaceState(null, "", nextHash);
+        } catch (error) {
+          window.location.hash = nextHash;
+        }
+      }
+
+      if (!syncSidebarActiveLink({ allowRouteFallbackWhenAnchorMissing: true })) {
+        scheduleSidebarActiveSync(6);
+      }
+    }
+
+    function resetScrollSpyState() {
+      scrollSpyState.lastAnchorId = "";
+      scrollSpyState.lastRoutePath = "";
+      scrollSpyState.lastUpdateAt = 0;
+      scrollSpyState.lastExplicitAnchorId = "";
+      scrollSpyState.lastExplicitAnchorAt = 0;
+    }
+
+    function updateScrollSpy() {
+      if (scrollSpyRafId) {
+        return;
+      }
+
+      scrollSpyRafId = window.requestAnimationFrame(function () {
+        scrollSpyRafId = 0;
+        var scrollRoot = scrollSpyScrollTarget || getActiveScrollRoot() || window;
+        var routePath = getCurrentRoutePath();
+        var anchorId = resolveActiveAnchorId(scrollRoot);
+        var now = Date.now();
+
+        if (anchorId === scrollSpyState.lastAnchorId && routePath === scrollSpyState.lastRoutePath) {
+          return;
+        }
+
+        scrollSpyState.lastAnchorId = anchorId;
+        scrollSpyState.lastRoutePath = routePath;
+        scrollSpyState.lastUpdateAt = now;
+        applyScrollSpyHash(routePath, anchorId);
+      });
+    }
+
+    function bindScrollSpyTarget() {
+      var nextTarget = getActiveScrollRoot() || window;
+      if (scrollSpyScrollTarget === nextTarget) {
+        return;
+      }
+
+      if (scrollSpyScrollTarget && scrollSpyScrollTarget.removeEventListener) {
+        scrollSpyScrollTarget.removeEventListener("scroll", updateScrollSpy);
+      }
+
+      scrollSpyScrollTarget = nextTarget;
+      if (scrollSpyScrollTarget && scrollSpyScrollTarget.addEventListener) {
+        scrollSpyScrollTarget.addEventListener("scroll", updateScrollSpy, { passive: true });
+      }
+
+      updateScrollSpy();
+    }
+
+    function initializeScrollSpy() {
+      if (!document.body || document.body.dataset.scrollSpyBound === "true") {
+        return;
+      }
+
+      bindScrollSpyTarget();
+      document.body.dataset.scrollSpyBound = "true";
     }
 
     function stripLeadingFrontMatter(markdownContent) {
@@ -2152,11 +2359,13 @@
             initializeSearchInteractions();
             initializeAnchorInteractions();
             initializeBackToTopButton();
+            initializeScrollSpy();
             scheduleSidebarActiveSync(12);
             updateTopbarHeightVariable();
             updateBackToTopVisibility();
             trackAnalyticsPageView();
             scheduleAnchorAdjustment();
+            updateScrollSpy();
           });
 
           hook.doneEach(function () {
@@ -2170,12 +2379,16 @@
             initializeSearchInteractions();
             initializeAnchorInteractions();
             initializeBackToTopButton();
+            initializeScrollSpy();
             scheduleSidebarActiveSync(12);
             updateTopbarHeightVariable();
             resetScrollForRouteWithoutAnchor();
             updateBackToTopVisibility();
             trackAnalyticsPageView();
             scheduleAnchorAdjustment();
+            resetScrollSpyState();
+            bindScrollSpyTarget();
+            updateScrollSpy();
           });
         }
       ]
@@ -2209,12 +2422,16 @@
       initializeSearchInteractions();
       initializeAnchorInteractions();
       initializeBackToTopButton();
+      initializeScrollSpy();
       scheduleSidebarActiveSync(12);
       updateTopbarHeightVariable();
       resetScrollForRouteWithoutAnchor();
       updateBackToTopVisibility();
       trackAnalyticsPageView();
       scheduleAnchorAdjustment();
+      resetScrollSpyState();
+      bindScrollSpyTarget();
+      updateScrollSpy();
     });
 
     window.addEventListener("resize", function () {
@@ -2225,6 +2442,8 @@
       bindBackToTopScrollTarget();
       updateBackToTopVisibility();
       scheduleAnchorAdjustment();
+      bindScrollSpyTarget();
+      updateScrollSpy();
     });
 
     window.addEventListener("hashchange", function () {
@@ -2236,6 +2455,9 @@
       updateBackToTopVisibility();
       trackAnalyticsPageView();
       scheduleAnchorAdjustment();
+      resetScrollSpyState();
+      bindScrollSpyTarget();
+      updateScrollSpy();
     });
   </script>
 </body>
