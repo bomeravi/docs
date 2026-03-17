@@ -1640,17 +1640,30 @@
         return;
       }
 
-      var scrollRoot = getActiveScrollRoot();
-      if (scrollRoot === window) {
-        if (window.pageYOffset > 0) {
+      var contentScroller = document.querySelector(".content");
+      var forceScrollTop = function () {
+        try {
           window.scrollTo(0, 0);
+        } catch (error) {
+          window.scrollTop = 0;
         }
-        return;
-      }
 
-      if (scrollRoot.scrollTop > 0) {
-        scrollRoot.scrollTop = 0;
-      }
+        if (contentScroller && typeof contentScroller.scrollTop === "number") {
+          try {
+            if (typeof contentScroller.scrollTo === "function") {
+              contentScroller.scrollTo({ top: 0, behavior: "auto" });
+            } else {
+              contentScroller.scrollTop = 0;
+            }
+          } catch (innerError) {
+            contentScroller.scrollTop = 0;
+          }
+        }
+      };
+
+      forceScrollTop();
+      window.setTimeout(forceScrollTop, 80);
+      window.setTimeout(forceScrollTop, 220);
     }
 
     function safeDecodeHashValue(value) {
@@ -1978,6 +1991,17 @@
       return "#" + currentRoute + rawHash;
     }
 
+    function buildHashForRouteWithoutAnchor(href, routePathOverride) {
+      var routePath = routePathOverride || extractRoutePathFromHashLike(href) || getCurrentRoutePath() || "/";
+      if (!routePath || routePath.charAt(0) !== "/") {
+        routePath = "/" + (routePath || "");
+      }
+      if (routePath.length > 1) {
+        routePath = routePath.replace(/\/+$/, "");
+      }
+      return "#" + routePath;
+    }
+
     function isSameOriginLink(anchorLink) {
       if (!anchorLink || !anchorLink.href) {
         return true;
@@ -2033,6 +2057,36 @@
           bindBackToTopScrollTarget();
           updateBackToTopVisibility();
           scheduleAnchorAdjustment(clickedAnchorId, { behavior: "smooth" });
+          return;
+        }
+
+        var shouldHandleSameRouteTop =
+          isSidebarLink &&
+          isPlainLeftClick(event) &&
+          isSameOriginLink(anchorLink) &&
+          !anchorLink.hasAttribute("download") &&
+          (!anchorLink.target || anchorLink.target === "_self") &&
+          !clickedAnchorId &&
+          !!linkPath &&
+          linkPath === currentPath;
+
+        if (shouldHandleSameRouteTop) {
+          event.preventDefault();
+          event.stopPropagation();
+
+          var nextRouteHash = buildHashForRouteWithoutAnchor(href, linkPath);
+          if (nextRouteHash) {
+            try {
+              window.history.pushState(null, "", nextRouteHash);
+            } catch (error) {
+              window.location.hash = nextRouteHash;
+            }
+          }
+
+          resetScrollForRouteWithoutAnchor();
+          scheduleSidebarActiveSync(12);
+          bindBackToTopScrollTarget();
+          updateBackToTopVisibility();
           return;
         }
 
