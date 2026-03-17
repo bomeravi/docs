@@ -477,7 +477,7 @@
     .content {
       background: var(--ui-bg);
       min-height: calc(100vh - var(--topbar-height));
-      scroll-padding-top: 6px;
+      scroll-padding-top: calc(var(--topbar-height) + 6px);
       transition: background-color 0.24s ease;
     }
 
@@ -496,7 +496,7 @@
     .markdown-section h4[id],
     .markdown-section h5[id],
     .markdown-section h6[id] {
-      scroll-margin-top: 6px;
+      scroll-margin-top: calc(var(--topbar-height) + 6px);
     }
 
     .markdown-section > * {
@@ -1858,7 +1858,7 @@
       return document.querySelector('[name="' + escaped + '"]');
     }
 
-    function adjustAnchorForTopbar(anchorIdOverride) {
+    function adjustAnchorForTopbar(anchorIdOverride, options) {
       var anchorId = anchorIdOverride || getCurrentHashAnchorId();
       if (!anchorId) {
         return;
@@ -1875,6 +1875,8 @@
       var scrollContainer = getScrollableAncestor(anchorElement);
       var anchorRect = anchorElement.getBoundingClientRect();
 
+      var behavior = options && options.behavior;
+
       if (scrollContainer) {
         var containerRect = scrollContainer.getBoundingClientRect();
         var desiredTop = containerRect.top + ANCHOR_OFFSET_EXTRA;
@@ -1886,7 +1888,11 @@
         var maxScrollTop = Math.max(0, scrollContainer.scrollHeight - scrollContainer.clientHeight);
         var clampedScrollTop = Math.min(maxScrollTop, Math.max(0, Math.round(targetScrollTop)));
         if (Math.abs(scrollContainer.scrollTop - clampedScrollTop) > 1) {
-          scrollContainer.scrollTop = clampedScrollTop;
+          if (behavior && typeof scrollContainer.scrollTo === "function") {
+            scrollContainer.scrollTo({ top: clampedScrollTop, behavior: behavior });
+          } else {
+            scrollContainer.scrollTop = clampedScrollTop;
+          }
         }
         return;
       }
@@ -1900,22 +1906,88 @@
       var targetWindowTop = window.pageYOffset + deltaInWindow;
       var clampedWindowTop = Math.max(0, Math.round(targetWindowTop));
       if (Math.abs(window.pageYOffset - clampedWindowTop) > 1) {
-        window.scrollTo(0, clampedWindowTop);
+        if (behavior) {
+          window.scrollTo({ top: clampedWindowTop, behavior: behavior });
+        } else {
+          window.scrollTo(0, clampedWindowTop);
+        }
       }
     }
 
-    function scheduleAnchorAdjustment(anchorIdOverride) {
-      var run = function () {
+    function scheduleAnchorAdjustment(anchorIdOverride, options) {
+      var firstOptions = options && options.behavior ? { behavior: options.behavior } : null;
+      var run = function (runOptions) {
         window.requestAnimationFrame(function () {
-          adjustAnchorForTopbar(anchorIdOverride);
+          adjustAnchorForTopbar(anchorIdOverride, runOptions);
         });
       };
 
-      run();
+      run(firstOptions);
 
-      window.setTimeout(run, 120);
-      window.setTimeout(run, 360);
-      window.setTimeout(run, 760);
+      window.setTimeout(function () { run(); }, 120);
+      window.setTimeout(function () { run(); }, 360);
+      window.setTimeout(function () { run(); }, 760);
+    }
+
+    function isPlainLeftClick(event) {
+      if (!event) {
+        return true;
+      }
+      if (event.defaultPrevented) {
+        return false;
+      }
+      if (typeof event.button === "number" && event.button !== 0) {
+        return false;
+      }
+      if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
+        return false;
+      }
+      return true;
+    }
+
+    function buildHashForInPageAnchor(href, anchorId) {
+      var rawHash = "";
+      if (href) {
+        var hashIndex = href.indexOf("#");
+        if (hashIndex !== -1) {
+          rawHash = href.slice(hashIndex);
+        }
+      }
+
+      if (!rawHash && anchorId) {
+        rawHash = "#" + anchorId;
+      }
+
+      if (!rawHash) {
+        return "";
+      }
+
+      if (rawHash.charAt(0) !== "#") {
+        rawHash = "#" + rawHash;
+      }
+
+      if (rawHash.charAt(1) === "/") {
+        return rawHash;
+      }
+
+      var currentRoute = getCurrentRoutePath() || "/";
+      if (rawHash.indexOf("#?") === 0) {
+        return "#" + currentRoute + rawHash.slice(1);
+      }
+
+      return "#" + currentRoute + rawHash;
+    }
+
+    function isSameOriginLink(anchorLink) {
+      if (!anchorLink || !anchorLink.href) {
+        return true;
+      }
+      try {
+        var linkUrl = new URL(anchorLink.href, window.location.href);
+        return linkUrl.origin === window.location.origin;
+      } catch (error) {
+        return true;
+      }
     }
 
     function initializeAnchorInteractions() {
@@ -1931,11 +2003,43 @@
 
         var href = anchorLink.getAttribute("href") || "";
         var clickedAnchorId = extractAnchorIdFromHashLike(href);
+        var linkPath = extractRoutePathFromHashLike(href);
+        var currentPath = getCurrentRoutePath();
+        var isContentLink = !!anchorLink.closest(".content");
+        var isSidebarLink = !!anchorLink.closest(".sidebar");
+        var shouldHandleInlineAnchor =
+          (isContentLink || isSidebarLink) &&
+          isPlainLeftClick(event) &&
+          isSameOriginLink(anchorLink) &&
+          !anchorLink.hasAttribute("download") &&
+          (!anchorLink.target || anchorLink.target === "_self") &&
+          !!clickedAnchorId &&
+          (!linkPath || linkPath === currentPath);
+
+        if (shouldHandleInlineAnchor) {
+          event.preventDefault();
+          event.stopPropagation();
+
+          var nextHash = buildHashForInPageAnchor(href, clickedAnchorId);
+          if (nextHash) {
+            try {
+              window.history.pushState(null, "", nextHash);
+            } catch (error) {
+              window.location.hash = nextHash;
+            }
+          }
+
+          scheduleSidebarActiveSync(12);
+          bindBackToTopScrollTarget();
+          updateBackToTopVisibility();
+          scheduleAnchorAdjustment(clickedAnchorId, { behavior: "smooth" });
+          return;
+        }
 
         window.setTimeout(function () {
           scheduleAnchorAdjustment(clickedAnchorId);
         }, 16);
-      });
+      }, true);
 
       document.body.dataset.anchorOffsetBound = "true";
     }
@@ -1966,7 +2070,7 @@
       homepage: "readme.md",
       loadSidebar: true,
       subMaxLevel: 2,
-      auto2top: true,
+      auto2top: false,
       relativePath: true,
       notFoundPage: "_404.md",
       copyCode: {
