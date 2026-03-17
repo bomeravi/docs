@@ -965,6 +965,7 @@
     var LONG_CODE_BLOCK_MIN_LINES = 9;
     var ANCHOR_OFFSET_EXTRA = 6;
     var BACK_TO_TOP_VISIBILITY_OFFSET = 220;
+    var SCROLLSPY_EXPLICIT_LOCK_MS = 1200;
     var backToTopContentScrollTarget = null;
     var scrollSpyScrollTarget = null;
     var scrollSpyRafId = 0;
@@ -2179,10 +2180,21 @@
       };
     }
 
-    function resolveActiveAnchorId(scrollRoot) {
+    function resolveActiveAnchorId(scrollRoot, now) {
       var headings = getAnchorHeadings();
       if (!headings.length) {
         return "";
+      }
+
+      var timestamp = typeof now === "number" ? now : Date.now();
+      if (
+        scrollSpyState.lastExplicitAnchorId &&
+        timestamp - scrollSpyState.lastExplicitAnchorAt < SCROLLSPY_EXPLICIT_LOCK_MS
+      ) {
+        var lockedAnchor = findAnchorElement(scrollSpyState.lastExplicitAnchorId);
+        if (lockedAnchor) {
+          return scrollSpyState.lastExplicitAnchorId;
+        }
       }
 
       var threshold = getScrollSpyThreshold(scrollRoot);
@@ -2207,13 +2219,6 @@
         var explicitAnchor = findAnchorElement(scrollSpyState.lastExplicitAnchorId);
         if (explicitAnchor) {
           return scrollSpyState.lastExplicitAnchorId;
-        }
-      }
-
-      if (metrics.nearBottom) {
-        var lastHeading = headings[headings.length - 1];
-        if (lastHeading && lastHeading.id) {
-          return lastHeading.id;
         }
       }
 
@@ -2255,6 +2260,15 @@
       scrollSpyState.lastExplicitAnchorAt = 0;
     }
 
+    function setExplicitAnchorFromHash() {
+      var anchorId = getCurrentHashAnchorId();
+      if (!anchorId) {
+        return;
+      }
+      scrollSpyState.lastExplicitAnchorId = anchorId;
+      scrollSpyState.lastExplicitAnchorAt = Date.now();
+    }
+
     function updateScrollSpy() {
       if (scrollSpyRafId) {
         return;
@@ -2264,8 +2278,8 @@
         scrollSpyRafId = 0;
         var scrollRoot = scrollSpyScrollTarget || getActiveScrollRoot() || window;
         var routePath = getCurrentRoutePath();
-        var anchorId = resolveActiveAnchorId(scrollRoot);
         var now = Date.now();
+        var anchorId = resolveActiveAnchorId(scrollRoot, now);
 
         if (anchorId === scrollSpyState.lastAnchorId && routePath === scrollSpyState.lastRoutePath) {
           return;
@@ -2365,6 +2379,7 @@
             updateBackToTopVisibility();
             trackAnalyticsPageView();
             scheduleAnchorAdjustment();
+            setExplicitAnchorFromHash();
             updateScrollSpy();
           });
 
@@ -2387,6 +2402,7 @@
             trackAnalyticsPageView();
             scheduleAnchorAdjustment();
             resetScrollSpyState();
+            setExplicitAnchorFromHash();
             bindScrollSpyTarget();
             updateScrollSpy();
           });
@@ -2430,6 +2446,7 @@
       trackAnalyticsPageView();
       scheduleAnchorAdjustment();
       resetScrollSpyState();
+      setExplicitAnchorFromHash();
       bindScrollSpyTarget();
       updateScrollSpy();
     });
@@ -2456,6 +2473,7 @@
       trackAnalyticsPageView();
       scheduleAnchorAdjustment();
       resetScrollSpyState();
+      setExplicitAnchorFromHash();
       bindScrollSpyTarget();
       updateScrollSpy();
     });
