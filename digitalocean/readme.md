@@ -10,7 +10,7 @@ This section contains DigitalOcean setup and troubleshooting guides.
 
 ## Setup Guides
 
-- [Server Setup](../server-setup.md): Secure Ubuntu server setup with non-root user and SSH hardening.
+- [Server Setup](../02-server-setup.md): Secure Ubuntu server setup with non-root user and SSH hardening.
 - [Doctl Setup](./install-doctl.md): Install and configure DigitalOcean CLI tool with authentication and examples.
 
 ## Troubleshooting
