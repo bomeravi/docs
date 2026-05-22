@@ -63,6 +63,10 @@
   - Shared Library
     - [Overview](/jenkins/shared-library/README.md)
 
+- Developer Tools
+  - [Overview](/developer-tools/readme.md)
+  - [Mailpit](/developer-tools/mailpit.md)
+
 - Kubernetes
   - [Overview](/kubernetes/readme.md)
   - [Installation and Commands](/kubernetes/kubernetes-installation-and-commands.md)
