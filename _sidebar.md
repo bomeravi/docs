@@ -4,6 +4,7 @@
   - [Basic Packages](/01-basic-packages.md)
   - [Server Setup](/02-server-setup.md)
   - [Certbot](/certbot.md)
+  - [Custom HTTPS (Local SSL)](/custom-https.md)
   - [Cloudflared](/cloudflared.md)
   - [LAMP Setup](/lamp-setup.md)
 
