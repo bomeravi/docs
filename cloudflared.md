@@ -61,12 +61,17 @@ cloudflared tunnel login
 ```
 
 ### 3. Create the Tunnel
+
+to create the tunnel named my-tunnel
 ```bash
 cloudflared tunnel create my-tunnel
 ```
 
 ### 4. Create config file
+
+create config file for cloudflare
 ```bash
+sudo mkdir -p /etc/cloudflared
 sudo nano /etc/cloudflared/config.yml
 ```
 

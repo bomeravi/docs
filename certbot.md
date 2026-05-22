@@ -1,17 +1,9 @@
-# Certbot Setup
+# Certbot
 
-This guide covers:
-
--   Standard Ubuntu setup
--   NGINX reverse proxy configuration
--   DigitalOcean deployment
--   Docker-based setup
--   Kubernetes / Ingress configuration
--   High Availability (HA) multi-server architecture
-
+Certbot is used to generate ssl certificates for the domain in the server. 
 ------------------------------------------------------------------------
 
-# 1️⃣ Base Requirements
+## 1️⃣ Base Requirements
 
 -   Ubuntu 20.04 / 22.04 / 24.04
 -   Domain pointing to server public IP
@@ -24,8 +16,9 @@ sudo ufw allow 443
 
 ------------------------------------------------------------------------
 
-# 2️⃣ Install Certbot (Recommended Snap Method)
+## 2️⃣ Install Certbot
 
+Recommended Snap Method
 ``` bash
 sudo apt update && sudo apt upgrade -y
 sudo apt install snapd -y
@@ -34,6 +27,24 @@ sudo snap refresh core
 sudo snap install --classic certbot
 sudo ln -s /snap/bin/certbot /usr/bin/certbot
 certbot --version
+```
+
+
+Alternative method with apache2
+```bash
+sudo apt-get install certbot python3-certbot-apache
+```
+
+
+Alternative method with nginx
+```bash
+sudo apt-get install certbot python3-certbot-nginx
+```
+
+Alternative method with cloudflare
+```bash
+sudo apt update
+sudo apt install certbot python3-certbot-dns-cloudflare -y
 ```
 
 ------------------------------------------------------------------------
@@ -265,4 +276,4 @@ sudo certbot --nginx   -d example.com   -d www.example.com   --redirect   --agre
 -   Enable HTTPS redirect
 -   Use HSTS
 -   Disable weak TLS protocols
--   Keep Ubuntu updated
+-   Keep Server updated

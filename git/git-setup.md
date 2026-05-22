@@ -47,7 +47,13 @@ Press **Enter** to accept default file path:\
 `~/.ssh/id_ed25519`
 
 When asked for a passphrase, enter one or press Enter to skip.
-
+> **Note**
+>
+> If you are using a legacy system that doesn't support the Ed25519 algorithm, use RSA instead:
+>
+> ```bash
+> ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
+> ```
 ---
 
 ## 3. Add SSH Key to SSH Agent
