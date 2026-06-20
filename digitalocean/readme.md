@@ -1,3 +1,7 @@
+---
+pagination_label: DigitalOcean
+---
+
 # DigitalOcean
 
 This section contains DigitalOcean setup and troubleshooting guides.

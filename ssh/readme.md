@@ -1,3 +1,7 @@
+---
+pagination_label: SSH
+---
+
 # Install SSH
 
 Install and Configure SSH on Ubuntu Server

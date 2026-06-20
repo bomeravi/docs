@@ -1,5 +1,6 @@
 ---
 title: Jenkins
+pagination_label: Jenkins
 ---
 
 # Jenkins

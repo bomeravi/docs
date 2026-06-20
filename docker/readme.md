@@ -1,3 +1,7 @@
+---
+pagination_label: Docker
+---
+
 # Docker
 
 ## Table of Contents

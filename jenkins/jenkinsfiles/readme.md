@@ -1,3 +1,7 @@
+---
+pagination_label: Jenkinsfiles
+---
+
 # Jenkinsfiles
 
 Jenkins declarative pipeline templates for common stacks. All templates in this folder are now Markdown files with descriptions and embedded pipeline snippets.

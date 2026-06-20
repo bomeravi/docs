@@ -1,3 +1,7 @@
+---
+pagination_label: Kubernetes
+---
+
 # Kubernetes
 
 This folder contains installation notes and reusable manifest examples.

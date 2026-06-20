@@ -1,3 +1,7 @@
+---
+pagination_label: Kubernetes Manifests
+---
+
 # Kubernetes Manifests
 Last updated: **March 4, 2026**
 

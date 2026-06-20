@@ -1,5 +1,6 @@
 ---
 title: Shared Library
+pagination_label: Shared Library
 ---
 
 # Shared Library

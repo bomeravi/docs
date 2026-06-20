@@ -1,3 +1,7 @@
+---
+pagination_label: Dockerfiles
+---
+
 # Dockerfile Templates
 
 This folder documents the Dockerfile templates under `docker/<stack>/Dockerfile`, plus Docker Compose examples and required companion files.

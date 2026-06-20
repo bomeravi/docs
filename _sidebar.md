@@ -23,6 +23,7 @@
   - [Overview](/ssh/readme.md)
   - [Allow Multiple SSH](/ssh/allow-multiple-ssh.md)
   - [Disable Root Ubuntu](/ssh/disable-root-ubuntu.md)
+  - [Create User](/ssh/create-user.md)
   - [Generate Keys](/ssh/generate-keys.md)
 
 - Git

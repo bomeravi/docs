@@ -1,6 +1,7 @@
 ---
 title: Git Setup Guide
 sidebar_position: 2
+pagination_label: Git
 ---
 
 # Git

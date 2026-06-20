@@ -1,3 +1,7 @@
+---
+pagination_label: Developer Tools
+---
+
 # Developer Tools
 
 A collection of useful tools that help developers build, test, and debug applications more efficiently during local development and on staging environments.

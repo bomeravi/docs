@@ -1,3 +1,7 @@
+---
+pagination_label: ArgoCD
+---
+
 # ArgoCD 
 
 ### Description
