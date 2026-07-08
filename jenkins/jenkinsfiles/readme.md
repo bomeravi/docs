@@ -16,4 +16,5 @@ Jenkins declarative pipeline templates for common stacks. All templates in this 
 - [Jenkinsfile-php.md](./Jenkinsfile-php.md) - PHP pipeline with Composer install, PHPUnit tests, and publish.
 - [Jenkinsfile-python.md](./Jenkinsfile-python.md) - Python pipeline with requirements install, pytest, and publish.
 - [Jenkinsfile-react.md](./Jenkinsfile-react.md) - React pipeline with npm build and container publish.
+- [Jenkinsfile-sonarqube.md](./Jenkinsfile-sonarqube.md) - SonarQube analysis pipeline with scanner run and Quality Gate enforcement.
 - [Jenkinsfile-wordpress.md](./Jenkinsfile-wordpress.md) - WordPress pipeline with container build and publish.

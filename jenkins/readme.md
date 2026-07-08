@@ -67,6 +67,10 @@ See `jenkins/jenkinsfiles/` for pipeline templates for common stacks (PHP, Larav
 
 See `jenkins/shared-library/README.md` for recommended layout and examples of custom steps, and `jenkins/secrets.md` for handling credentials.
 
+**Code Quality (SonarQube)**
+
+See [SonarQube](/security/sonarqube.md) to run a SonarQube server, wire it into Jenkins (plugin, server, token, and Quality Gate webhook), and add an analysis stage to a pipeline. A copy-ready pipeline template is at [Jenkinsfile-sonarqube.md](./jenkinsfiles/Jenkinsfile-sonarqube.md).
+
 **Docker & CI**
 
 This repo contains a `docker/` folder with Dockerfile templates and a `docker-compose.yml` sample to help you build images locally and integrate with Jenkins. See `docker/readme.md`.

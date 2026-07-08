@@ -1,10 +1,9 @@
 - [Home](/readme.md)
 
 - Core Docs
+  - [Basic Linux Commands](/linux-commands.md)
   - [Basic Packages](/01-basic-packages.md)
   - [Server Setup](/02-server-setup.md)
-  - [Certbot](/certbot.md)
-  - [Custom HTTPS (Local SSL)](/custom-https.md)
   - [Cloudflared](/cloudflared.md)
   - [LAMP Setup](/lamp-setup.md)
 
@@ -60,9 +59,16 @@
     - [Jenkinsfile PHP](/jenkins/jenkinsfiles/Jenkinsfile-php.md)
     - [Jenkinsfile Python](/jenkins/jenkinsfiles/Jenkinsfile-python.md)
     - [Jenkinsfile React](/jenkins/jenkinsfiles/Jenkinsfile-react.md)
+    - [Jenkinsfile SonarQube](/jenkins/jenkinsfiles/Jenkinsfile-sonarqube.md)
     - [Jenkinsfile WordPress](/jenkins/jenkinsfiles/Jenkinsfile-wordpress.md)
   - Shared Library
     - [Overview](/jenkins/shared-library/README.md)
+
+- Security
+  - [Overview](/security/readme.md)
+  - [Certbot](/security/certbot.md)
+  - [Custom HTTPS (Local SSL)](/security/custom-https.md)
+  - [SonarQube](/security/sonarqube.md)
 
 - Developer Tools
   - [Overview](/developer-tools/readme.md)

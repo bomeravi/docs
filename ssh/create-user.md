@@ -155,6 +155,92 @@ sudo cat /home/deployer/.ssh/id_ed25519.pub   # add this to GitHub/GitLab deploy
 
 ---
 
+## 7. Deleting the User (Teardown)
+
+When the `deployer` user is no longer needed, remove it cleanly: check
+what it's running, revoke its passwordless sudo, then delete the account
+and its home directory.
+
+### Step 1 — Check the user first
+
+Before deleting, confirm the account exists and see what it owns or runs:
+
+```bash
+# Does the user exist?
+id deployer
+
+# Any processes currently running as deployer? (stop/migrate them first)
+sudo pgrep -au deployer
+
+# Files owned by deployer outside its home (review before deleting)
+sudo find / -xdev -user deployer -not -path "/home/deployer/*" 2>/dev/null
+```
+
+> ⚠️ If `pgrep` shows running services (e.g. a Jenkins agent), stop them
+> first. Deleting an account with live processes can leave orphans.
+
+### Step 2 — Revoke passwordless sudo
+
+Remove the sudoers drop-in created in step 5, then validate the sudoers
+config is still intact:
+
+```bash
+sudo rm -f /etc/sudoers.d/deployer
+sudo visudo -c
+```
+
+`visudo -c` must still report `parsed OK`. Optionally remove the user
+from the `sudo` group as well:
+
+```bash
+sudo deluser deployer sudo
+```
+
+### Step 3 — Kill any remaining sessions
+
+```bash
+sudo pkill -u deployer || true
+```
+
+### Step 4 — Delete the user and its home folder
+
+Delete the account **and** its home directory + mail spool in one step:
+
+```bash
+sudo deluser --remove-home deployer
+```
+
+Alternatives:
+
+```bash
+# Same thing on systems using userdel
+sudo userdel -r deployer
+
+# Delete the account but KEEP /home/deployer (review/back up first)
+sudo deluser deployer
+```
+
+> `--remove-home` / `-r` permanently deletes `/home/deployer`. Back up
+> anything you need (keys, configs) before running it.
+
+### Step 5 — Verify deletion
+
+```bash
+id deployer                        # → "no such user"
+getent passwd deployer             # → no output
+ls /home/deployer 2>/dev/null      # → no such directory
+sudo ls /etc/sudoers.d/deployer    # → no such file
+```
+
+If you manually deleted the home folder, make sure no leftover files
+remain:
+
+```bash
+sudo find / -xdev -user deployer 2>/dev/null   # → no output
+```
+
+---
+
 ## Recap
 
 | Step | Command |
@@ -165,6 +251,7 @@ sudo cat /home/deployer/.ssh/id_ed25519.pub   # add this to GitHub/GitLab deploy
 | Fix perms | `chown -R deployer:deployer`, `chmod 700` / `600` |
 | Passwordless sudo | `deployer ALL=(ALL) NOPASSWD:ALL` in `/etc/sudoers.d/deployer` |
 | Validate | `sudo visudo -c` |
+| Delete user + home | `sudo rm -f /etc/sudoers.d/deployer && sudo deluser --remove-home deployer` |
 
 `deployer` now logs in by key with no password and runs `sudo` silently —
 ready to drop into a Jenkins SSH credential.

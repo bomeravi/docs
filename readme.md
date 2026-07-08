@@ -8,54 +8,29 @@ sidebar_position: 1
 
 This repository serves as a centralized collection of internal setup, deployment, and operational guides used by our team. It is intended to document best practices, step-by-step procedures, and configuration notes for systems we manage, including cloud services, container orchestration, CI/CD, and more. Whether you're onboarding or troubleshooting, these docs should help you get up to speed quickly.
 
-## All Documentation Pages
+## 🚀 Start Here
 
-### Core Docs
-- [Basic Packages](./01-basic-packages.md)
-- [Server Setup](./02-server-setup.md)
-- [Certbot](./certbot.md)
-- [Cloudflared](./cloudflared.md)
-- [LAMP Setup](./lamp-setup.md)
+New here? Jump straight into the essentials:
 
-### ArgoCD
-- [Overview](./argocd/readme.md)
+- [Server Setup](./02-server-setup.md) — provision a fresh box
+- [Create a Deployer User](./ssh/create-user.md) — CI/CD user + passwordless sudo
+- [Docker](./docker/readme.md) — install & Dockerfiles
+- [Jenkins](./jenkins/readme.md) — pipelines & Jenkinsfiles
 
-### DigitalOcean
-- [Overview](./digitalocean/readme.md)
-- [Droplet Setup](./digitalocean/droplet.md)
-- [Fix Sudo User Permission](./digitalocean/fix-sudo-user-permission.md)
-- [Install doctl](./digitalocean/install-doctl.md)
-- [Kubernetes on DigitalOcean](./digitalocean/kubernetes.md)
-- [Space Object Storage](./digitalocean/space-object-storage.md)
+> 💡 Browse everything from the left sidebar, or press **/** to search.
 
-### SSH
-- [Overview](./ssh/readme.md)
-- [Allow Multiple SSH](./ssh/allow-multiple-ssh.md)
-- [Disable Root Ubuntu](./ssh/disable-root-ubuntu.md)
-- [Generate Keys](./ssh/generate-keys.md)
+## 📚 What's Inside
 
-### Git
-- [Overview](./git/readme.md)
-- [Git Setup](./git/git-setup.md)
-- [Git Commands](./git/git-commands.md)
-- [Git Commit Guide](./git/git-commit.md)
-
-### Docker
-- [Overview](./docker/readme.md)
-- [Dockerfiles Overview](./docker/dockerfiles/readme.md)
-
-### Jenkins
-- [Overview](./jenkins/readme.md)
-- [Apache Setup](./jenkins/apache-setup.md)
-- [Secrets](./jenkins/secrets.md)
-- [Server Setup](./jenkins/server-setup.md)
-- [Jenkinsfiles Overview](./jenkins/jenkinsfiles/readme.md)
-- [Shared Library Overview](./jenkins/shared-library/README.md)
-
-### Kubernetes
-- [Overview](./kubernetes/readme.md)
-- [Installation and Commands](./kubernetes/kubernetes-installation-and-commands.md)
-- [Manifests Overview](./kubernetes/manifests/README.md)
+| Area              | Covers                                            |
+| ----------------- | ------------------------------------------------- |
+| Core / Server     | Base packages, server setup, Certbot, HTTPS, LAMP |
+| SSH               | Access, user creation, key generation             |
+| Git               | Setup, commands, commit conventions               |
+| Docker            | Install + per-stack Dockerfiles                   |
+| Jenkins           | CI/CD, Jenkinsfiles, shared library, secrets      |
+| Kubernetes        | Install, commands, manifests by stack             |
+| Cloud             | DigitalOcean, AWS, Cloudflared                    |
+| Developer Tools   | Mailpit and other local-dev helpers               |
 
 ## Local Preview
 
