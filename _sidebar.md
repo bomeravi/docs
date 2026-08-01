@@ -5,6 +5,7 @@
   - [Basic Packages](/01-basic-packages.md)
   - [Server Setup](/02-server-setup.md)
   - [Cloudflared](/cloudflared.md)
+  - [DNS & Domain Commands](/domain-dns-commands.md)
   - [LAMP Setup](/lamp-setup.md)
 
 - ArgoCD
