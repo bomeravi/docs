@@ -2428,6 +2428,31 @@
       window.Prism.languages.apache = window.Prism.languages.apacheconf;
     }
 
+    // Prism ships no HAProxy grammar, so define one for haproxy.md.
+    if (window.Prism && window.Prism.languages) {
+      window.Prism.languages.haproxy = {
+        "comment": { pattern: /#.*/, greedy: true },
+        "string": { pattern: /(["'])(?:\\.|(?!\1)[^\\\r\n])*\1/, greedy: true },
+        "section": {
+          pattern: /^(?:global|defaults|frontend|backend|listen|resolvers|peers|userlist|mailers|ring|cache|program|http-errors)\b[^\r\n#]*/m,
+          greedy: true,
+          inside: {
+            "keyword": /^[a-z-]+/,
+            "class-name": /\S+/
+          }
+        },
+        "directive": {
+          pattern: /(^[ \t]+)[a-z][\w-]*/m,
+          lookbehind: true,
+          greedy: true,
+          alias: "property"
+        },
+        "address": /\b(?:\d{1,3}\.){3}\d{1,3}(?::\d+)?\b|\*:\d+/,
+        "number": /\b\d+(?:ms|s|m|h|d)?\b/,
+        "punctuation": /[{}[\],:]/
+      };
+    }
+
     window.addEventListener("load", function () {
       var appRoot = document.querySelector("#app");
       initializeGoogleAnalytics();

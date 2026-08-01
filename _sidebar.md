@@ -6,6 +6,7 @@
   - [Server Setup](/02-server-setup.md)
   - [Cloudflared](/cloudflared.md)
   - [DNS & Domain Commands](/domain-dns-commands.md)
+  - [HAProxy](/haproxy.md)
   - [LAMP Setup](/lamp-setup.md)
 
 - ArgoCD
@@ -88,3 +89,7 @@
     - [Node](/kubernetes/manifests/node/README.md)
     - [React](/kubernetes/manifests/react/README.md)
     - [WordPress](/kubernetes/manifests/wordpress/README.md)
+
+- Troubleshooting
+  - [Overview](/troubleshoot/readme.md)
+  - [GRUB & EFI Boot Repair](/troubleshoot/grub-efi-boot-repair.md)
