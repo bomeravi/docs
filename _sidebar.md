@@ -16,6 +16,16 @@
   - [Overview](/argocd/readme.md)
   - [Argo CD CLI](/argocd/argocd-cli.md)
 
+- AWS
+  - [Overview](/aws/readme.md)
+  - [EC2](/aws/ec2.md)
+  - [Elastic IP (Static IP)](/aws/elastic-ip.md)
+  - [IAM](/aws/iam.md)
+  - [ECR](/aws/ecr.md)
+  - [EKS (Kubernetes)](/aws/eks.md)
+  - [S3](/aws/s3.md)
+  - [RDS](/aws/rds.md)
+
 - DigitalOcean
   - [Overview](/digitalocean/readme.md)
   - [Droplet Setup](/digitalocean/droplet.md)
