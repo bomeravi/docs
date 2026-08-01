@@ -34,7 +34,7 @@ ssh-keygen -t rsa -b 4096
 ```
 
 When prompted, press **Enter** to accept defaults:
-```
+```text
 Generating public/private rsa key pair.
 Enter file in which to save the key (/home/ubuntu/.ssh/id_rsa): [press Enter]
 Enter passphrase (empty for no passphrase): [enter passphrase or press Enter]
@@ -60,7 +60,7 @@ Parameters:
 - `-C`: Comment (email or identifier)
 
 **Prompt:**
-```
+```text
 Enter passphrase (empty for no passphrase): [enter passphrase]
 Enter same passphrase again: [repeat passphrase]
 ```
@@ -100,7 +100,7 @@ ssh-keygen -t ed25519 -C "your_email@example.com"
 Default location: `~/.ssh/id_ed25519`
 
 **Prompt:**
-```
+```text
 Enter file in which to save the key (/home/ubuntu/.ssh/id_ed25519): [press Enter]
 Enter passphrase (empty for no passphrase): [enter passphrase]
 Enter same passphrase again: [repeat passphrase]
@@ -169,7 +169,7 @@ eval "$(ssh-agent -s)"
 ```
 
 Expected output:
-```
+```text
 Agent pid 5906
 ```
 
@@ -203,7 +203,7 @@ ssh-add ~/.ssh/id_rsa_server
 ```
 
 **Prompt (if key has passphrase):**
-```
+```text
 Enter passphrase for /home/ubuntu/.ssh/id_rsa_work: [enter passphrase]
 ```
 
@@ -214,7 +214,7 @@ ssh-add -l
 ```
 
 Example output:
-```
+```text
 2048 SHA256:xvXQvF8aQ7y9K3mP2... /home/ubuntu/.ssh/id_rsa (RSA)
 256 SHA256:aBc1DeF2gHi3JkL4m... /home/ubuntu/.ssh/id_ed25519 (ED25519)
 2048 SHA256:nOpQrStUvWxYzAbC... /home/ubuntu/.ssh/id_rsa_work (RSA)
@@ -278,7 +278,7 @@ ssh-copy-id -i ~/.ssh/id_ed25519.pub username@server_ip
 ```
 
 **Prompt:**
-```
+```text
 The authenticity of host '192.168.1.100 (192.168.1.100)' can't be established.
 ECDSA key fingerprint is SHA256:...
 Are you sure you want to continue connecting (yes/no)? yes
@@ -321,7 +321,7 @@ cat ~/.ssh/id_ed25519.pub
 ```
 
 Output:
-```
+```text
 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKx1... your_email@example.com
 ```
 
@@ -380,7 +380,7 @@ sudo nano /etc/ssh/sshd_config
 ```
 
 Find and modify:
-```
+```text
 PasswordAuthentication no
 PubkeyAuthentication yes
 ```
@@ -643,7 +643,7 @@ nano ~/.ssh/config
 
 Add entries:
 
-```
+```text
 # GitHub
 Host github.com
     HostName github.com

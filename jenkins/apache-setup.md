@@ -3,9 +3,9 @@
 This guide configures Jenkins securely behind Apache2 with HTTPS,
 firewall, and hardened settings.
 
-------------------------------------------------------------------------
+---
 
-# 1. Install Jenkins (LTS)
+## 1. Install Jenkins (LTS)
 
 Use the main installation guide before following this Apache production setup:
 
@@ -14,25 +14,25 @@ Use the main installation guide before following this Apache production setup:
 
 After Jenkins is installed and accessible, continue with the steps below.
 
-------------------------------------------------------------------------
+---
 
-# 2. System Preparation
+## 2. System Preparation
 
-## Update System
+### Update System
 
 ``` bash
 sudo apt update && sudo apt upgrade -y
 ```
 
-## Install Required Packages
+### Install Required Packages
 Not to use
 ``` bash
 sudo apt install -y apache2 ufw fail2ban curl wget
 ```
 
-------------------------------------------------------------------------
+---
 
-# 3. Restrict Jenkins to Localhost Only
+## 3. Restrict Jenkins to Localhost Only
 
 Edit:
 
@@ -58,9 +58,9 @@ ss -lntp | grep 8080
 
 Should bind only to 127.0.0.1.
 
-------------------------------------------------------------------------
+---
 
-# 4. Configure Firewall (UFW)
+## 4. Configure Firewall (UFW)
 
 ``` bash
 sudo ufw allow OpenSSH
@@ -72,18 +72,18 @@ sudo ufw status
 
 DO NOT expose 8080 publicly.
 
-------------------------------------------------------------------------
+---
 
-# 5. Enable Apache Required Modules
+## 5. Enable Apache Required Modules
 
 ``` bash
 sudo a2enmod proxy proxy_http proxy_wstunnel headers rewrite ssl
 sudo systemctl restart apache2
 ```
 
-------------------------------------------------------------------------
+---
 
-# 6. Apache Production VHost (HTTPS + Redirect)
+## 6. Apache Production VHost (HTTPS + Redirect)
 
 Create:
 
@@ -170,9 +170,9 @@ sudo apache2ctl configtest
 sudo systemctl reload apache2
 ```
 
-------------------------------------------------------------------------
+---
 
-# 7. Install SSL (Let's Encrypt)
+## 7. Install SSL (Let's Encrypt)
 
 ``` bash
 sudo apt install certbot python3-certbot-apache
@@ -207,9 +207,9 @@ make this changes, this is used to forwarded all headers, port = 443, proto = ht
     RequestHeader set X-Forwarded-Proto "https"
 ```
 
-------------------------------------------------------------------------
+---
 
-# 8. Jenkins Configuration
+## 8. Jenkins Configuration
 
 Inside Jenkins:
 
@@ -220,9 +220,9 @@ Set:
     Jenkins URL:
     https://jenkins.digi.saroj.name.np/
 
-------------------------------------------------------------------------
+---
 
-# 9. Fail2Ban Protection
+## 9. Fail2Ban Protection
 
 ``` bash
 sudo systemctl enable fail2ban
@@ -231,9 +231,9 @@ sudo systemctl start fail2ban
 
 Optional custom jail for Apache login protection.
 
-------------------------------------------------------------------------
+---
 
-# 10. Systemd Hardening (Optional)
+## 10. Systemd Hardening (Optional)
 
 Create override:
 
@@ -253,9 +253,9 @@ sudo systemctl daemon-reexec
 sudo systemctl restart jenkins
 ```
 
-------------------------------------------------------------------------
+---
 
-# 11. Monitoring & Logs
+## 11. Monitoring & Logs
 
 Apache logs:
 
@@ -269,11 +269,11 @@ Jenkins logs:
 sudo journalctl -u jenkins -f
 ```
 
-------------------------------------------------------------------------
+---
 
 - [Server setup guide](./server-setup.md) - complete the first login and initial Jenkins web setup.
 
-# Production Checklist
+## Production Checklist
 
 ✔ Jenkins bound to localhost\
 ✔ 8080 not publicly exposed\
@@ -283,6 +283,6 @@ sudo journalctl -u jenkins -f
 ✔ Fail2Ban active\
 ✔ Auto-renew SSL tested
 
-------------------------------------------------------------------------
+---
 
 Jenkins production deployment complete.

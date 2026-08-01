@@ -95,7 +95,7 @@ You will be prompted to:
 1. Enter your API token (paste the token from Step 1)
 2. Provide a context name (default: "default")
 
-```
+```text
 DigitalOcean access token: [paste your token here]
 Use the following credentials in the default context? (Y/n): Y
 ```
@@ -122,7 +122,7 @@ This command should display your account information if authentication is succes
 ## Configuration File
 
 The authentication configuration is stored in:
-```
+```text
 ~/.config/doctl/config.yaml
 ```
 

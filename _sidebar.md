@@ -9,8 +9,12 @@
   - [HAProxy](/haproxy.md)
   - [LAMP Setup](/lamp-setup.md)
 
+- Ansible
+  - [Overview](/ansible/readme.md)
+
 - ArgoCD
   - [Overview](/argocd/readme.md)
+  - [Argo CD CLI](/argocd/argocd-cli.md)
 
 - DigitalOcean
   - [Overview](/digitalocean/readme.md)
@@ -48,6 +52,7 @@
 
 - Jenkins
   - [Overview](/jenkins/readme.md)
+  - [Agents](/jenkins/agents.md)
   - [Apache Setup](/jenkins/apache-setup.md)
   - [Secrets](/jenkins/secrets.md)
   - [Server Setup](/jenkins/server-setup.md)
@@ -70,6 +75,7 @@
   - [Overview](/security/readme.md)
   - [Certbot](/security/certbot.md)
   - [Custom HTTPS (Local SSL)](/security/custom-https.md)
+  - [OWASP Dependency Check](/security/owasp-dependency-check.md)
   - [SonarQube](/security/sonarqube.md)
 
 - Developer Tools

@@ -16,5 +16,8 @@ in CI.
   for public domains.
 - [Custom HTTPS (Local SSL)](./custom-https.md): trusted HTTPS for local
   domains using a self-signed cert or your own Root CA.
+- [OWASP Dependency Check](./owasp-dependency-check.md): scan project
+  dependencies for known CVEs from Jenkins and fail builds on high-severity
+  findings.
 - [SonarQube](./sonarqube.md): run a SonarQube server (Docker or bare metal),
   wire it into Jenkins, and enforce a Quality Gate.

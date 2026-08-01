@@ -94,7 +94,7 @@ docker kill -s HUP haproxy
 
 ### Config Structure
 
-```
+```haproxy
 global
     # Process-level settings (logging, ulimits, SSL)
 
@@ -429,7 +429,7 @@ sudo haproxy -f /etc/haproxy/haproxy.cfg -c
 
 Expected output on success:
 
-```
+```text
 Configuration file is valid
 ```
 

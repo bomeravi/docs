@@ -8,7 +8,7 @@ Set up trusted HTTPS for local domains without Let's Encrypt. Two approaches:
 Example domain: `sajiloapps.com`
 Cert storage: `/etc/local-certs/{domain_name}`
 
-------------------------------------------------------------------------
+---
 
 ## Part 1 — Quick Single Domain SSL
 
@@ -20,7 +20,7 @@ sudo nano /etc/hosts
 
 Add:
 
-```
+```text
 127.0.0.1   sajiloapps.com
 ```
 
@@ -177,13 +177,13 @@ sudo haproxy -c -f /etc/haproxy/haproxy.cfg
 sudo systemctl reload haproxy
 ```
 
-------------------------------------------------------------------------
+---
 
 ## Part 2 — Custom Root CA (Recommended)
 
 Create one Root CA, trust it once. Sign any local domain with it — no per-domain browser steps.
 
-------------------------------------------------------------------------
+---
 
 ### Step 1 — Create Root CA
 
@@ -208,7 +208,7 @@ sudo openssl req -x509 -new -nodes \
   -subj "/C=NP/ST=Bagmati/L=Kathmandu/O=SajiloApps Local CA/OU=Dev/CN=SajiloApps Root CA"
 ```
 
-------------------------------------------------------------------------
+---
 
 ### Step 2 — Trust Root CA System-wide (Ubuntu)
 
@@ -228,7 +228,7 @@ openssl verify -CAfile /etc/local-certs/rootCA/rootCA.crt \
   /etc/local-certs/rootCA/rootCA.crt
 ```
 
-------------------------------------------------------------------------
+---
 
 ### Step 3 — Trust Root CA in Chrome / Chromium
 
@@ -250,7 +250,7 @@ certutil -d sql:$HOME/.pki/nssdb -L
 
 Restart Chrome completely (`chrome://restart`).
 
-------------------------------------------------------------------------
+---
 
 ### Step 4 — Trust Root CA in Firefox
 
@@ -282,7 +282,7 @@ EOF
 
 Restart Firefox.
 
-------------------------------------------------------------------------
+---
 
 ### Step 5 — Create a Reusable Script to Sign Domains
 
@@ -374,7 +374,7 @@ SCRIPT
 sudo chmod +x /usr/local/bin/local-cert-sign
 ```
 
-------------------------------------------------------------------------
+---
 
 ### Step 6 — Sign Domain with Root CA
 
@@ -398,7 +398,7 @@ openssl x509 -in /etc/local-certs/sajiloapps.com/fullchain.pem \
   -noout -text | grep -A2 "Subject Alternative"
 ```
 
-------------------------------------------------------------------------
+---
 
 ### Step 7 — Add Domain to `/etc/hosts`
 
@@ -406,7 +406,7 @@ openssl x509 -in /etc/local-certs/sajiloapps.com/fullchain.pem \
 sudo nano /etc/hosts
 ```
 
-```
+```text
 127.0.0.1   sajiloapps.com
 127.0.0.1   *.sajiloapps.com
 ```
@@ -414,7 +414,7 @@ sudo nano /etc/hosts
 > `/etc/hosts` does not support wildcard. Add each subdomain explicitly if needed:
 > `127.0.0.1   api.sajiloapps.com`
 
-------------------------------------------------------------------------
+---
 
 ### Step 8 — Configure NGINX
 
@@ -541,11 +541,11 @@ sudo haproxy -c -f /etc/haproxy/haproxy.cfg
 sudo systemctl reload haproxy
 ```
 
-------------------------------------------------------------------------
+---
 
 ## Certificate File Layout
 
-```
+```text
 /etc/local-certs/
 ├── rootCA/
 │   ├── rootCA.key        ← keep private, never share
@@ -559,7 +559,7 @@ sudo systemctl reload haproxy
     └── ext.conf          ← signing extensions
 ```
 
-------------------------------------------------------------------------
+---
 
 ## Add Another Domain Later
 
@@ -577,7 +577,7 @@ echo "127.0.0.1   anotherdomain.com" | sudo tee -a /etc/hosts
 # No browser steps needed — Root CA already trusted
 ```
 
-------------------------------------------------------------------------
+---
 
 ## Renew Domain Certificate
 
@@ -639,7 +639,7 @@ sudo systemctl reload haproxy
 > NGINX and Apache2 read cert files on reload — no path change needed.
 > HAProxy requires the combined PEM to be rebuilt and copied each time.
 
-------------------------------------------------------------------------
+---
 
 ## Troubleshooting
 
@@ -655,7 +655,7 @@ sudo systemctl reload haproxy
 | Apache2 `AH01630: client denied` | Enable `proxy` and `proxy_http` modules: `sudo a2enmod proxy proxy_http` |
 | HAProxy `cannot load certificate` | haproxy.pem must contain fullchain + privkey concatenated; check `chmod 600` on both `/etc/local-certs/.../haproxy.pem` and `/etc/haproxy/certs/sajiloapps.com.pem` |
 
-------------------------------------------------------------------------
+---
 
 ## Quick Reference
 

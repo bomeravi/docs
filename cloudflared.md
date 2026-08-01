@@ -98,7 +98,7 @@ sudo systemctl start cloudflared
 ## 🟦 Windows Setup
 ### 1. Install cloudflared
 Download installer from the Cloudflare docs or place the binary inside:
-```
+```text
 C:\Program Files\cloudflared\
 ```
 
@@ -114,7 +114,7 @@ cloudflared tunnel create my-tunnel
 
 ### 4. Create config file
 Location:
-```
+```text
 C:\Users\<YOU>\.cloudflared\config.yml
 ```
 
@@ -157,7 +157,7 @@ cloudflared tunnel create my-tunnel
 ```
 
 ### 4. Config file location
-```
+```text
 ~/.cloudflared/config.yml
 ```
 
@@ -180,7 +180,7 @@ Great for quick testing:
 cloudflared tunnel --url http://localhost:3000
 ```
 Output example:
-```
+```text
 https://random1234.trycloudflare.com
 ```
 
@@ -250,7 +250,7 @@ Example:
 cloudflared tunnel route dns my-tunnel app.example.com
 ```
 This creates a DNS CNAME record:
-```
+```text
 app.example.com → <UUID>.cfargotunnel.com
 ```
 
@@ -285,7 +285,7 @@ cloudflared tunnel login
 
 ### **DNS not resolving**
 Create CNAME:
-```
+```text
 <UUID>.cfargotunnel.com
 ```
 

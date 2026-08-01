@@ -2,11 +2,11 @@
 
 > **Mailpit** is a lightweight, self-hosted email testing tool for developers. It acts as a local SMTP server that captures all outgoing emails from your application and displays them in a clean web UI — without ever sending them to real recipients.
 
-------------------------------------------------------------------------
+---
 
 ## How Mailpit Works
 
-```
+```text
 Your App  →  SMTP (port 1025)  →  Mailpit  →  Web UI (port 8025)
 ```
 
@@ -22,7 +22,7 @@ Your App  →  SMTP (port 1025)  →  Mailpit  →  Web UI (port 8025)
 - Optional SMTP authentication
 - Optional HTTPS and basic auth for the web UI
 
-------------------------------------------------------------------------
+---
 
 ## 1️⃣ Installation
 
@@ -66,7 +66,7 @@ sudo systemctl enable --now mailpit
 sudo systemctl status mailpit
 ```
 
-------------------------------------------------------------------------
+---
 
 ### Windows
 
@@ -94,7 +94,7 @@ nssm install Mailpit "C:\path\to\mailpit.exe"
 nssm start Mailpit
 ```
 
-------------------------------------------------------------------------
+---
 
 ### macOS
 
@@ -125,7 +125,7 @@ sudo mv mailpit /usr/local/bin/mailpit
 mailpit --version
 ```
 
-------------------------------------------------------------------------
+---
 
 ## 2️⃣ Default Ports
 
@@ -139,7 +139,7 @@ Point your application's SMTP settings to:
 - **Port:** `1025`
 - **No authentication, no TLS** (development only)
 
-------------------------------------------------------------------------
+---
 
 ## 3️⃣ Reverse Proxy Setup
 
@@ -147,7 +147,7 @@ Use domain: **`mailpit.sajiloapps.com`** → proxies to `http://127.0.0.1:8025`
 
 > Make sure your DNS A record for `mailpit.sajiloapps.com` points to your server's public IP.
 
-------------------------------------------------------------------------
+---
 
 ### Apache2
 
@@ -227,7 +227,7 @@ sudo apache2ctl configtest
 sudo systemctl reload apache2
 ```
 
-------------------------------------------------------------------------
+---
 
 ### Nginx
 
@@ -319,7 +319,7 @@ sudo nginx -t
 sudo systemctl reload nginx
 ```
 
-------------------------------------------------------------------------
+---
 
 ### HAProxy
 
@@ -393,7 +393,7 @@ sudo haproxy -c -f /etc/haproxy/haproxy.cfg
 sudo systemctl reload haproxy
 ```
 
-------------------------------------------------------------------------
+---
 
 ## 4️⃣ Verify Setup
 
@@ -413,7 +413,7 @@ Open the web UI in your browser:
 - HTTP: `http://mailpit.sajiloapps.com`
 - HTTPS: `https://mailpit.sajiloapps.com`
 
-------------------------------------------------------------------------
+---
 
 ## 5️⃣ Useful Mailpit Flags
 

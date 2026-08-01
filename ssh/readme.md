@@ -91,13 +91,13 @@ sudo nano /etc/ssh/sshd_config
 
 Find:
 
-```
+```text
 #Port 22
 ```
 
 Change to:
 
-```
+```text
 Port 2222
 ```
 
@@ -125,7 +125,7 @@ sudo nano /etc/ssh/sshd_config
 
 Set:
 
-```
+```text
 PermitRootLogin no
 ```
 
@@ -165,7 +165,7 @@ sudo nano /etc/ssh/sshd_config
 
 Set:
 
-```
+```text
 PasswordAuthentication no
 ```
 

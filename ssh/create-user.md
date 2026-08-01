@@ -121,7 +121,7 @@ sudo visudo -c
 
 `visudo -c` should print:
 
-```
+```text
 /etc/sudoers.d/deployer: parsed OK
 ```
 

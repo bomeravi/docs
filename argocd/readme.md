@@ -149,3 +149,10 @@ Recommended branch mapping:
 
 - `jenkins` branch for direct Jenkins + kubectl pipeline
 - `argocd` branch for Argo CD sync (`targetRevision: argocd`)
+
+---
+
+## Guides in this folder
+
+- [Argo CD CLI](./argocd-cli.md): install the `argocd` CLI, log in, and manage
+  applications from the terminal.

@@ -40,7 +40,8 @@ To preview locally before pushing:
 npx docsify-cli serve .
 ```
 or using php
-```php
+
+```bash
 php -S localhost:3000 -t .
 ```
 

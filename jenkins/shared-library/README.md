@@ -7,7 +7,7 @@ pagination_label: Shared Library
 
 Recommended structure for a Git-backed shared library:
 
-```
+```text
 vars/                 # global var steps callable from Jenkinsfile
   notify.groovy
 src/                  # reusable java/groovy classes

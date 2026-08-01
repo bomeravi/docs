@@ -31,7 +31,7 @@ sudo apt install jenkins
 
 - Initial admin password:
 
-```
+```bash
 sudo cat /var/lib/jenkins/secrets/initialAdminPassword
 ```
 
@@ -70,6 +70,14 @@ See `jenkins/shared-library/README.md` for recommended layout and examples of cu
 **Code Quality (SonarQube)**
 
 See [SonarQube](/security/sonarqube.md) to run a SonarQube server, wire it into Jenkins (plugin, server, token, and Quality Gate webhook), and add an analysis stage to a pipeline. A copy-ready pipeline template is at [Jenkinsfile-sonarqube.md](./jenkinsfiles/Jenkinsfile-sonarqube.md).
+
+**Agents**
+
+See [Agents](./agents.md) to offload builds from the controller — SSH permanent agents, ephemeral Docker containers, and auto-scaled Kubernetes pods, plus label-based agent selection.
+
+**Dependency Scanning (OWASP)**
+
+See [OWASP Dependency Check](/security/owasp-dependency-check.md) to install the Dependency-Check plugin, register the `OWASP-DC` tool, scan dependencies for known CVEs on an agent or in a Docker/Kubernetes pod, and fail the build on high-severity findings.
 
 **Docker & CI**
 

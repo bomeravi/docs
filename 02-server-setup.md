@@ -30,7 +30,7 @@ groups ubuntu
 ```
 
 Expected:
-```
+```text
 ubuntu : ubuntu sudo users
 ```
 
@@ -81,7 +81,7 @@ sudo whoami
 ```
 
 Expected output:
-```
+```text
 root
 ```
 

@@ -79,7 +79,7 @@ WSL 2 enabled
 Hardware virtualization enabled in BIOS
 Installation Steps
 Enable WSL 2
-```PowerShell
+```powershell
 
 # Run in PowerShell as Administrator
 wsl --install
@@ -96,7 +96,7 @@ Ensure "Use WSL 2 instead of Hyper-V" is selected
 Restart your computer when prompted
 Verify Installation
 
-```PowerShell
+```powershell
 
 docker --version
 docker compose version
@@ -142,11 +142,11 @@ Using Homebrew (Alternative)
 ```
 
 ### Install Homebrew if not installed
-```
+```bash
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
 ### Install Docker Desktop
-```
+```bash
 brew install --cask docker
 ```
 ### Launch Docker Desktop
@@ -154,7 +154,7 @@ open /Applications/Docker.app
 ## Docker Commands
 Container Management
 
-```
+```bash
 # List running containers
 docker ps
 
@@ -247,7 +247,7 @@ docker attach <container_id/name>
 ```
 
 Image Management
-```
+```bash
 
 # List images
 docker images
@@ -312,7 +312,7 @@ docker export <container_id> > container.tar
 docker import container.tar <image_name>:<tag>
 ```
 Network Management
-```
+```bash
 
 # List networks
 docker network ls
@@ -433,7 +433,7 @@ docker compose push
 docker compose top
 ```
 System Commands
-```
+```bash
 
 # View Docker disk usage
 docker system df
@@ -489,7 +489,7 @@ docker push <registry>/<repository>:<tag>
 docker pull <registry>/<repository>:<tag>
 ```
 Useful Command Combinations
-```
+```bash
 
 # Stop all running containers
 docker stop $(docker ps -q)
@@ -573,7 +573,7 @@ USER node
 CMD ["node", "dist/main.js"]
 ```
 Python Application
-```Dockerfile
+```dockerfile
 
 FROM python:3.11-slim
 
@@ -601,7 +601,7 @@ EXPOSE 8000
 CMD ["python", "app.py"]
 ```
 Go Application
-```Dockerfile
+```dockerfile
 
 # Build stage
 FROM golang:1.21-alpine AS builder
@@ -628,7 +628,7 @@ EXPOSE 8080
 CMD ["./main"]
 ```
 Java Application
-```Dockerfile
+```dockerfile
 
 # Build stage
 FROM maven:3.9-eclipse-temurin-17 AS builder
@@ -653,7 +653,7 @@ EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]
 ```
 Nginx with Custom Config
-```Dockerfile
+```dockerfile
 
 FROM nginx:alpine
 
@@ -672,7 +672,7 @@ EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
 ```
 PHP Application
-```Dockerfile
+```dockerfile
 
 FROM php:8.2-fpm-alpine
 
@@ -707,7 +707,7 @@ EXPOSE 9000
 CMD ["php-fpm"]
 ```
 WordPress
-```Dockerfile
+```dockerfile
 
 FROM wordpress:latest
 
@@ -1111,7 +1111,7 @@ networks:
 ```
 
 Development Environment (LAMP Stack)
-```YAML
+```yaml
 
 version: '3.8'
 
@@ -1168,7 +1168,7 @@ networks:
 ```
 
 Monitoring Stack (Prometheus + Grafana)
-```YAML
+```yaml
 
 version: '3.8'
 
@@ -1255,7 +1255,7 @@ networks:
 #### Troubleshooting
 ##### Common Issues
 
-```
+```bash
 # Container keeps restarting
 
 docker logs <container_name>
@@ -1289,12 +1289,12 @@ docker network inspect <network_name>
 docker run --dns 8.8.8.8 <image>
 ```
 #### Useful Resources
-Official Docker Documentation
-Docker Hub
-Docker Compose Documentation
-Dockerfile Reference
-Docker Best Practices
-```
+- Official Docker Documentation
+- Docker Hub
+- Docker Compose Documentation
+- Dockerfile Reference
+- Docker Best Practices
+
 Docker basics for local builds and for Jenkins CI
 
 Build an image locally:

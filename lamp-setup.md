@@ -86,7 +86,7 @@ Ensure the PHP version used by Apache matches your default (8.4 in this guide):
 
 Access it at:
 
-```
+```text
 http://your-server-ip/phpmyadmin
 ```
 
@@ -112,7 +112,7 @@ Create a vhost and point it to the PHP-FPM socket you want:
 
 To use PHP 8.3 for this site instead, swap the socket to:
 
-```
+```text
 /run/php/php8.3-fpm.sock
 ```
 

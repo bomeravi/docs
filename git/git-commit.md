@@ -11,7 +11,7 @@ This document describes the standard format for writing clean, consistent, profe
 
 ## 📌 Commit Message Format
 
-```
+```text
 <type>(optional-scope): <short summary>
 
 (optional body)
@@ -41,27 +41,27 @@ This document describes the standard format for writing clean, consistent, profe
 ## ✨ Examples
 
 ### 1. Adding a new document
-```
+```text
 docs: add project requirements document
 ```
 
 ### 2. Fixing a bug
-```
+```text
 fix(auth): resolve token expiration issue
 ```
 
 ### 3. Adding a new feature
-```
+```text
 feat(blog): add post search functionality
 ```
 
 ### 4. Refactoring code
-```
+```text
 refactor(api): simplify user serializer logic
 ```
 
 ### 5. Updating documentation
-```
+```text
 docs(readme): update setup instructions
 ```
 
@@ -75,14 +75,14 @@ docs(readme): update setup instructions
 - Use the body to explain **why** the change was made
 - Use footer for issue references, e.g.:
 
-```
+```text
 Closes #42
 ```
 
 ---
 
 ## 📄 Example with Body + Footer
-```
+```text
 feat(auth): implement refresh token flow
 
 Added refresh token rotation and secure cookie handling.

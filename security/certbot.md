@@ -1,9 +1,9 @@
 # Certbot
 
 Certbot is used to generate ssl certificates for the domain in the server. 
-------------------------------------------------------------------------
+---
 
-## 1️⃣ Base Requirements
+## 1. Base Requirements
 
 -   Ubuntu 20.04 / 22.04 / 24.04
 -   Domain pointing to server public IP
@@ -14,9 +14,9 @@ sudo ufw allow 80
 sudo ufw allow 443
 ```
 
-------------------------------------------------------------------------
+---
 
-## 2️⃣ Install Certbot
+## 2. Install Certbot
 
 Recommended Snap Method
 ``` bash
@@ -47,9 +47,9 @@ sudo apt update
 sudo apt install certbot python3-certbot-dns-cloudflare -y
 ```
 
-------------------------------------------------------------------------
+---
 
-# 3️⃣ NGINX Reverse Proxy Setup
+## 3. NGINX Reverse Proxy Setup
 
 Install NGINX:
 
@@ -86,11 +86,11 @@ Generate SSL:
 sudo certbot --nginx -d example.com -d www.example.com --redirect
 ```
 
-------------------------------------------------------------------------
+---
 
-# 4️⃣ DigitalOcean Setup
+## 4. DigitalOcean Setup
 
-## Droplet Requirements
+### Droplet Requirements
 
 -   Public IPv4 assigned
 -   DNS A record pointing to droplet IP
@@ -108,9 +108,9 @@ Then run:
 sudo certbot --nginx -d example.com
 ```
 
-------------------------------------------------------------------------
+---
 
-# 5️⃣ Docker Version
+## 5. Docker Version
 
 Run Certbot in Docker (Standalone mode):
 
@@ -124,9 +124,9 @@ Renew:
 docker run --rm   -v /etc/letsencrypt:/etc/letsencrypt   certbot/certbot renew
 ```
 
-------------------------------------------------------------------------
+---
 
-# 6️⃣ Kubernetes / Ingress Setup
+## 6. Kubernetes and Ingress Setup
 
 Recommended: Use cert-manager
 
@@ -182,9 +182,9 @@ spec:
               number: 80
 ```
 
-------------------------------------------------------------------------
+---
 
-# 7️⃣ High Availability (HA) Setup
+## 7. High Availability (HA) Setup
 
 For multiple servers behind a load balancer:
 
@@ -192,7 +192,7 @@ Architecture:
 
 Client → Load Balancer → Multiple NGINX Servers
 
-## Recommended Approach
+### Recommended Approach
 
 -   Use shared storage (NFS) for `/etc/letsencrypt` OR
 -   Issue certificate on one server and sync via rsync OR
@@ -209,9 +209,9 @@ Best Practice:
 Use Load Balancer SSL termination (DigitalOcean LB supports Let's
 Encrypt automatically).
 
-------------------------------------------------------------------------
+---
 
-# 8️⃣ Auto Renewal
+## 8. Auto Renewal
 
 Test renewal:
 
@@ -225,9 +225,9 @@ Check timer:
 sudo systemctl list-timers | grep certbot
 ```
 
-------------------------------------------------------------------------
+---
 
-# 9️⃣ Certificate Location
+## 9. Certificate Location
 
     /etc/letsencrypt/live/example.com/
 
@@ -238,40 +238,40 @@ Files:
 -   cert.pem
 -   chain.pem
 
-------------------------------------------------------------------------
+---
 
-# 🔟 Force Renew
+## 10. Force Renew
 
 ``` bash
 sudo certbot renew --force-renewal
 ```
 
-------------------------------------------------------------------------
+---
 
-# 1️⃣1️⃣ Delete Certificate
+## 11. Delete Certificate
 
 ``` bash
 sudo certbot delete --cert-name example.com
 ```
 
-------------------------------------------------------------------------
+---
 
-# 📅 Certificate Validity
+## Certificate Validity
 
 -   Valid for 90 days
 -   Auto-renewed every 60 days
 
-------------------------------------------------------------------------
+---
 
-# 🎯 Production Command Example
+## Production Command Example
 
 ``` bash
 sudo certbot --nginx   -d example.com   -d www.example.com   --redirect   --agree-tos   -m admin@example.com
 ```
 
-------------------------------------------------------------------------
+---
 
-# 🛡 Security Recommendations
+## Security Recommendations
 
 -   Enable HTTPS redirect
 -   Use HSTS

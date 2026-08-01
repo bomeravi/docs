@@ -3,7 +3,7 @@
 This guide explains how to securely disable root login on an Ubuntu
 server after system upgrades on Ubuntu (SSH Hardening Guide)
 
-------------------------------------------------------------------------
+---
 
 ## 1. Edit SSH Server Configuration
 
@@ -21,7 +21,7 @@ NOT:
 
     /etc/ssh/ssh_config
 
-------------------------------------------------------------------------
+---
 
 ## 2. Disable Root Login
 
@@ -31,7 +31,7 @@ If the line does not exist, add it manually:
 
 This completely disables SSH login for the root user.
 
-------------------------------------------------------------------------
+---
 
 ## 3. Disable Password Authentication (Recommended)
 
@@ -39,7 +39,7 @@ If you are using SSH keys, also ensure:
 
     PasswordAuthentication no
 
-------------------------------------------------------------------------
+---
 
 ## 4. Validate SSH Configuration
 
@@ -51,7 +51,7 @@ sudo sshd -t
 
 If there is no output, the configuration is valid.
 
-------------------------------------------------------------------------
+---
 
 ## 5. Restart SSH Service
 
@@ -65,7 +65,7 @@ or
 sudo systemctl restart sshd
 ```
 
-------------------------------------------------------------------------
+---
 
 ## 6. Verify Active Configuration
 
@@ -79,7 +79,7 @@ Expected output:
 
     permitrootlogin no
 
-------------------------------------------------------------------------
+---
 
 ## 7. Important Safety Note
 
@@ -87,7 +87,7 @@ Before disabling root login: - Ensure you have a non-root sudo user. -
 Confirm SSH key login works. - Test login in a new terminal before
 closing your current session.
 
-------------------------------------------------------------------------
+---
 
 ## Production-Ready SSH Hardening Recommendations
 
@@ -98,7 +98,7 @@ closing your current session.
 -   Enable UFW firewall
 -   Install fail2ban
 
-------------------------------------------------------------------------
+---
 
 ## Basic Firewall Setup (Optional)
 
@@ -110,7 +110,7 @@ sudo ufw enable
 sudo ufw status
 ```
 
-------------------------------------------------------------------------
+---
 
 ## Summary
 
@@ -122,4 +122,4 @@ By setting:
 Your server becomes significantly more secure against brute-force and
 unauthorized root access attempts.
 
-------------------------------------------------------------------------
+---
