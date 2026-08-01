@@ -221,7 +221,7 @@ post {
 Without an API key, the NVD rate-limits downloads and the vulnerability
 database update is very slow.
 
-1. Register at <https://nvd.nist.gov/developers/request-an-api-key>
+1. Register at the [API key request page](https://nvd.nist.gov/developers/request-an-api-key)
 2. Add it as a Jenkins secret:
    - **Manage Jenkins → Credentials → Add → Secret text**
    - ID: `NVD_API_KEY`
