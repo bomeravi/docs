@@ -46,6 +46,7 @@
   - [Git Setup](/git/git-setup.md)
   - [Git Commands](/git/git-commands.md)
   - [Git Commit](/git/git-commit.md)
+  - [Merge Conflicts](/git/merge-conflict.md)
 
 - Docker
   - [Overview](/docker/readme.md)

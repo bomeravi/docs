@@ -17,3 +17,5 @@ and writing consistent commit messages.
   branching, committing, rebasing, tagging, and troubleshooting.
 - [Git Commit Message Standard](./git-commit.md): commit message format using
   Conventional Commits.
+- [Resolving Merge Conflicts](./merge-conflict.md): resolve conflicts from
+  `git pull`, plus rebase and stash strategies.
