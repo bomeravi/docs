@@ -81,4 +81,4 @@ kubectl get ns
 
 ## Next Step
 
-- Continue with [Kubernetes installation and commands](../kubernetes/kubernetes-installation-and-commands.md).
+- Continue with [Kubernetes installation](../kubernetes/01-kubernetes-installation.md), then the [kubectl commands reference](../kubernetes/02-kubectl-commands.md).

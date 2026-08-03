@@ -1,6 +1,8 @@
-# Kubernetes: Installation and Common Commands (Windows, Ubuntu, macOS)
+# Kubernetes Installation (Ubuntu, macOS, Windows)
 
-This document contains step-by-step installation instructions for Kubernetes on Windows, Ubuntu, and macOS, followed by a compact, practical reference of kubectl/deployment commands and examples optimized for storing manifests in a GitHub repository.
+This document contains step-by-step installation instructions for Kubernetes on Windows, Ubuntu, and macOS, followed by example manifests and a deployment workflow optimized for storing manifests in a GitHub repository.
+
+> For the day-to-day command reference, see [kubectl Commands Reference](./02-kubectl-commands.md).
 
 ## Overview and recommendations
 
@@ -188,42 +190,20 @@ kubectl cluster-info --context kind-kind
 
 ---
 
-## Common kubectl workflows and commands (with examples)
+## kubectl commands
 
-Note: Keep declarative YAML in `./manifests/` and use `kubectl apply -f`.
+The day-to-day `kubectl` reference now lives on its own page:
+**[kubectl Commands Reference](./02-kubectl-commands.md)** — namespaces, pods, deployments,
+services, ingress, ConfigMaps/Secrets, storage, logs, debugging, RBAC, and cleanup.
 
-- Create a namespace:
+A minimal smoke test after the cluster is up:
 
 ```bash
+kubectl get nodes
+kubectl get ns
 kubectl create namespace demo
-```
-
-- Apply manifests:
-
-```bash
 kubectl apply -f manifests/ -n demo
-```
-
-- Create a Deployment (imperative):
-
-```bash
-kubectl create deployment nginx --image=nginx -n demo
-kubectl expose deployment nginx --port=80 --type=ClusterIP -n demo
-```
-
-- Useful `kubectl` listing and debugging:
-
-```bash
-kubectl get pods -n demo
-kubectl get svc -n demo
-kubectl describe pod <pod-name> -n demo
-kubectl logs <pod-name> -n demo
-kubectl exec -it <pod-name> -n demo -- /bin/bash
-kubectl port-forward svc/nginx 8080:80 -n demo
-kubectl delete -f manifests/ -n demo
-kubectl rollout status deployment/nginx -n demo
-kubectl rollout undo deployment/nginx -n demo
-kubectl scale deployment/nginx --replicas=3 -n demo
+kubectl get all -n demo
 ```
 
 ---
@@ -274,24 +254,6 @@ spec:
 ```
 
 Apply both with `kubectl apply -f manifests/`.
-
----
-
-## ConfigMaps, Secrets, and rolling updates
-
-- Create a ConfigMap from file or literal:
-
-```bash
-kubectl create configmap app-config --from-literal=LOG_LEVEL=info -n demo
-kubectl create secret generic db-credentials --from-literal=username=admin --from-literal=password='s3cr3t' -n demo
-```
-
-- Apply a config change and trigger rolling update by updating Deployment image or env:
-
-```bash
-kubectl set image deployment/nginx nginx=nginx:1.25 -n demo
-kubectl rollout status deployment/nginx -n demo
-```
 
 ---
 
@@ -365,10 +327,12 @@ Notes: prefer short-lived credentials or GitHub OIDC for security. For GitOps, p
 
 ## Quick troubleshooting tips
 
-- Check events: `kubectl get events -n <ns>`
+- Check events: `kubectl get events -n <ns> --sort-by=.metadata.creationTimestamp`
 - Describe: `kubectl describe pod <pod>` to see pod scheduling or image pull errors
-- Node status: `kubectl get nodes` and `kubectl describe node <node>`
+- Node status: `kubectl get nodes -o wide` and `kubectl describe node <node>`
 - Resource exec/logs: `kubectl exec -it <pod> -- /bin/sh` and `kubectl logs -f <pod>`
+
+See [kubectl Commands Reference](./02-kubectl-commands.md) for the full debugging section.
 
 ---
 
@@ -377,12 +341,3 @@ Notes: prefer short-lived credentials or GitHub OIDC for security. For GitOps, p
 - Commit all YAMLs to Git using the layout above.
 - Add CI workflows for linting (`kubeval`, `kustomize` build, `helm lint`) and for deploying to staging via GitHub Actions.
 - Consider using `image update` bots or GitHub Actions to automate image tag updates and PRs.
-
----
-
-If you want, I can:
-- add example `manifests/` files directly into the repo,
-- create `.github/workflows/deploy.yml` with a full flow, or
-- add an `ArgoCD` example app manifest.
-
-Tell me which of those you'd like next.

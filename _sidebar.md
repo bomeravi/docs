@@ -82,6 +82,11 @@
   - Shared Library
     - [Overview](/jenkins/shared-library/README.md)
 
+- Web Servers
+  - [Overview](/web-servers/readme.md)
+  - [NGINX](/web-servers/nginx.md)
+  - [Apache](/web-servers/apache.md)
+
 - Security
   - [Overview](/security/readme.md)
   - [Certbot](/security/certbot.md)
@@ -95,7 +100,8 @@
 
 - Kubernetes
   - [Overview](/kubernetes/readme.md)
-  - [Installation and Commands](/kubernetes/kubernetes-installation-and-commands.md)
+  - [Installation](/kubernetes/01-kubernetes-installation.md)
+  - [kubectl Commands](/kubernetes/02-kubectl-commands.md)
   - Manifests
     - [Overview](/kubernetes/manifests/README.md)
     - [Django](/kubernetes/manifests/django/README.md)
