@@ -6,6 +6,7 @@
   - [Server Setup](/02-server-setup.md)
   - [Cloudflared](/cloudflared.md)
   - [DNS & Domain Commands](/domain-dns-commands.md)
+  - [Standard Ports](/standard-ports.md)
   - [HAProxy](/haproxy.md)
   - [LAMP Setup](/lamp-setup.md)
 
