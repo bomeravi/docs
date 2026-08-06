@@ -41,6 +41,7 @@
   - [Disable Root Ubuntu](/ssh/disable-root-ubuntu.md)
   - [Create User](/ssh/create-user.md)
   - [Generate Keys](/ssh/generate-keys.md)
+  - [Client Config (~/.ssh/config)](/ssh/client-config.md)
 
 - Git
   - [Overview](/git/readme.md)
