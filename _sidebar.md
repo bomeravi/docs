@@ -5,6 +5,7 @@
   - [Basic Packages](/01-basic-packages.md)
   - [Server Setup](/02-server-setup.md)
   - [Cloudflared](/cloudflared.md)
+  - [Tailscale](/tailscale.md)
   - [DNS & Domain Commands](/domain-dns-commands.md)
   - [Standard Ports](/standard-ports.md)
   - [HAProxy](/haproxy.md)

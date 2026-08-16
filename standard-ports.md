@@ -86,3 +86,4 @@ Common applications/services and their default ports.
 | SNMP        | 161, 162 | UDP   |
 | Syslog      | 514   | TCP/UDP  |
 | Cloudflared | -     | -        |
+| Tailscale   | 41641 | UDP      |
