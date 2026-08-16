@@ -160,6 +160,9 @@ ssh-add ~/.ssh/id_ed25519_work
 
 ### SSH Config (`~/.ssh/config`)
 
+See [SSH Client Configuration](../ssh/client-config.md) for a full reference on
+these parameters.
+
     # Personal GitHub
     Host github.com
         HostName github.com
