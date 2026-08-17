@@ -16,6 +16,7 @@ New here? Jump straight into the essentials:
 - [Create a Deployer User](./ssh/create-user.md) — CI/CD user + passwordless sudo
 - [Docker](./docker/readme.md) — install & Dockerfiles
 - [Jenkins](./jenkins/readme.md) — pipelines & Jenkinsfiles
+- [Operations](./operations/readme.md) — recovery and monitoring expectations
 
 > 💡 Browse everything from the left sidebar, or press **/** to search.
 
@@ -30,6 +31,8 @@ New here? Jump straight into the essentials:
 | Jenkins           | CI/CD, Jenkinsfiles, shared library, secrets      |
 | Kubernetes        | Install, commands, manifests by stack             |
 | Cloud             | DigitalOcean, AWS, Cloudflared                    |
+| Infrastructure    | Terraform workflow and state-management guidance  |
+| Operations        | Backup/recovery and monitoring/alerting baselines |
 | Developer Tools   | Mailpit and other local-dev helpers               |
 
 ## Local Preview
