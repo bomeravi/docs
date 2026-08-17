@@ -1,0 +1,25 @@
+# WordPress configuration and generated content
+wp-config.php
+wp-content/uploads/
+wp-content/cache/
+wp-content/upgrade/
+wp-content/backups/
+
+# Local database/export artifacts
+*.sql
+*.sql.gz
+*.zip
+*.tar.gz
+
+# Environment files (commit an example, never real values)
+.env
+.env.*
+!.env.example
+!.env.*.example
+
+# Logs, editor, and OS files
+*.log
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

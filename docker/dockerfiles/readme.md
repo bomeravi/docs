@@ -12,6 +12,7 @@ This folder documents the Dockerfile templates under `docker/<stack>/Dockerfile`
 - [Go](./go.md)
 - [Java Microservice](./java-microservice.md)
 - [Laravel](./laravel.md)
+- [Node.js](./node.md)
 - [PHP](./php.md)
 - [Python](./python.md)
 - [React](./react.md)

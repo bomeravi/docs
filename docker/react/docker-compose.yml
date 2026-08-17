@@ -1,0 +1,9 @@
+# Copy this file to the application repository root as docker-compose.yml.
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: docker/react/Dockerfile
+    ports:
+      - "${HOST_PORT:-3000}:80"
+    restart: unless-stopped

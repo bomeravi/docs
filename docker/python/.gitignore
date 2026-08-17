@@ -1,0 +1,27 @@
+# Python bytecode and virtual environments
+__pycache__/
+*.py[cod]
+*.so
+.venv/
+venv/
+env/
+
+# Test, type-checking, and coverage output
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+coverage.xml
+
+# Environment files (commit an example, never real values)
+.env
+.env.*
+!.env.example
+!.env.*.example
+
+# Local editor and OS files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

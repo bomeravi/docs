@@ -60,6 +60,7 @@
     - [Go](/docker/dockerfiles/go.md)
     - [Java Microservice](/docker/dockerfiles/java-microservice.md)
     - [Laravel](/docker/dockerfiles/laravel.md)
+    - [Node.js](/docker/dockerfiles/node.md)
     - [PHP](/docker/dockerfiles/php.md)
     - [Python](/docker/dockerfiles/python.md)
     - [React](/docker/dockerfiles/react.md)

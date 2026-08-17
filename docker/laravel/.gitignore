@@ -1,0 +1,23 @@
+# PHP and frontend dependencies
+/vendor/
+/node_modules/
+
+# Laravel-generated cache and logs
+/bootstrap/cache/*.php
+/storage/logs/*
+/storage/framework/cache/*
+/storage/framework/sessions/*
+/storage/framework/views/*
+/public/storage
+
+# Environment files (commit an example, never real values)
+.env
+.env.*
+!.env.example
+!.env.*.example
+
+# Local editor and OS files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

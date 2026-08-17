@@ -1,0 +1,19 @@
+# Build output and test artifacts
+bin/
+dist/
+*.exe
+*.test
+*.out
+coverage.out
+
+# Environment files (commit an example, never real values)
+.env
+.env.*
+!.env.example
+!.env.*.example
+
+# Local editor and OS files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
