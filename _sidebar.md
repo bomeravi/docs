@@ -97,6 +97,11 @@
   - [OWASP Dependency Check](/security/owasp-dependency-check.md)
   - [SonarQube](/security/sonarqube.md)
 
+- Operations
+  - [Overview](/operations/readme.md)
+  - [Backup & Disaster Recovery](/operations/backup-disaster-recovery.md)
+  - [Monitoring & Alerting](/operations/monitoring-alerting.md)
+
 - Developer Tools
   - [Overview](/developer-tools/readme.md)
   - [Mailpit](/developer-tools/mailpit.md)
@@ -105,6 +110,7 @@
   - [Overview](/kubernetes/readme.md)
   - [Installation](/kubernetes/01-kubernetes-installation.md)
   - [kubectl Commands](/kubernetes/02-kubectl-commands.md)
+  - [Production Baseline](/kubernetes/03-production-baseline.md)
   - Manifests
     - [Overview](/kubernetes/manifests/README.md)
     - [Django](/kubernetes/manifests/django/README.md)
