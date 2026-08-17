@@ -7,6 +7,7 @@
   - [Cloudflared](/cloudflared.md)
   - [Tailscale](/tailscale.md)
   - [DNS & Domain Commands](/domain-dns-commands.md)
+  - [HTTP Status Codes](/http-status-codes.md)
   - [Standard Ports](/standard-ports.md)
   - [HAProxy](/haproxy.md)
   - [LAMP Setup](/lamp-setup.md)

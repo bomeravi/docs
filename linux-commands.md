@@ -149,6 +149,8 @@ owner/group/other — e.g. `755` = `rwxr-xr-x`.
 `curl` transfers data to and from a URL — use it to download files, test
 endpoints, and call APIs from the terminal.
 
+For interpreting response results, see [HTTP Status Codes](./http-status-codes.md).
+
 | Command | Description |
 | ------- | ----------- |
 | `curl https://site` | Fetch a URL and print the body |
