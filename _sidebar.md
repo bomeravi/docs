@@ -28,6 +28,7 @@
   - [EKS (Kubernetes)](/aws/eks.md)
   - [S3](/aws/s3.md)
   - [RDS](/aws/rds.md)
+  - [Disaster Recovery (AZ & Region)](/aws/disaster-recovery.md)
 
 - DigitalOcean
   - [Overview](/digitalocean/readme.md)
@@ -104,6 +105,7 @@
   - [Backup & Disaster Recovery](/operations/backup-disaster-recovery.md)
   - [Monitoring & Alerting](/operations/monitoring-alerting.md)
   - [Load Testing](/operations/load-testing.md)
+  - [Multi-DC Replication](/operations/multi-dc-replication.md)
 
 - Developer Tools
   - [Overview](/developer-tools/readme.md)

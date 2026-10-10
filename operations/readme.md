@@ -17,6 +17,9 @@ be used for VMs, managed cloud services, containers, and Kubernetes workloads.
 - [Load Testing](./load-testing.md) — JMeter, k6, Locust, Artillery, wrk,
   ab, Vegeta, hey, Siege and Gatling, plus metrics to monitor and CI/CD
   integration.
+- [Multi-Data-Center Replication](./multi-dc-replication.md) — encrypted
+  DC-to-DC link, MySQL/PostgreSQL/Redis/file replication, lag monitoring, and
+  a split-brain-safe failover and failback runbook.
 
 ## Minimum production standard
 

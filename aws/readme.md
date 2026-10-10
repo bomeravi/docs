@@ -15,6 +15,9 @@ Practical guides for provisioning and managing AWS resources.
 - [EKS](./eks.md) — Elastic Kubernetes Service: managed Kubernetes cluster
 - [S3](./s3.md) — object storage: buckets, uploads, policies, static sites
 - [RDS](./rds.md) — managed relational databases (PostgreSQL, MySQL)
+- [Disaster Recovery](./disaster-recovery.md) — survive AZ (data center) and
+  Region outages: Multi-AZ, cross-Region replication per service, Route 53
+  failover, runbook and testing
 
 ## Prerequisites
 
