@@ -107,6 +107,7 @@
 - Developer Tools
   - [Overview](/developer-tools/readme.md)
   - [Mailpit](/developer-tools/mailpit.md)
+  - [tmux](/developer-tools/tmux.md)
 
 - Kubernetes
   - [Overview](/kubernetes/readme.md)
