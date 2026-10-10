@@ -14,6 +14,9 @@ be used for VMs, managed cloud services, containers, and Kubernetes workloads.
   perform, test, and restore backups.
 - [Monitoring and Alerting](./monitoring-alerting.md) — health checks, metrics,
   logs, alert design, and incident triage.
+- [Load Testing](./load-testing.md) — JMeter, k6, Locust, Artillery, wrk,
+  ab, Vegeta, hey, Siege and Gatling, plus metrics to monitor and CI/CD
+  integration.
 
 ## Minimum production standard
 
