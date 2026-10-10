@@ -103,6 +103,7 @@
   - [Overview](/operations/readme.md)
   - [Backup & Disaster Recovery](/operations/backup-disaster-recovery.md)
   - [Monitoring & Alerting](/operations/monitoring-alerting.md)
+  - [Load Testing](/operations/load-testing.md)
 
 - Developer Tools
   - [Overview](/developer-tools/readme.md)
