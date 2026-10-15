@@ -83,6 +83,17 @@ tmux -V
 
 ## 2. Sessions
 
+### Quick reference
+
+| Action                       | Command                         |
+| ---------------------------- | ------------------------------- |
+| Create session               | `tmux new -s server`            |
+| Detach and keep running      | `Ctrl+B`, then `D`              |
+| List sessions                | `tmux ls`                       |
+| Reattach to session          | `tmux attach -t server`         |
+| Create session in background | `tmux new -d -s server`         |
+| Kill a session               | `tmux kill-session -t server`   |
+
 ### Create
 
 ```bash
