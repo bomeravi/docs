@@ -580,7 +580,7 @@ sudo awk '{print $NF, $7}' /var/log/nginx/access.log | sort -rn | head
 | `502 Bad Gateway` | Backend down or wrong socket/port | `curl 127.0.0.1:3000`, `systemctl status php8.4-fpm` |
 | `504 Gateway Timeout` | Backend too slow | Raise `proxy_read_timeout` |
 | `403 Forbidden` | Permissions or missing index | `ls -la /var/www/...`, `namei -l /var/www/app/public` |
-| `404` on SPA routes | No `try_files` fallback | See [section 7](#7-scenario-spa-react-vue-angular) |
+| `404` on SPA routes | No `try_files` fallback | See [section 7](#_7-scenario-spa-react-vue-angular) |
 | Config change ignored | Wrong site enabled, or not reloaded | `sudo nginx -T \| grep server_name` |
 | Won't start | Port already bound | `sudo ss -tlnp \| grep :80` |
 

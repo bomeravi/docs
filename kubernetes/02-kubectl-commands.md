@@ -118,7 +118,7 @@ kubectl get all -A
 
 > ⚠️ `kubectl get all` does **not** include every resource type — secrets, configmaps,
 > ingresses, PVCs and CRDs are excluded. Use the command in
-> [section 18](#18-listing-everything-in-a-namespace) for a truly complete list.
+> [section 18](#_18-listing-everything-in-a-namespace) for a truly complete list.
 
 ### Delete a namespace
 
