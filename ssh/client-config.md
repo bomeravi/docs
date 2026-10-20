@@ -184,6 +184,43 @@ key.
 
 ---
 
+### One-off Command-line Equivalents
+
+Any config directive can be passed directly with `-o <Option>=<value>`, which
+is handy for a single connection without editing `~/.ssh/config`.
+
+#### Force a specific key
+
+```bash
+ssh -o IdentitiesOnly=yes -i ~/.ssh/YOUR_PRIVATE_KEY \
+    -p 1033 root@<IP>
+```
+
+- `-o IdentitiesOnly=yes` → offer only the key given with `-i`, ignoring
+  `ssh-agent` and default keys (avoids `Too many authentication failures`).
+- `-i ~/.ssh/YOUR_PRIVATE_KEY` → the private key to use.
+- `-p 1033` → connect to a non-default SSH port.
+
+#### Force password login (skip keys)
+
+```bash
+ssh -o PubkeyAuthentication=no \
+    -o PreferredAuthentications=password \
+    -p 1033 root@<IP>
+```
+
+- `-o PubkeyAuthentication=no` → don't try any SSH keys.
+- `-o PreferredAuthentications=password` → go straight to the password prompt.
+
+Useful for testing that password auth works (or is correctly disabled), or
+when a key is being offered that the server rejects.
+
+> The server must have `PasswordAuthentication yes` in `sshd_config` for the
+> password login to succeed. Logging in as `root` with a password also needs
+> `PermitRootLogin yes`.
+
+---
+
 ### `StrictHostKeyChecking`
 
 Controls how SSH verifies a server's host key.
