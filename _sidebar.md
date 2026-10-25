@@ -45,6 +45,7 @@
   - [Create User](/ssh/create-user.md)
   - [Generate Keys](/ssh/generate-keys.md)
   - [Client Config (~/.ssh/config)](/ssh/client-config.md)
+  - [Port Forwarding](/ssh/port-forwarding.md)
 
 - Git
   - [Overview](/git/readme.md)
