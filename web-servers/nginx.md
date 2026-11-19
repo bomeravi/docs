@@ -12,7 +12,196 @@ HTTPS, and WebSockets.
 
 ## 1. Installation
 
-### Ubuntu / Debian
+### Ubuntu: official mainline repository (recommended)
+
+Ubuntu's own `nginx` package lags several releases behind. Install from the official
+`nginx.org` repository instead of downloading `.deb` files by hand.
+
+| Channel  | Series (odd/even) | Use when                                          |
+| -------- | ----------------- | ------------------------------------------------- |
+| Mainline | Odd, e.g. `1.31.x` | **Preferred** — latest features and fixes         |
+| Stable   | Even, e.g. `1.30.x` | You only want critical fixes between big updates |
+
+> Mainline is what the NGINX team recommends for most users; it is not a "beta".
+> To use stable instead, replace `packages/mainline/ubuntu` with `packages/ubuntu` in
+> step 3.
+
+> Already running Ubuntu's `nginx`? Follow
+> [Upgrading from Ubuntu's package](#upgrading-from-ubuntus-package) instead.
+
+#### 1. Install prerequisites and the signing key
+
+```bash
+sudo apt install -y curl gnupg2 ca-certificates lsb-release ubuntu-keyring
+
+curl -fsSL https://nginx.org/keys/nginx_signing.key \
+  | sudo gpg --dearmor --yes -o /usr/share/keyrings/nginx-archive-keyring.gpg
+```
+
+#### 2. Verify the key
+
+```bash
+gpg --dry-run --quiet --no-keyring \
+  --import --import-options import-show \
+  /usr/share/keyrings/nginx-archive-keyring.gpg
+```
+
+The output must contain this fingerprint — if it doesn't, delete the file and stop:
+
+```text
+573BFD6B3D8FBC641079A6ABABF5BD827BD9BF62
+```
+
+#### 3. Add the mainline repository and pin it
+
+```bash
+echo "deb [signed-by=/usr/share/keyrings/nginx-archive-keyring.gpg] https://nginx.org/packages/mainline/ubuntu $(lsb_release -cs) nginx" \
+  | sudo tee /etc/apt/sources.list.d/nginx.list
+```
+
+Prefer `nginx.org` packages over Ubuntu's so `apt upgrade` never swaps back:
+
+```bash
+sudo tee /etc/apt/preferences.d/99nginx >/dev/null <<'EOF'
+Package: *
+Pin: origin nginx.org
+Pin: release o=nginx
+Pin-Priority: 900
+EOF
+```
+
+#### 4. Check the candidate version
+
+```bash
+sudo apt update
+apt-cache policy nginx
+```
+
+The `Candidate` should come from `nginx.org` with priority `900`:
+
+```text
+nginx:
+  Installed: (none)
+  Candidate: 1.31.x-1~noble
+  Version table:
+     1.31.x-1~noble 900
+        900 https://nginx.org/packages/mainline/ubuntu noble/nginx amd64 Packages
+```
+
+#### 5. Install and start
+
+```bash
+sudo apt install -y nginx
+sudo systemctl enable --now nginx
+```
+
+#### 6. Enable the sites-available and sites-enabled layout
+
+The `nginx.org` package only loads `/etc/nginx/conf.d/*.conf` and runs as user `nginx`
+(not `www-data`). The rest of this page uses the Debian-style `sites-*` layout, so add
+it:
+
+```bash
+sudo mkdir -p /etc/nginx/sites-available /etc/nginx/sites-enabled
+```
+
+Your `nginx.conf` must include the enabled sites **inside the `http { }` block**:
+
+```nginx
+http {
+    # ...
+    include /etc/nginx/conf.d/*.conf;
+    include /etc/nginx/sites-enabled/*;
+}
+```
+
+Add the line only if it is missing (running this twice is safe — it never adds a
+duplicate):
+
+```bash
+grep -q 'sites-enabled' /etc/nginx/nginx.conf || \
+  sudo sed -i '\|include /etc/nginx/conf.d/\*.conf;|a\    include /etc/nginx/sites-enabled/*;' /etc/nginx/nginx.conf
+
+grep -n 'include' /etc/nginx/nginx.conf
+sudo nginx -t && sudo systemctl reload nginx
+```
+
+> The package also ships `/etc/nginx/conf.d/default.conf` (the welcome page). Remove it
+> once your own site is enabled: `sudo rm /etc/nginx/conf.d/default.conf`.
+
+### Upgrading from Ubuntu's package
+
+Moves an existing Ubuntu `nginx` install to the official mainline build while keeping
+your sites.
+
+#### 1. Back up the config
+
+```bash
+sudo cp -a /etc/nginx /etc/nginx.backup-$(date +%F-%H%M%S)
+```
+
+#### 2. Add the key, repository, and pin
+
+Run steps 1–4 of the [mainline install](#ubuntu-official-mainline-repository-recommended)
+above, then confirm `apt-cache policy nginx` shows `nginx.org` as a source.
+
+#### 3. Simulate the upgrade
+
+```bash
+sudo apt-get -s install nginx
+```
+
+Review the output. Removing Ubuntu's `nginx-common` / `nginx-core` and `libnginx-mod-*`
+packages is expected. **Don't proceed** if unrelated packages would be removed.
+
+#### 4. Install
+
+```bash
+sudo apt install nginx
+```
+
+> If `apt` asks whether to replace `/etc/nginx/nginx.conf`, keep your current version
+> (`N`) — it already includes `sites-enabled` and uses `user www-data;`.
+
+#### 5. Check the site includes
+
+```bash
+ls -la /etc/nginx/sites-enabled/
+ls -la /etc/nginx/sites-available/
+ls -la /etc/nginx/conf.d/
+grep -n 'include' /etc/nginx/nginx.conf
+```
+
+`include /etc/nginx/sites-enabled/*;` must be inside the `http { }` block. If it's
+missing, add it as in [step 6](#_6-enable-the-sites-available-and-sites-enabled-layout) —
+**once**, not twice.
+
+#### 6. Test and restart
+
+```bash
+sudo nginx -t
+sudo systemctl restart nginx
+```
+
+> ⚠️ If `nginx -t` fails on a `load_module` line from `/etc/nginx/modules-enabled/`, that
+> module came from a removed `libnginx-mod-*` package. Delete the dangling symlink, or
+> drop the `include /etc/nginx/modules-enabled/*.conf;` line if you use none.
+
+Confirm the new build:
+
+```bash
+nginx -v
+nginx -V                             # build flags and compiled-in modules
+systemctl status nginx --no-pager
+```
+
+To roll back, restore the backup over `/etc/nginx`, remove
+`/etc/apt/sources.list.d/nginx.list` and `/etc/apt/preferences.d/99nginx`, then
+`sudo apt update && sudo apt install --reinstall nginx`.
+
+### Ubuntu / Debian: distro package
+
+Simpler, but older. Use this only if you must stay on the distribution's version.
 
 ```bash
 sudo apt update
@@ -20,17 +209,8 @@ sudo apt install -y nginx
 sudo systemctl enable --now nginx
 ```
 
-For the latest mainline release from the official NGINX repository:
-
-```bash
-sudo apt install -y curl gnupg2 ca-certificates lsb-release ubuntu-keyring
-curl https://nginx.org/keys/nginx_signing.key | gpg --dearmor \
-  | sudo tee /usr/share/keyrings/nginx-archive-keyring.gpg >/dev/null
-echo "deb [signed-by=/usr/share/keyrings/nginx-archive-keyring.gpg] \
-http://nginx.org/packages/mainline/ubuntu $(lsb_release -cs) nginx" \
-  | sudo tee /etc/apt/sources.list.d/nginx.list
-sudo apt update && sudo apt install -y nginx
-```
+> **Debian** can use the official repository too: install `debian-archive-keyring`
+> instead of `ubuntu-keyring` and use `https://nginx.org/packages/mainline/debian`.
 
 ### RHEL / CentOS / Rocky
 
@@ -58,7 +238,7 @@ Expected:
 
 ```text
 HTTP/1.1 200 OK
-Server: nginx/1.24.0
+Server: nginx/1.31.x
 ```
 
 > ⚠️ Port 80 conflicts with Apache. If Apache is already running:
@@ -87,7 +267,8 @@ sudo nginx -t && sudo systemctl reload nginx
 ```
 
 > On RHEL there is no `sites-available`/`sites-enabled` — put site files directly in
-> `/etc/nginx/conf.d/example.com.conf`.
+> `/etc/nginx/conf.d/example.com.conf`. The `nginx.org` package doesn't create them
+> either; see [step 6](#_6-enable-the-sites-available-and-sites-enabled-layout) to add them.
 
 ---
 
@@ -186,8 +367,10 @@ server {
     }
 
     location ~ \.php$ {
-        include snippets/fastcgi-php.conf;
+        try_files $uri =404;
         fastcgi_pass unix:/run/php/php8.4-fpm.sock;
+        fastcgi_index index.php;
+        include fastcgi_params;          # ships with both nginx.org and Ubuntu packages
         fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
     }
 
@@ -207,6 +390,10 @@ sudo chown -R www-data:www-data /var/www/app
 sudo find /var/www/app -type d -exec chmod 755 {} \;
 sudo find /var/www/app -type f -exec chmod 644 {} \;
 ```
+
+> ⚠️ The `nginx.org` package runs as user `nginx`, but PHP-FPM's socket is owned by
+> `www-data` with mode `0660`, which gives `502 Bad Gateway`. Fix it with
+> `sudo usermod -aG www-data nginx && sudo systemctl restart nginx`.
 
 > Swap the socket to `/run/php/php8.3-fpm.sock` to run this one site on a different
 > PHP version.
